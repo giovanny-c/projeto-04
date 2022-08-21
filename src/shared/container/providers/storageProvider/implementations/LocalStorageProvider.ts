@@ -14,6 +14,8 @@ class LocalStorageProvider implements IStorageProvider {
             //let [, file_type] = file.split(/\.(?!.*\.)/, 2) // separa no ultimo ponto para pegar o tipo do arquivo
 
             let dir = `${upload.tmpFolder}/${folder}`
+            //ver se funciona 
+            //let dir = resolve(`${upload.tmpFolder}/${folder}`)
 
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true })

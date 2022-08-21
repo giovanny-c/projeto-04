@@ -16,8 +16,14 @@ function genKeyPair() {
         }
     })
 
-    fs.writeFileSync("../../../keys" + "/id_rsa_pub.pem", keyPair.publicKey)
-    fs.writeFileSync("../../../keys" + "/id_rsa_priv.pem", keyPair.privateKey)
+    const dir = "../../../keys"
+
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true })
+    }
+
+    fs.writeFileSync(dir + "/id_rsa_pub.pem", keyPair.publicKey)
+    fs.writeFileSync(dir + "/id_rsa_priv.pem", keyPair.privateKey)
     //para salvar em uma pasta fora de src
 }
 

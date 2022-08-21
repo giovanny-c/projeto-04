@@ -4,11 +4,11 @@ import { DataSource } from "typeorm";
 
 export const dataSource: DataSource = new DataSource({
     type: "postgres",
-    host: "database_projeto03",
+    host: "database_projeto04",
     port: 5432,
     username: "root",
     password: "1234",
-    database: "projeto03_database",
+    database: "projeto04_database",
     migrationsRun: true,
     //logging: true,
     entities: [
