@@ -16,6 +16,8 @@ interface ISaveUserDTO {
     is_confirmed?: boolean
 
     is_logged?: boolean
+
+    admin?: boolean
 }
 
 export { ISaveUserDTO }

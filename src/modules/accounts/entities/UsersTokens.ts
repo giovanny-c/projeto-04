@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./User";
+import { v4 as uuidV4 } from "uuid"
 
 
 
@@ -7,7 +8,7 @@ import { User } from "./User";
 class UsersTokens {
 
     @PrimaryGeneratedColumn()
-    id: string
+    id?: string
 
     @Column()
     token: string
@@ -34,7 +35,11 @@ class UsersTokens {
     @Column()
     token_family: string
 
-
+    constructor() {
+        if (!this.id) {
+            this.id = uuidV4()
+        }
+    }
 
 
 

@@ -56,7 +56,7 @@ class SaveFileUseCase {
                     throw new AppError("File not found", 400)
                 }
 
-                if (user_id !== fileExists.user_id /*&& userExists.admin === false*/) {
+                if (user_id !== fileExists.user_id && userExists.admin === false) { //update no test
 
                     fs.unlinkSync(path as string)
 

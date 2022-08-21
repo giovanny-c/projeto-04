@@ -7,7 +7,7 @@ class UsersRepositoryInMemory implements IUsersRepository {
 
     users: User[] = []//inicializa o array
 
-    async save({ id = uuidV4(), password_hash, name, email, salt, is_confirmed = false }: ISaveUserDTO): Promise<User> {
+    async save({ id = uuidV4(), password_hash, name, email, salt, is_confirmed = false, admin = false }: ISaveUserDTO): Promise<User> {
         let user
 
         user = new User()
@@ -18,7 +18,8 @@ class UsersRepositoryInMemory implements IUsersRepository {
             email,
             password_hash,
             salt,
-            is_confirmed
+            is_confirmed,
+            admin
         })
 
 

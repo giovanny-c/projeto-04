@@ -26,6 +26,7 @@ class FileRepository implements IFileRepository {
             permission,
             created_at,
             updated_at
+
         })
 
         await this.repository.save(file)

@@ -89,7 +89,7 @@ class AuthenticateUserUseCase {
                     user: {
                         id: user.id as string,
                         email,
-                        //admin: user.admin
+                        admin: user.admin
                     },
                     token: `Bearer ${token}`,
                     //  expires_date: token_expires_date,
@@ -101,8 +101,8 @@ class AuthenticateUserUseCase {
             return {
                 user: {
                     id: user.id as string,
-                    email: user.email as string
-                    //admin: user.admin
+                    email: user.email as string,
+                    admin: user.admin
                 }
             }
 

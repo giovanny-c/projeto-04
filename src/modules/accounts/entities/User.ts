@@ -1,10 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { v4 as uuidV4 } from "uuid"
 import { Exclude } from "class-transformer"
 
 @Entity("users")
 class User {
 
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryColumn()
     id?: string
 
     @Column()
@@ -25,6 +26,15 @@ class User {
 
     @Column()
     is_logged: boolean
+
+    @Column()
+    admin: boolean
+
+    constructor() {
+        if (!this.id) {
+            this.id = uuidV4()
+        }
+    }
 
 
 }

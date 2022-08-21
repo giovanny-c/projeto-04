@@ -9,12 +9,21 @@ class CreateUserController {
 
     async handle(req: Request, res: Response): Promise<Response> {
         try {
+
+
+
             const { name, email, password } = req.body
 
             const createUser = container.resolve(CreateUserUseCase)
 
             const sendConfirmationRegisterMail = container.resolve(SendConfirmationRegisterMailUseCase)
 
+            if (req.user.admin) { // so se for admin
+
+                const { admin } = req.body
+
+                await createUser.execute({ name, email, password, admin })
+            }
 
             await createUser.execute({ name, email, password })
 

@@ -47,7 +47,11 @@ accountRoutes.post("/forgot-password", upload.none(), sendForgotPasswordMailCont
 accountRoutes.put("/retrieve-password", upload.none(), retrievePasswordController.handle)
 accountRoutes.post("/gen-pdf", ensureAuthenticated, upload.none(), generatePdfController.handle)
 accountRoutes.get("/user/files", ensureAuthenticated, getFileFromUserController.handle)
+//admin
+accountRoutes.post("admin/create-admin-account", ensureAuthenticated, ensureAdmin, upload.none(), createUserController.handle)
+
 accountRoutes.get("/user/file/:id", ensureAuthenticated, getFileController.handle)
+
 
 
 
