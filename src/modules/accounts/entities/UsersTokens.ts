@@ -1,3 +1,4 @@
+
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./User";
 import { v4 as uuidV4 } from "uuid"
@@ -18,7 +19,7 @@ class UsersTokens {
 
     @ManyToOne(() => User)
     @JoinColumn({ name: "user_id" })
-    user: string
+    user: User
 
     @Column()
     expires_date: Date

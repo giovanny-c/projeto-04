@@ -1,6 +1,7 @@
 
 
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { User } from "modules/Accounts/entities/User";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid"
 
 @Entity("Products")
@@ -8,6 +9,14 @@ class Product {
 
     @PrimaryColumn()
     id: string
+
+
+    @Column()
+    vendor_id: string
+
+    @ManyToOne(() => User)
+    @JoinColumn({ name: "vendor_id" })
+    vendor: User
 
     @Column()
     price: number
