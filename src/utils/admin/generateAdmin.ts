@@ -1,5 +1,5 @@
 
-import { UsersRepository } from "@modules/accounts/repositories/implementations/UsersRepository";
+import { UsersRepository } from "@modules/Accounts/repositories/implementations/UsersRepository";
 import { genPassword } from "@utils/passwordUtils/passwordUtils";
 
 // GENERATES AN ADMIN ACC
@@ -18,3 +18,4 @@ usersRepository.save({
     admin: true,
     is_confirmed: true,
 })
+// achar outro 

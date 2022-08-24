@@ -1,16 +1,16 @@
 
 import Router from "express";
 
-import { CreateUserController } from "../modules/accounts/useCases/createUser/CreateUserController";
-import { SignInController } from "../modules/accounts/useCases/signIn/SignInController";
-import { ConfirmateRegisterController } from "../modules/accounts/useCases/confirmateRegister/ConfirmateRegisterController"
-import { AuthenticateUserController } from "../modules/accounts/useCases/authenticateUser/AuthenticateUserController";
-import { GetProfileController } from "../modules/accounts/useCases/getProfile/GetProfileController";
-import { RefreshTokenController } from "../modules/accounts/useCases/refreshToken/RefreshTokenController";
-import { LogOutController } from "../modules/accounts/useCases/logout/LogOutController";
-import { SendForgotPasswordMailController } from "../modules/accounts/useCases/sendForgotPasswordMail/SendForgotPasswordMailController";
-import { RetrievePasswordController } from "../modules/accounts/useCases/retrivePassword/RetrievePasswordController";
-import { GeneratePdfController } from "../modules/accounts/useCases/generatePdf/GeneratePdfController";
+import { CreateUserController } from "../modules/Accounts/useCases/createUser/CreateUserController";
+import { SignInController } from "../modules/Accounts/useCases/signIn/SignInController";
+import { ConfirmateRegisterController } from "../modules/Accounts/useCases/confirmateRegister/ConfirmateRegisterController"
+import { AuthenticateUserController } from "../modules/Accounts/useCases/authenticateUser/AuthenticateUserController";
+import { GetProfileController } from "../modules/Accounts/useCases/getProfile/GetProfileController";
+import { RefreshTokenController } from "../modules/Accounts/useCases/refreshToken/RefreshTokenController";
+import { LogOutController } from "../modules/Accounts/useCases/logout/LogOutController";
+import { SendForgotPasswordMailController } from "../modules/Accounts/useCases/sendForgotPasswordMail/SendForgotPasswordMailController";
+import { RetrievePasswordController } from "../modules/Accounts/useCases/retrivePassword/RetrievePasswordController";
+import { GeneratePdfController } from "../modules/Accounts/useCases/generatePdf/GeneratePdfController";
 //middlewares
 import { ensureAuthenticated } from "../shared/middlewares/ensureAuthenticated";
 import multer from "multer"
@@ -47,7 +47,8 @@ accountRoutes.post("/forgot-password", upload.none(), sendForgotPasswordMailCont
 accountRoutes.put("/retrieve-password", upload.none(), retrievePasswordController.handle)
 accountRoutes.post("/gen-pdf", ensureAuthenticated, upload.none(), generatePdfController.handle)
 accountRoutes.get("/user/files", ensureAuthenticated, getFileFromUserController.handle)
-//admin
+
+//admin // testar
 accountRoutes.post("admin/create-admin-account", ensureAuthenticated, ensureAdmin, upload.none(), createUserController.handle)
 
 accountRoutes.get("/user/file/:id", ensureAuthenticated, getFileController.handle)

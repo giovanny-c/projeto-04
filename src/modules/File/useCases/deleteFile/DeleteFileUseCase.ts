@@ -1,4 +1,4 @@
-import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
+import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 import { IFileRepository } from "@modules/File/repositories/IFileRepository";
 import { IStorageProvider } from "@shared/container/providers/storageProvider/IStorageProvider";
 import { AppError } from "@shared/errors/AppError";

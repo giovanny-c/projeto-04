@@ -1,4 +1,4 @@
-import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
+import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 import { File } from "@modules/File/entities/File";
 import { FileMap } from "@modules/File/mapper/FileMap";
 import { IFileRepository } from "@modules/File/repositories/IFileRepository";

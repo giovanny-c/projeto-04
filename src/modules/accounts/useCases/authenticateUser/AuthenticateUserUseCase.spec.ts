@@ -1,9 +1,9 @@
 
 import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider";
-import { ISaveUserDTO } from "@modules/accounts/dtos/ISaveUserDTO";
-import { UsersRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersRepositoryInMemory";
-import { UsersTokensRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersTokensRepositoryInMemory";
-import { CreateUserUseCase } from "@modules/accounts/useCases/createUser/CreateUserUseCase";
+import { ISaveUserDTO } from "@modules/Accounts/dtos/ISaveUserDTO";
+import { UsersRepositoryInMemory } from "@modules/Accounts/repositories/In-memory/UsersRepositoryInMemory";
+import { UsersTokensRepositoryInMemory } from "@modules/Accounts/repositories/In-memory/UsersTokensRepositoryInMemory";
+import { CreateUserUseCase } from "@modules/Accounts/useCases/createUser/CreateUserUseCase";
 import { AuthenticateUserUseCase } from "./AuthenticateUserUseCase";
 
 import { AppError } from "@shared/errors/AppError";

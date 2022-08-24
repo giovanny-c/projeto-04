@@ -2,10 +2,10 @@ import { container } from "tsyringe";
 
 import "./providers/index"
 
-import { UsersRepository } from "../../modules/accounts/repositories/implementations/UsersRepository";
-import { IUsersRepository } from "../../modules/accounts/repositories/IUsersRepository";
-import { IUsersTokensRepository } from "../../modules/accounts/repositories/IUsersTokensRepository";
-import { UsersTokensRepository } from "../../modules/accounts/repositories/implementations/UsersTokensRepository";
+import { UsersRepository } from "../../modules/Accounts/repositories/implementations/UsersRepository";
+import { IUsersRepository } from "../../modules/Accounts/repositories/IUsersRepository";
+import { IUsersTokensRepository } from "../../modules/Accounts/repositories/IUsersTokensRepository";
+import { UsersTokensRepository } from "../../modules/Accounts/repositories/implementations/UsersTokensRepository";
 import { IFileRepository } from "@modules/File/repositories/IFileRepository";
 import { FileRepository } from "@modules/File/repositories/implementations/FileRepository";
 

@@ -6,7 +6,7 @@ import { AppError } from "../../../../shared/errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository"
 import issueJWT from "../../../../utils/tokensUtils/issueJWT";
 import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
-import { IEmailRequest } from "@modules/accounts/dtos/IEmaiRequestDTO";
+import { IEmailRequest } from "@modules/Accounts/dtos/IEmaiRequestDTO";
 
 @injectable()
 class SendForgotPasswordMailUseCase {

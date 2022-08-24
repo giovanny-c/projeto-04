@@ -5,7 +5,7 @@ import { resolve } from "path";
 import issueJWT from "../../../../utils/tokensUtils/issueJWT";
 import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
 import { AppError } from "../../../../shared/errors/AppError";
-import { IEmailRequest } from "@modules/accounts/dtos/IEmaiRequestDTO";
+import { IEmailRequest } from "@modules/Accounts/dtos/IEmaiRequestDTO";
 
 
 

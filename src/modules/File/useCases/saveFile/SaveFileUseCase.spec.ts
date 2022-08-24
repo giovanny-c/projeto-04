@@ -1,5 +1,5 @@
 import upload from "@config/upload"
-import { UsersRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersRepositoryInMemory"
+import { UsersRepositoryInMemory } from "@modules/Accounts/repositories/In-memory/UsersRepositoryInMemory"
 import { ISaveFile } from "@modules/File/dtos/ISaveFileDTO"
 import { File } from "@modules/File/entities/File"
 import { FileRepositoryInMemory } from "@modules/File/repositories/In-memory/FileRepositoryInMemory"

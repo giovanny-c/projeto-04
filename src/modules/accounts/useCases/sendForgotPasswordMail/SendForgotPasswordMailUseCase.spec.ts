@@ -1,4 +1,4 @@
-import { UsersRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersRepositoryInMemory";
+import { UsersRepositoryInMemory } from "@modules/Accounts/repositories/In-memory/UsersRepositoryInMemory";
 import { MailProviderInMemory } from "@shared/container/providers/mailProvider/In-Memory/MailProviderInMemory";
 import { AppError } from "@shared/errors/AppError";
 import { SendForgotPasswordMailUseCase } from "./SendForgotPasswordMailUseCase";

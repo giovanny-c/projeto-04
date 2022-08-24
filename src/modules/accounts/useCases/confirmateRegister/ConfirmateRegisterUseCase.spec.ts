@@ -1,4 +1,4 @@
-import { UsersRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersRepositoryInMemory";
+import { UsersRepositoryInMemory } from "@modules/Accounts/repositories/In-memory/UsersRepositoryInMemory";
 import { PRIV_KEY, PUB_KEY } from "@utils/keyUtils/readKeys";
 import issueJWT from "@utils/tokensUtils/issueJWT";
 import { JsonWebTokenError, JwtPayload, TokenExpiredError, verify } from "jsonwebtoken";

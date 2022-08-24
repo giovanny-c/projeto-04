@@ -1,4 +1,4 @@
-import { User } from "../../accounts/entities/User";
+import { User } from "../../Accounts/entities/User";
 import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid"
 import { Expose } from "class-transformer";

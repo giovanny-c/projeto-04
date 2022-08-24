@@ -8,8 +8,8 @@ import { AppError } from "../../../../shared/errors/AppError";
 import { v4 as uuidV4 } from "uuid"
 import issueJWT from "../../../../utils/tokensUtils/issueJWT";
 import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
-import { IAuthenticationResponse } from "@modules/accounts/dtos/IAuthenticationResponseDTO";
-import { ITokenRequest } from "@modules/accounts/dtos/ITokensRequestDTO";
+import { IAuthenticationResponse } from "@modules/Accounts/dtos/IAuthenticationResponseDTO";
+import { ITokenRequest } from "@modules/Accounts/dtos/ITokensRequestDTO";
 
 
 

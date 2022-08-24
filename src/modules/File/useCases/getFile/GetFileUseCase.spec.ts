@@ -1,4 +1,4 @@
-import { UsersRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersRepositoryInMemory"
+import { UsersRepositoryInMemory } from "@modules/Accounts/repositories/In-memory/UsersRepositoryInMemory"
 import { FileRepositoryInMemory } from "@modules/File/repositories/In-memory/FileRepositoryInMemory"
 import { AppError } from "@shared/errors/AppError"
 import { GetFileUseCase } from "./GetFileUseCase"

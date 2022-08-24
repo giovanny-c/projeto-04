@@ -1,5 +1,5 @@
-import { UsersRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersRepositoryInMemory"
-import { UsersTokensRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersTokensRepositoryInMemory"
+import { UsersRepositoryInMemory } from "@modules/Accounts/repositories/In-memory/UsersRepositoryInMemory"
+import { UsersTokensRepositoryInMemory } from "@modules/Accounts/repositories/In-memory/UsersTokensRepositoryInMemory"
 import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider"
 import { AppError } from "@shared/errors/AppError"
 import { RefreshTokenUseCase } from "./RefreshTokenUseCase"

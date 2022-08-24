@@ -8,7 +8,7 @@ import { AppError } from "../../../../shared/errors/AppError";
 import { validatePassword } from "../../../../utils/passwordUtils/passwordUtils";
 import issueJWT from "../../../../utils/tokensUtils/issueJWT";
 import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
-import { IAuthenticationResponse } from "@modules/accounts/dtos/IAuthenticationResponseDTO";
+import { IAuthenticationResponse } from "@modules/Accounts/dtos/IAuthenticationResponseDTO";
 import { IAuthenticateUserRequest } from "./AuthenticateUserDTO";
 
 

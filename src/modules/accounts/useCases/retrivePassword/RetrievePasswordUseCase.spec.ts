@@ -1,4 +1,4 @@
-import { UsersRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersRepositoryInMemory"
+import { UsersRepositoryInMemory } from "@modules/Accounts/repositories/In-memory/UsersRepositoryInMemory"
 import { AppError } from "@shared/errors/AppError"
 import { PRIV_KEY } from "@utils/keyUtils/readKeys"
 import { genPassword, validatePassword } from "@utils/passwordUtils/passwordUtils"
