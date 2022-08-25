@@ -6,6 +6,10 @@ import { v4 as uuidV4 } from "uuid"
 
 class FileRepositoryInMemory implements IFileRepository {
 
+    getFileUrlById(id: string, product_id: string): Promise<File> {
+        throw new Error("Method not implemented.");
+    }
+
     private repository: File[] = []
 
     async save({ id = uuidV4(), mime_type, name, user_id, extension, path, size, storage_type, created_at = new Date(), updated_at, permission = "public" }: ISaveFile): Promise<File> {

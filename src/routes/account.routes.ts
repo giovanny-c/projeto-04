@@ -17,6 +17,7 @@ import multer from "multer"
 import { GetFileFromUserController } from "@modules/File/useCases/getFilesFromUser/GetFileFromUserController";
 import { GetFileController } from "@modules/File/useCases/getFile/GetFileController";
 import { ensureAdmin } from "@shared/middlewares/ensureAdmin";
+import { SaveProductController } from "@modules/Products/useCases/createProduct/SaveProductController";
 
 const upload = multer()
 
@@ -34,6 +35,7 @@ const retrievePasswordController = new RetrievePasswordController()
 const generatePdfController = new GeneratePdfController()
 const getFileController = new GetFileController()
 const getFileFromUserController = new GetFileFromUserController()
+const saveProductController = new SaveProductController()
 
 accountRoutes.post("/sign-in", upload.none(), createUserController.handle)
 accountRoutes.get("/sign-in", signInController.handle)
@@ -45,14 +47,18 @@ accountRoutes.get("/profile", ensureAuthenticated, getProfileController.handle)
 accountRoutes.patch("/log-out", ensureAuthenticated, logOutController.handle)
 accountRoutes.post("/forgot-password", upload.none(), sendForgotPasswordMailController.handle)
 accountRoutes.put("/retrieve-password", upload.none(), retrievePasswordController.handle)
-accountRoutes.post("/gen-pdf", ensureAuthenticated, upload.none(), generatePdfController.handle)
-accountRoutes.get("/user/files", ensureAuthenticated, getFileFromUserController.handle)
+//accountRoutes.post("/gen-pdf", ensureAuthenticated, upload.none(), generatePdfController.handle)
 
 //admin // testar
 accountRoutes.post("admin/create-admin-account", ensureAuthenticated, ensureAdmin, upload.none(), createUserController.handle)
 
+//files
+accountRoutes.get("/user/files", ensureAuthenticated, getFileFromUserController.handle)
 accountRoutes.get("/user/file/:id", ensureAuthenticated, getFileController.handle)
 
+
+//products
+accountRoutes.get("/user/products/create", ensureAuthenticated, saveProductController.handle)
 
 
 

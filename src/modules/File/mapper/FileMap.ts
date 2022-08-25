@@ -37,6 +37,19 @@ class FileMap {
         return file
 
     }
+
+
+
+    //para retornar apenas id e o file url
+    static return_URL({ id, file_url }: File) {
+
+        const file = instanceToInstance({
+            id, //necessario
+            file_url
+        })
+
+        return file
+    }
 }
 
 export { FileMap }

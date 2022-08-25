@@ -40,6 +40,8 @@ class FileRepository implements IFileRepository {
 
         return file
     }
+
+
     async findByUserId(user_id: string): Promise<File[]> {
         const file = await this.repository.findBy({ user_id })
 
@@ -47,6 +49,17 @@ class FileRepository implements IFileRepository {
 
 
     }
+
+    async getFileUrlById(id: string, product_id: string): Promise<File> {
+
+        const file = await this.repository.findOne({
+            select: ["id", "file_url"],
+            where: { id }
+        }) as File
+
+        return file
+    }
+
     async delete(id: string): Promise<void> {
 
         await this.repository.delete(id)
