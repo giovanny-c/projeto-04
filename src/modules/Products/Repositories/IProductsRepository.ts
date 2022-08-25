@@ -1,5 +1,5 @@
 import { ISaveProduct } from "../dtos/ISaveProductDTO"
-import { Product } from "../Entities/Product"
+import { Product } from "../entities/Product"
 
 
 interface IProductsRepository {

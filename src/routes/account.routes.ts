@@ -11,15 +11,18 @@ import { LogOutController } from "../modules/Accounts/useCases/logout/LogOutCont
 import { SendForgotPasswordMailController } from "../modules/Accounts/useCases/sendForgotPasswordMail/SendForgotPasswordMailController";
 import { RetrievePasswordController } from "../modules/Accounts/useCases/retrivePassword/RetrievePasswordController";
 import { GeneratePdfController } from "../modules/Accounts/useCases/generatePdf/GeneratePdfController";
-//middlewares
-import { ensureAuthenticated } from "../shared/middlewares/ensureAuthenticated";
-import multer from "multer"
 import { GetFileFromUserController } from "@modules/File/useCases/getFilesFromUser/GetFileFromUserController";
 import { GetFileController } from "@modules/File/useCases/getFile/GetFileController";
-import { ensureAdmin } from "@shared/middlewares/ensureAdmin";
 import { SaveProductController } from "@modules/Products/useCases/createProduct/SaveProductController";
 
-const upload = multer()
+//middlewares
+import { ensureAuthenticated } from "../shared/middlewares/ensureAuthenticated";
+import { ensureAdmin } from "@shared/middlewares/ensureAdmin";
+import multer from "multer"
+
+import uploadConfig from "@config/upload"
+
+const upload = multer(uploadConfig)
 
 const accountRoutes = Router()
 

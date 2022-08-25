@@ -1,5 +1,5 @@
 import { ISaveProduct } from "@modules/Products/dtos/ISaveProductDTO";
-import { Product } from "@modules/Products/Entities/Product";
+import { Product } from "@modules/Products/entities/Product";
 import { dataSource } from "../../../../database";
 import { Repository } from "typeorm";
 import { IProductsRepository } from "../IProductsRepository";
@@ -32,10 +32,11 @@ class ProductsRepository implements IProductsRepository {
 
     }
     async findById(id: string): Promise<Product> {
-
+        console.log(id)
+        const product = await this.repository.findOneBy({ id })
         //fazer find com relations de user
+        return product as Product
 
-        return await this.repository.findOneBy({ id }) as Product
     }
     async findByVendor(vendor_id: string): Promise<Product[]> {
 
