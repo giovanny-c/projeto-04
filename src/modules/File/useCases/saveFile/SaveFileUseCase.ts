@@ -1,5 +1,5 @@
 
-import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
+import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 import { IDateProvider } from "@shared/container/providers/dateProvider/IDateProvider";
 import { IStorageProvider } from "@shared/container/providers/storageProvider/IStorageProvider";
 import { AppError } from "@shared/errors/AppError";

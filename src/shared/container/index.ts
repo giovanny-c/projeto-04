@@ -8,6 +8,8 @@ import { IUsersTokensRepository } from "../../modules/Accounts/repositories/IUse
 import { UsersTokensRepository } from "../../modules/Accounts/repositories/implementations/UsersTokensRepository";
 import { IFileRepository } from "@modules/File/repositories/IFileRepository";
 import { FileRepository } from "@modules/File/repositories/implementations/FileRepository";
+import { IProductsRepository } from "@modules/Products/Repositories/IProductsRepository";
+import { ProductsRepository } from "@modules/Products/Repositories/implementations/ProductsRepository";
 
 
 container.registerSingleton<IUsersRepository>(
@@ -23,4 +25,9 @@ container.registerSingleton<IUsersTokensRepository>(
 container.registerSingleton<IFileRepository>(
     "FileRepository",
     FileRepository
+)
+
+container.registerSingleton<IProductsRepository>(
+    "ProductsRepository",
+    ProductsRepository
 )

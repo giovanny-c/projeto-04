@@ -14,7 +14,7 @@ class ProductsRepository implements IProductsRepository {
     }
 
     async save({ id, vendor_id, price, old_price, description, quantity, available, created_at, updated_at }: ISaveProduct): Promise<Product> {
-
+        //FALTA O NOME DO PRODUTO
         const product = this.repository.create({
             id,
             vendor_id,
@@ -46,4 +46,4 @@ class ProductsRepository implements IProductsRepository {
 
 }
 
-export { }
+export { ProductsRepository }
