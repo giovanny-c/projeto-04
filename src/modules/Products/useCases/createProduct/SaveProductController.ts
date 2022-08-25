@@ -10,6 +10,7 @@ class SaveProductController {
     async handle(req: Request, res: Response): Promise<Response> {
 
         const {
+            name,
             price,
             available,
             quantity,
@@ -24,6 +25,7 @@ class SaveProductController {
 
         const response = await saveProductUseCase.execute({
             id,
+            name,
             vendor_id,
             price,
             description,

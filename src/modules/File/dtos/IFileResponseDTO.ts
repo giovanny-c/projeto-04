@@ -4,6 +4,7 @@ interface IFileResponseDTO {
 
     id: string
     user_id: string
+    product_id?: string
     name: string
     mime_type: string
     extension: string

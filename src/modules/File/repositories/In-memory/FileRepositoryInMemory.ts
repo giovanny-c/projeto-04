@@ -2,11 +2,12 @@ import { ISaveFile } from "@modules/File/dtos/ISaveFileDTO";
 import { File } from "@modules/File/entities/File";
 import { IFileRepository } from "../IFileRepository";
 import { v4 as uuidV4 } from "uuid"
+import { IFileRequestUrl } from "@modules/File/dtos/IFileRequestUrlDTO";
 
 
 class FileRepositoryInMemory implements IFileRepository {
 
-    getFileUrlById(id: string, product_id: string): Promise<File> {
+    getFileUrlByIdOrProductId({ id, product_id }: IFileRequestUrl): Promise<File | File[]> {
         throw new Error("Method not implemented.");
     }
 

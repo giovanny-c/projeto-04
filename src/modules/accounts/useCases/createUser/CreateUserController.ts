@@ -18,12 +18,12 @@ class CreateUserController {
 
             const sendConfirmationRegisterMail = container.resolve(SendConfirmationRegisterMailUseCase)
 
-            if (req.user.admin) { // so se for admin
+            // if (req.user.admin) { // so se for admin
 
-                const { admin } = req.body
+            //     const { admin } = req.body
 
-                await createUser.execute({ name, email, password, admin })
-            }
+            //     await createUser.execute({ name, email, password, admin })
+            // }
 
             await createUser.execute({ name, email, password })
 

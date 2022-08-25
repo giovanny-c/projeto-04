@@ -1,6 +1,6 @@
 import { ISaveProduct } from "@modules/Products/dtos/ISaveProductDTO";
 import { Product } from "@modules/Products/Entities/Product";
-import { dataSource } from "database";
+import { dataSource } from "../../../../database";
 import { Repository } from "typeorm";
 import { IProductsRepository } from "../IProductsRepository";
 
@@ -13,10 +13,11 @@ class ProductsRepository implements IProductsRepository {
         this.repository = dataSource.getRepository(Product)
     }
 
-    async save({ id, vendor_id, price, old_price, description, quantity, available, created_at, updated_at }: ISaveProduct): Promise<Product> {
+    async save({ id, name, vendor_id, price, old_price, description, quantity, available, created_at, updated_at }: ISaveProduct): Promise<Product> {
         //FALTA O NOME DO PRODUTO
         const product = this.repository.create({
             id,
+            name,
             vendor_id,
             price,
             old_price,

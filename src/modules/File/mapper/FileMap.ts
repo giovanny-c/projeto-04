@@ -9,6 +9,7 @@ class FileMap {
     static toDTO({
         id,
         user_id,
+        product_id,
         name,
         mime_type,
         extension,
@@ -23,6 +24,7 @@ class FileMap {
         const file = instanceToInstance({
             id,
             user_id,
+            product_id,
             name,
             mime_type,
             extension,
@@ -41,10 +43,11 @@ class FileMap {
 
 
     //para retornar apenas id e o file url
+    //ou fazer o mapper nos files do product?
     static return_URL({ id, file_url }: File) {
 
         const file = instanceToInstance({
-            id, //necessario
+            id, //necessario ?
             file_url
         })
 

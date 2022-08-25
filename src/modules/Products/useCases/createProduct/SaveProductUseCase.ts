@@ -21,7 +21,7 @@ class SaveProductUseCase {
     }
 
 
-    async execute({ id, vendor_id, available, description, price, quantity }: ISaveProduct): Promise<Product> {
+    async execute({ id, name, vendor_id, available, description, price, quantity }: ISaveProduct): Promise<Product> {
         try {
 
 
@@ -45,6 +45,7 @@ class SaveProductUseCase {
 
                 return await this.productsRepository.save({
                     id,
+                    name,
                     vendor_id: vendor_id as string,
                     description: description,
                     price: price,
@@ -57,6 +58,7 @@ class SaveProductUseCase {
             }
 
             return await this.productsRepository.save({
+                name,
                 vendor_id: vendor_id,
                 description: description,
                 price: price,

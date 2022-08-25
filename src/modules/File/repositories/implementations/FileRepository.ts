@@ -1,3 +1,4 @@
+import { IFileRequestUrl } from "@modules/File/dtos/IFileRequestUrlDTO";
 import { ISaveFile } from "@modules/File/dtos/ISaveFileDTO";
 import { File } from "@modules/File/entities/File";
 import { dataSource } from "database";
@@ -13,11 +14,12 @@ class FileRepository implements IFileRepository {
         this.repository = dataSource.getRepository(File)
     }
 
-    async save({ id, user_id, name, mime_type, created_at, updated_at, extension, size, storage_type, permission }: ISaveFile): Promise<File> {
+    async save({ id, user_id, product_id, name, mime_type, created_at, updated_at, extension, size, storage_type, permission }: ISaveFile): Promise<File> {
 
         const file = this.repository.create({
             id,
             user_id,
+            product_id,
             name,
             mime_type,
             extension,
@@ -50,14 +52,26 @@ class FileRepository implements IFileRepository {
 
     }
 
-    async getFileUrlById(id: string, product_id: string): Promise<File> {
+    async getFileUrlByIdOrProductId({ id, product_id }: IFileRequestUrl): Promise<File | File[]> {
 
-        const file = await this.repository.findOne({
-            select: ["id", "file_url"],
-            where: { id }
-        }) as File
+        let files
 
-        return file
+        if (product_id) {
+            files = await this.repository.find({
+                select: ["id", "file_url"],
+                where: { product_id }
+            }) as File[]
+        }
+
+        if (!product_id) {
+            files = await this.repository.findOne({
+                select: ["id", "file_url"],
+                where: { id }
+            }) as File
+        }
+
+
+        return files
     }
 
     async delete(id: string): Promise<void> {

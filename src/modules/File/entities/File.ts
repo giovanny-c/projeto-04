@@ -17,6 +17,9 @@ class File {
     user?: User
 
     @Column()
+    product_id?: string
+
+    @Column()
     name: string
 
     @Column() // futuramente Armazenar no aws bucket 
@@ -39,6 +42,7 @@ class File {
 
     @Column()
     updated_at?: Date
+
 
     @Expose({ name: "file_url" })
     file_url(): string {

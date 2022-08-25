@@ -58,7 +58,7 @@ accountRoutes.get("/user/file/:id", ensureAuthenticated, getFileController.handl
 
 
 //products
-accountRoutes.get("/user/products/create", ensureAuthenticated, saveProductController.handle)
+accountRoutes.get(["/user/products/create", "user/announce/new-product"], ensureAuthenticated, upload.array("images"), saveProductController.handle)
 
 
 

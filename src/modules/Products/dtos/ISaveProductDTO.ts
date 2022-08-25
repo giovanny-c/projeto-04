@@ -3,6 +3,7 @@
 interface ISaveProduct {
 
     id?: string
+    name: string
     price: number
     old_price?: number
     vendor_id: string
