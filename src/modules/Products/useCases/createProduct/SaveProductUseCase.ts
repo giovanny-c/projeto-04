@@ -7,7 +7,7 @@ import { AppError } from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
-class CreateProductUseCase {
+class SaveProductUseCase {
 
     constructor(
         @inject("ProductsRepository")
@@ -21,7 +21,7 @@ class CreateProductUseCase {
     }
 
 
-    async execute({ id, vendor_id, available, description, price, quantity = 0 }: ISaveProduct): Promise<Product> {
+    async execute({ id, vendor_id, available, description, price, quantity }: ISaveProduct): Promise<Product> {
         try {
 
 
@@ -34,10 +34,12 @@ class CreateProductUseCase {
             const product = await this.productsRepository.findById(id as string)
 
             if (product && product.vendor_id !== vendor_id) {
-                throw new AppError("Your not the vendor of this profuct", 401)
+                throw new AppError("You're not the vendor of this product", 401)
             }
 
-            if (quantity === 0) available = false
+            if (quantity === 0 && available === true) {
+                throw new AppError("You cant offer a product without a stock", 400)
+            }
 
             if (product) {
 
@@ -68,3 +70,5 @@ class CreateProductUseCase {
         }
     }
 }
+
+export { SaveProductUseCase }
