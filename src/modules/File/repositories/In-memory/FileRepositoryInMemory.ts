@@ -6,6 +6,9 @@ import { IFileRequestUrl } from "@modules/File/dtos/IFileRequestUrlDTO";
 
 
 class FileRepositoryInMemory implements IFileRepository {
+    countFilesByProductId(product_id: any): Promise<number> {
+        throw new Error("Method not implemented.");
+    }
 
     getFileUrlByIdOrProductId({ id, product_id }: IFileRequestUrl): Promise<File | File[]> {
         throw new Error("Method not implemented.");

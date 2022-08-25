@@ -14,6 +14,7 @@ class FileRepository implements IFileRepository {
         this.repository = dataSource.getRepository(File)
     }
 
+
     async save({ id, user_id, product_id, name, mime_type, created_at, updated_at, extension, size, storage_type, permission }: ISaveFile): Promise<File> {
 
         const file = this.repository.create({
@@ -72,6 +73,11 @@ class FileRepository implements IFileRepository {
 
 
         return files
+    }
+
+    async countFilesByProductId(product_id: any): Promise<number> {
+
+        return await this.repository.countBy({ product_id })
     }
 
     async delete(id: string): Promise<void> {

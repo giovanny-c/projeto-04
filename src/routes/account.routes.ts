@@ -61,7 +61,8 @@ accountRoutes.get("/user/file/:id", ensureAuthenticated, getFileController.handl
 
 
 //products
-accountRoutes.get(["/user/products/create", "user/announce/new-product"], ensureAuthenticated, upload.array("images"), saveProductController.handle)
+accountRoutes.post(["/user/products/create", "user/announce/new-product"], ensureAuthenticated, upload.array("images"), saveProductController.handle)
+accountRoutes.put("/user/product/:id/edit", ensureAuthenticated, upload.array("images"), saveProductController.handle)
 
 
 

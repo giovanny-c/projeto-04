@@ -1,5 +1,6 @@
 import { IFile } from "@modules/File/dtos/IFileDTO";
 import { SaveFileUseCase } from "@modules/File/useCases/saveFile/SaveFileUseCase";
+import { SaveFilesForProductUseCase } from "@modules/File/useCases/saveFileForProducts/SaveFilesForProductsUseCase";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 import { SaveProductUseCase } from "./SaveProductUseCase";
@@ -20,9 +21,9 @@ class SaveProductController {
                 price,
                 available,
                 quantity,
-                description
+                description,
+                deleted_images_ids
             } = req.body
-
 
             const images = req.files as IFile[]
 
@@ -30,7 +31,7 @@ class SaveProductController {
 
             const { id: vendor_id } = req.user
 
-            const saveFileUseCase = container.resolve(SaveFileUseCase)
+            const saveFilesForProductUseCase = container.resolve(SaveFilesForProductUseCase)
 
             const saveProductUseCase = container.resolve(SaveProductUseCase)
 
@@ -44,17 +45,29 @@ class SaveProductController {
                 quantity
             })
 
-            images.forEach(async (file) => {
 
-                await saveFileUseCase.execute({
+
+            //deletar imgs que foram passadas no edit
+            //so permitir 4 imgs por produto / countImg - deleteImg = ?
+
+            //para o delete images nao entrar como array com strings ""
+            //pensar em algo melhor
+            if (deleted_images_ids[0] === "") {
+                await saveFilesForProductUseCase.execute({
+                    images,
+                    product_id: response.id,
                     user_id: vendor_id,
-                    name: file.filename,
-                    is_public: true,
-                    mime_type: file.mimetype,
-                    path: file.path,
-                    size: file.size
                 })
+            }
+
+            await saveFilesForProductUseCase.execute({
+                images,
+                product_id: response.id,
+                user_id: vendor_id,
+                deleted_images_ids
             })
+
+
 
             return res.status(201).json(response)
 

@@ -33,8 +33,13 @@ class SaveProductUseCase {
                 throw new AppError("User do not exists", 400)
             }
 
-            if (id) {
+            let is_available
 
+            available = "true" ? is_available = true : is_available = false
+
+
+
+            if (id) {
 
                 const product = await this.productsRepository.findById(id as string)
 
@@ -47,6 +52,7 @@ class SaveProductUseCase {
                     throw new AppError("You cant offer a product without a stock", 400)
                 }
 
+
                 if (product) {
 
                     return await this.productsRepository.save({
@@ -57,7 +63,7 @@ class SaveProductUseCase {
                         price: price,
                         old_price: product.price,
                         quantity: quantity,
-                        available: available,
+                        available: is_available,
                         created_at: product.created_at,
                         updated_at: this.dateProvider.dateNow()
                     })
@@ -71,7 +77,7 @@ class SaveProductUseCase {
                 description: description,
                 price: price,
                 quantity: quantity,
-                available: available,
+                available: is_available,
                 created_at: this.dateProvider.dateNow(),
             })
 
