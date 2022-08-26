@@ -39,9 +39,12 @@ class FileRepository implements IFileRepository {
     }
     async findById(id: string): Promise<File> {
 
+
         const file = await this.repository.findOneBy({ id }) as File
 
         return file
+
+
     }
 
 

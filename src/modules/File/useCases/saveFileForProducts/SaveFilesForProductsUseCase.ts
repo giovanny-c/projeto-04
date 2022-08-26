@@ -50,38 +50,53 @@ class SaveFilesForProductUseCase {
                 }
 
                 //delete img
+
+
                 deleted_images_ids.forEach(async (id) => {
+                    try {
 
-                    const file = await this.fileRepository.findById(id)
+                        const file = await this.fileRepository.findById(id)
 
-                    await this.storageProvider.delete({ file: file.name, folder: file.mime_type })
+                        if (file) {
+                            await this.storageProvider.delete({ file: file.name, folder: file.mime_type })
 
-                    await this.fileRepository.delete(id)
+                            await this.fileRepository.delete(id)
+                        }
+
+
+
+                    } catch (error) {
+                        throw error
+                    }
                 })
 
                 // add new image
                 images.forEach(async (image) => {
+                    try {
+
+                        let [, file_extension] = image.filename.split(/\.(?!.*\.)/, 2)
 
 
-                    let [, file_extension] = image.filename.split(/\.(?!.*\.)/, 2)
 
+                        //salva no storage
+                        await this.storageProvider.save({ file: image.filename, folder: image.mimetype })
 
+                        //salva no bd
+                        return await this.fileRepository.save({
+                            user_id,
+                            product_id,
+                            name: image.filename,
+                            mime_type: image.mimetype,
+                            created_at: this.dateProvider.dateNow(),
+                            size: image.size,
+                            storage_type: process.env.STORAGE,
+                            extension: file_extension,
+                            permission: "public"
+                        })
 
-                    //salva no storage
-                    await this.storageProvider.save({ file: image.filename, folder: image.mimetype })
-
-                    //salva no bd
-                    return await this.fileRepository.save({
-                        user_id,
-                        product_id,
-                        name: image.filename,
-                        mime_type: image.mimetype,
-                        created_at: this.dateProvider.dateNow(),
-                        size: image.size,
-                        storage_type: process.env.STORAGE,
-                        extension: file_extension,
-                        permission: "public"
-                    })
+                    } catch (error) {
+                        throw error
+                    }
                 })
 
             }
@@ -90,12 +105,19 @@ class SaveFilesForProductUseCase {
 
                 //delete img
                 deleted_images_ids.forEach(async (id) => {
+                    try {
 
-                    const file = await this.fileRepository.findById(id)
+                        const file = await this.fileRepository.findById(id)
 
-                    await this.storageProvider.delete({ file: file.name, folder: file.mime_type })
+                        if (file) {
+                            await this.storageProvider.delete({ file: file.name, folder: file.mime_type })
 
-                    await this.fileRepository.delete(id)
+                            await this.fileRepository.delete(id)
+                        }
+
+                    } catch (error) {
+                        throw error
+                    }
                 })
             }
 
@@ -108,26 +130,34 @@ class SaveFilesForProductUseCase {
 
                 images.forEach(async (image) => {
 
-
-                    let [, file_extension] = image.filename.split(/\.(?!.*\.)/, 2)
-
+                    try {
 
 
-                    //salva no storage
-                    await this.storageProvider.save({ file: image.filename, folder: image.mimetype })
 
-                    //salva no bd
-                    return await this.fileRepository.save({
-                        user_id,
-                        product_id,
-                        name: image.filename,
-                        mime_type: image.mimetype,
-                        created_at: this.dateProvider.dateNow(),
-                        size: image.size,
-                        storage_type: process.env.STORAGE,
-                        extension: file_extension,
-                        permission: "public"
-                    })
+                        let [, file_extension] = image.filename.split(/\.(?!.*\.)/, 2)
+
+
+
+                        //salva no storage
+                        await this.storageProvider.save({ file: image.filename, folder: image.mimetype })
+
+                        //salva no bd
+                        return await this.fileRepository.save({
+                            user_id,
+                            product_id,
+                            name: image.filename,
+                            mime_type: image.mimetype,
+                            created_at: this.dateProvider.dateNow(),
+                            size: image.size,
+                            storage_type: process.env.STORAGE,
+                            extension: file_extension,
+                            permission: "public"
+                        })
+
+
+                    } catch (error) {
+                        throw error
+                    }
                 })
             }
 

@@ -2,9 +2,9 @@ import { IFile } from "@modules/File/dtos/IFileDTO";
 import { SaveFileUseCase } from "@modules/File/useCases/saveFile/SaveFileUseCase";
 import { SaveFilesForProductUseCase } from "@modules/File/useCases/saveFileForProducts/SaveFilesForProductsUseCase";
 import { Request, Response } from "express";
+import { type } from "os";
 import { container } from "tsyringe";
 import { SaveProductUseCase } from "./SaveProductUseCase";
-
 
 
 class SaveProductController {
@@ -22,8 +22,11 @@ class SaveProductController {
                 available,
                 quantity,
                 description,
-                deleted_images_ids
+
             } = req.body
+
+            let { deleted_images_ids } = req.body
+
 
             const images = req.files as IFile[]
 
@@ -52,20 +55,23 @@ class SaveProductController {
 
             //para o delete images nao entrar como array com strings ""
             //pensar em algo melhor
-            if (deleted_images_ids[0] === "") {
-                await saveFilesForProductUseCase.execute({
-                    images,
-                    product_id: response.id,
-                    user_id: vendor_id,
-                })
-            }
+            // if (deleted_images_ids[0] === "") {
+            //     await saveFilesForProductUseCase.execute({
+            //         images,
+            //         product_id: response.id,
+            //         user_id: vendor_id,
+            //     })
+            // }
+
+
 
             await saveFilesForProductUseCase.execute({
                 images,
                 product_id: response.id,
                 user_id: vendor_id,
-                deleted_images_ids
+                deleted_images_ids: deleted_images_ids || undefined
             })
+            //quando deleta só 1 nao vem em array, vem em string
 
 
 
