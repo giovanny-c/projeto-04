@@ -1,5 +1,5 @@
 interface IFileRequestUrl {
-    id?: string
+    file_id?: string
     product_id?: string
 }
 

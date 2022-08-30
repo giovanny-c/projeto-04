@@ -44,14 +44,20 @@ class FileMap {
 
     //para retornar apenas id e o file url
     //ou fazer o mapper nos files do product?
-    static return_URL({ id, file_url }: File) {
+    static return_URL({ id, storage_type, mime_type, name, file_url }: File) {
 
         const file = instanceToInstance({
-            id, //necessario ?
+            id,
+            storage_type,
+            mime_type,
+            name,
             file_url
         })
 
-        return file
+        return {
+            id: file.id,
+            url: file.file_url
+        }
     }
 }
 

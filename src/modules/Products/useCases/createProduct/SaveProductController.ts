@@ -63,16 +63,26 @@ class SaveProductController {
             //     })
             // }
 
+            // console.log(deleted_images_ids.split(/S+/))
 
+            if (deleted_images_ids[1]) {
 
+                await saveFilesForProductUseCase.execute({
+                    images,
+                    product_id: response.id,
+                    user_id: vendor_id,
+                    deleted_images_ids: deleted_images_ids
+                })
+
+            }
+
+            //quando deleta só 1 nao vem em array, vem em string
             await saveFilesForProductUseCase.execute({
                 images,
                 product_id: response.id,
                 user_id: vendor_id,
-                deleted_images_ids: deleted_images_ids || undefined
+                deleted_images_ids: [deleted_images_ids] || undefined
             })
-            //quando deleta só 1 nao vem em array, vem em string
-
 
 
             return res.status(201).json(response)

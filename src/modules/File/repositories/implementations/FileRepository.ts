@@ -56,21 +56,21 @@ class FileRepository implements IFileRepository {
 
     }
 
-    async getFileUrlByIdOrProductId({ id, product_id }: IFileRequestUrl): Promise<File | File[]> {
+    async getFileUrlByIdOrProductId({ file_id, product_id }: IFileRequestUrl): Promise<File | File[]> {
 
         let files
 
         if (product_id) {
             files = await this.repository.find({
-                select: ["id", "file_url"],
+                select: ["id", "storage_type", "mime_type", "name"],
                 where: { product_id }
             }) as File[]
         }
 
         if (!product_id) {
             files = await this.repository.findOne({
-                select: ["id", "file_url"],
-                where: { id }
+                select: ["id", "storage_type", "mime_type", "name"],
+                where: { id: file_id }
             }) as File
         }
 

@@ -16,10 +16,12 @@ import "@shared/container"
 //multer upload 
 import upload from "@config/upload"
 
-//routes
 import { errorHandler } from "@shared/errors/ErrorHandler" //colocar em cima?
+
+//routes
 import { accountRoutes } from "./routes/account.routes"
 import { fileRoutes } from "routes/file.routes"
+import { productRoutes } from "routes/product.routes"
 //import { config } from "../src/config/auth"
 
 
@@ -70,6 +72,7 @@ app.use(session({
 
 app.use("/accounts", accountRoutes)
 app.use("/file", fileRoutes)
+app.use(productRoutes)
 
 app.use(["/accounts/user/file/:id", "/accounts/user/files"], express.static(`${upload.tmpFolder}/**/**`))
 //toda vez que uma rota /file for chamada
