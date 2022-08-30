@@ -11,7 +11,7 @@ interface IProductResponse {
     product: Product
     files: {
         id: string
-        file_url: () => string
+        url: () => string
     }[]
 
 }

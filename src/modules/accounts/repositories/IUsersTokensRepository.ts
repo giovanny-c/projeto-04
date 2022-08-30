@@ -12,7 +12,6 @@ interface IUsersTokensRepository {
     deleteByUserId(user_id: string): Promise<void>
     setTokenAsInvalidAndUsed(id: string): Promise<void>
     setTokenFamilyAsInvalid(data: ISetTokenFamilyInvalidDTO): Promise<void>
-
 }
 
 export { IUsersTokensRepository }
