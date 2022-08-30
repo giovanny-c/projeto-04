@@ -60,7 +60,7 @@ class SaveFilesForProductUseCase {
                         if (file) {
                             await this.storageProvider.delete({ file: file.name, folder: file.mime_type })
 
-                            await this.fileRepository.delete(id)
+                            await this.fileRepository.delete(file.id)
                         }
 
 
@@ -112,7 +112,7 @@ class SaveFilesForProductUseCase {
                         if (file) {
                             await this.storageProvider.delete({ file: file.name, folder: file.mime_type })
 
-                            await this.fileRepository.delete(id)
+                            await this.fileRepository.delete(file.id)
                         }
 
                     } catch (error) {

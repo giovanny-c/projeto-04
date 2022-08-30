@@ -10,7 +10,7 @@ class Pdf_LibProvider implements IPdfProvider {
 
     async CreatePdf(data: string[], saveOnApp?: boolean) {
 
-        console.log(data)
+
 
         const doc = await PDFDocument.create()
 

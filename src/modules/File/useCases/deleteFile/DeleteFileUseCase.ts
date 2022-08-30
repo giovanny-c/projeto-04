@@ -23,7 +23,7 @@ class DeleteFileUseCase {
     async execute(file_id: string, user_id: string): Promise<void> {
 
         try {
-            console.log(user_id)
+
             const user = await this.usersRepository.findById(user_id)
 
             if (!user) {

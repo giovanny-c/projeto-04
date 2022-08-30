@@ -83,7 +83,6 @@ class UsersTokensRepository implements IUsersTokensRepository {
             token.is_valid = false
         });
 
-        console.log(tokens)
 
         await this.repository.save(tokens)
     }

@@ -8,7 +8,7 @@ const usersRepository = new UsersRepository()
 const password = "admin"
 const { salt, hash } = genPassword(password)
 
-console.log(process.env.ADMIN_PASS)
+
 
 usersRepository.save({
     name: "admin",

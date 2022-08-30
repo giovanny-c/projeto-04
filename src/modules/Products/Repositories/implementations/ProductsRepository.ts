@@ -35,7 +35,7 @@ class ProductsRepository implements IProductsRepository {
 
     }
     async findById(id: string): Promise<Product> {
-        console.log(id)
+
         const product = await this.repository.findOneBy({ id })
         //fazer find com relations de user
         return product as Product
@@ -50,37 +50,38 @@ class ProductsRepository implements IProductsRepository {
         search_query,
         price_range = [0, 10 ** 5],
         vendor_name,
-        order_by = { sort: "available", order: "ASC" },
-        limit = 20,
-        offset = 0,
+        order_by,
+        limit,
+        offset,
     }: IFindProducts): Promise<Product[]> {
 
 
         const query = this.repository.createQueryBuilder("p")
 
 
-        // if (vendor_name) {
-        //     query.leftJoin("vendor", "u", "ON u.name = :vendor_name", { vendor_name })
-        // }
+        if (vendor_name) {
+            query.innerJoin("users", "u", "u.name = :vendor_name", { vendor_name })
+
+        }
 
         if (search_query) {
             query.where(`p.name LIKE :name`, { name: `%${search_query}%` })
         }
 
-        // if (price_range) {
-        //     query.andWhere("p.price BETWEEN :price1 AND :price2", { price1: price_range[0], price2: price_range[1] })
-        // }
+        if (price_range) {
+            query.andWhere("p.price BETWEEN :price1 AND :price2", { price1: price_range[0], price2: price_range[1] })
+        }
 
         // if(category_id){
         // }
+        query.orderBy("available", "DESC", "NULLS LAST")
 
-        // if (order_by.sort && order_by.order) {
-        //     query.orderBy(order_by.sort, order_by.order)
-        // }
+        if (order_by && order_by.sort && order_by.order) {
+            query.addOrderBy(order_by.sort, order_by.order, "NULLS LAST")
+        }
 
-        // query.limit(limit).offset(offset)
+        query.limit(limit).offset(offset)
 
-        console.log(query.getQuery())
         const products = await query.getMany()
 
         return products

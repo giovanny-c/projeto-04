@@ -6,6 +6,7 @@ import { IDateProvider } from "@shared/container/providers/dateProvider/IDatePro
 import { AppError } from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
 import { IFile } from "@modules/File/dtos/IFileDTO"
+import { IRequestSaveProduct } from "./IRequestSaveProductDTO";
 
 @injectable()
 class SaveProductUseCase {
@@ -23,7 +24,7 @@ class SaveProductUseCase {
     }
 
 
-    async execute({ id, name, vendor_id, available, description, price, quantity }: ISaveProduct): Promise<Product> {
+    async execute({ id, name, vendor_id, available, description, price, quantity }: IRequestSaveProduct): Promise<Product> {
         try {
 
 
@@ -35,7 +36,7 @@ class SaveProductUseCase {
 
             let is_available
 
-            available = "true" ? is_available = true : is_available = false
+            available === "true" ? is_available = true : is_available = false
 
 
 
@@ -48,7 +49,7 @@ class SaveProductUseCase {
                     throw new AppError("You're not the vendor of this product", 401)
                 }
 
-                if (quantity === 0 && available === true) {
+                if (quantity === 0 && is_available === true) {
                     throw new AppError("You cant offer a product without a stock", 400)
                 }
 
@@ -79,6 +80,7 @@ class SaveProductUseCase {
                 quantity: quantity,
                 available: is_available,
                 created_at: this.dateProvider.dateNow(),
+                updated_at: this.dateProvider.dateNow()
             })
 
 

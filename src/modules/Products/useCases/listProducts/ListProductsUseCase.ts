@@ -2,6 +2,7 @@ import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepositor
 import { IFindProducts } from "@modules/Products/dtos/IFindProductsDTO";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
 import { inject, injectable } from "tsyringe";
+import { IRequestListProducts } from "./IRequestListProductsDTO";
 
 
 
@@ -17,7 +18,7 @@ class ListProductsUseCase {
 
     }
 
-    async execute({ search_query, available, vendor_name, price_range, order_by, limit, offset }: IFindProducts) {
+    async execute({ search_query, available, vendor_name, price_range, order_by, limit, offset }: IRequestListProducts) {
 
         return await this.productsRepository.find({
             search_query,

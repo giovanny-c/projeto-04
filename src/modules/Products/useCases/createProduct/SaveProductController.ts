@@ -65,7 +65,7 @@ class SaveProductController {
 
             // console.log(deleted_images_ids.split(/S+/))
 
-            if (deleted_images_ids[1]) {
+            if (deleted_images_ids && Array.isArray(deleted_images_ids)) {
 
                 await saveFilesForProductUseCase.execute({
                     images,
@@ -74,15 +74,19 @@ class SaveProductController {
                     deleted_images_ids: deleted_images_ids
                 })
 
+            } else {
+                await saveFilesForProductUseCase.execute({
+                    images,
+                    product_id: response.id,
+                    user_id: vendor_id,
+                    deleted_images_ids: [deleted_images_ids] || undefined
+                })
             }
 
             //quando deleta só 1 nao vem em array, vem em string
-            await saveFilesForProductUseCase.execute({
-                images,
-                product_id: response.id,
-                user_id: vendor_id,
-                deleted_images_ids: [deleted_images_ids] || undefined
-            })
+
+
+
 
 
             return res.status(201).json(response)

@@ -35,7 +35,7 @@ class SendConfirmationRegisterMailUseCase {
             const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "confirmateRegister.hbs")
 
             const token = issueJWT({ subject: user.id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_CONFIRAMTION_TOKEN as string })
-            console.log(token)
+
             const variables = {
                 name: user.name,
                 link: `${process.env.CONFIRMATION_MAIL_URL}${token}`
