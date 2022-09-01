@@ -35,25 +35,29 @@ class ListProductsUseCase {
             offset
         })
 
-        let response = products.map(async (product) => {
+        return products.forEach(async (product) => {
 
             let files = await this.fileRepository.getFileUrlByIdOrProductId({ product_id: product.id }) as File[]
 
-            let filesUrl = files.map(file => {
+            // let filesUrl = files.map(file => {
 
-                return FileMap.return_URL(file)
+            //     return FileMap.return_URL(file)
 
-            });
+            // })
+
+
 
             return {
-                product,
-                filesUrl
+                product: {
+                    ...product,
+                    files
+                }
             }
 
 
         });
 
-        return response
+
 
     }
 

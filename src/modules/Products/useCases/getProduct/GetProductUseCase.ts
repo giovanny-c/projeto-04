@@ -1,20 +1,12 @@
 import { File } from "@modules/File/entities/File";
 import { FileMap } from "@modules/File/mapper/FileMap";
 import { IFileRepository } from "@modules/File/repositories/IFileRepository";
+import { IProductResponse } from "@modules/Products/dtos/IProductResponseDTO";
 import { Product } from "@modules/Products/entities/Product";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
 import { AppError } from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
 
-interface IProductResponse {
-
-    product: Product
-    files: {
-        id: string
-        url: () => string
-    }[]
-
-}
 
 @injectable()
 class GetProductUseCase {
@@ -43,8 +35,12 @@ class GetProductUseCase {
         })
 
         return {
-            product,
-            files: files_url
+
+            product: {
+                ...product,
+                files: files_url
+            }
+
         }
     }
 }
