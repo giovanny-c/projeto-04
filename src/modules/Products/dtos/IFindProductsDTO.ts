@@ -13,6 +13,9 @@ interface IFindProducts {
     limit?: number
     offset?: number
     available?: boolean
+    category_id?: string
+    tags?: string
+    sells?: string
 }
 
 export { IFindProducts }

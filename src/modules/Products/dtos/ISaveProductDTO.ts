@@ -12,6 +12,9 @@ interface ISaveProduct {
     available: boolean
     created_at?: Date
     updated_at?: Date
+    category_id?: string
+    tags?: string
+    sells?: string
 
 }
 

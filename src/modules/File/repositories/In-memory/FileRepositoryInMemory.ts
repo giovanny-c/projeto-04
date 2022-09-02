@@ -10,7 +10,7 @@ class FileRepositoryInMemory implements IFileRepository {
         throw new Error("Method not implemented.");
     }
 
-    getFileUrlByIdOrProductId({ id, product_id }: IFileRequestUrl): Promise<File | File[]> {
+    getFileUrlByIdOrProductId({ file_id, product_id }: IFileRequestUrl): Promise<File | File[]> {
         throw new Error("Method not implemented.");
     }
 

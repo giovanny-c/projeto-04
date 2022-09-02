@@ -22,7 +22,7 @@ class GetProductUseCase {
 
     async execute(id: string): Promise<IProductResponse> {
 
-        const product = await this.productsRepository.findById(id)
+        let product = await this.productsRepository.findById(id)
 
         if (!product) {
             throw new AppError("No product found", 404)
@@ -34,14 +34,11 @@ class GetProductUseCase {
             return FileMap.return_URL(file)
         })
 
-        return {
+        return Object.assign(product, {
+            files: files_url
+        })
 
-            product: {
-                ...product,
-                files: files_url
-            }
 
-        }
     }
 }
 

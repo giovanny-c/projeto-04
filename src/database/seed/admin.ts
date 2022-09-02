@@ -29,6 +29,7 @@ async function createAdmin() {
 
     dataSource.destroy()
 
+    //Nao ta FUnCionado
 
 
 

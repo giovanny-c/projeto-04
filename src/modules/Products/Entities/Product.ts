@@ -41,6 +41,18 @@ class Product {
     @Column()
     updated_at: Date
 
+    @Column()
+    category_id?: string
+
+    @Column()
+    rating?: number
+
+    @Column()
+    votes?: number
+
+    @Column()
+    sells?: number
+
 
     constructor() {
         if (!this.id) {

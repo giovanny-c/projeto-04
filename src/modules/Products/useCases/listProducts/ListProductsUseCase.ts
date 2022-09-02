@@ -3,6 +3,7 @@ import { File } from "@modules/File/entities/File";
 import { FileMap } from "@modules/File/mapper/FileMap";
 import { IFileRepository } from "@modules/File/repositories/IFileRepository";
 import { IFindProducts } from "@modules/Products/dtos/IFindProductsDTO";
+import { IProductResponse } from "@modules/Products/dtos/IProductResponseDTO";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
 import { inject, injectable } from "tsyringe";
 import { IRequestListProducts } from "./IRequestListProductsDTO";
@@ -23,9 +24,9 @@ class ListProductsUseCase {
 
     }
 
-    async execute({ search_query, available, vendor_name, price_range, order_by, limit, offset }: IRequestListProducts) {
+    async execute({ search_query, available, vendor_name, price_range, order_by, limit, offset }: IRequestListProducts): Promise<IProductResponse[]> {
 
-        const products = await this.productsRepository.find({
+        let products = await this.productsRepository.find({
             search_query,
             available,
             vendor_name,
@@ -35,27 +36,25 @@ class ListProductsUseCase {
             offset
         })
 
-        return products.forEach(async (product) => {
+        return await Promise.all(products.map(async (product) => {
 
             let files = await this.fileRepository.getFileUrlByIdOrProductId({ product_id: product.id }) as File[]
 
-            // let filesUrl = files.map(file => {
+            let filesUrl = files.map(file => {
 
-            //     return FileMap.return_URL(file)
+                return FileMap.return_URL(file)
 
-            // })
+            })
+
+            product = Object.assign(product, {
+                files: filesUrl
+            })
+
+            return product
+
+        })) as IProductResponse[]
 
 
-
-            return {
-                product: {
-                    ...product,
-                    files
-                }
-            }
-
-
-        });
 
 
 

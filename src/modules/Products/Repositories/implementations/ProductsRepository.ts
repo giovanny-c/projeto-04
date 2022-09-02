@@ -53,6 +53,7 @@ class ProductsRepository implements IProductsRepository {
         order_by,
         limit,
         offset,
+        category_id
     }: IFindProducts): Promise<Product[]> {
 
 
@@ -74,9 +75,21 @@ class ProductsRepository implements IProductsRepository {
 
         // if(category_id){
         // }
+
+        if (category_id) {
+            query.andWhere("p.category_id = :category_id", { category_id })
+        }
+
+        // if(category_id){
+        // }
         query.orderBy("available", "DESC", "NULLS LAST")
 
         if (order_by && order_by.sort && order_by.order) {
+
+            if (order_by.sort === "rating") {
+                query.addOrderBy(order_by.sort, order_by.order, "NULLS LAST")
+            }
+
             query.addOrderBy(order_by.sort, order_by.order, "NULLS LAST")
         }
 
