@@ -16,7 +16,7 @@ class ProductsRepository implements IProductsRepository {
 
 
 
-    async save({ id, name, vendor_id, price, old_price, description, quantity, available, created_at, updated_at }: ISaveProduct): Promise<Product> {
+    async save({ id, name, vendor_id, price, old_price, description, quantity, available, created_at, updated_at, category_id, sells, rating, votes }: ISaveProduct): Promise<Product> {
         //FALTA O NOME DO PRODUTO
         const product = this.repository.create({
             id,
@@ -28,7 +28,11 @@ class ProductsRepository implements IProductsRepository {
             quantity,
             available,
             created_at,
-            updated_at
+            updated_at,
+            category_id,
+            sells,
+            rating,
+            votes
         })
 
         return await this.repository.save(product)
@@ -86,11 +90,13 @@ class ProductsRepository implements IProductsRepository {
 
         if (order_by && order_by.sort && order_by.order) {
 
-            if (order_by.sort === "rating") {
-                query.addOrderBy(order_by.sort, order_by.order, "NULLS LAST")
-            }
+
 
             query.addOrderBy(order_by.sort, order_by.order, "NULLS LAST")
+
+            if (order_by.sort === "rating") { //order by ranting and order by votes desc (melhores ratings com mais votos)
+                query.addOrderBy("votes", "DESC", "NULLS LAST")
+            }
         }
 
         query.limit(limit).offset(offset)

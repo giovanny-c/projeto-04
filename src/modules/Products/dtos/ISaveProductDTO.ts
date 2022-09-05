@@ -13,8 +13,9 @@ interface ISaveProduct {
     created_at?: Date
     updated_at?: Date
     category_id?: string
-    tags?: string
-    sells?: string
+    rating?: number
+    votes?: number
+    sells?: number
 
 }
 

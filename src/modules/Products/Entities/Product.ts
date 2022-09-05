@@ -3,6 +3,7 @@
 import { User } from "../../Accounts/entities/User";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid"
+import { Category } from "@modules/Categories/entities/Category";
 
 @Entity("products")
 class Product {
@@ -42,7 +43,12 @@ class Product {
     updated_at: Date
 
     @Column()
-    category_id?: string
+    category_id: string
+
+    @ManyToOne(() => Category)
+    @JoinColumn({ name: "category_id" })
+    category?: Category
+
 
     @Column()
     rating?: number

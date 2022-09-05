@@ -7,15 +7,14 @@ interface IFindProducts {
     vendor_id?: string
     price_range?: number[]
     order_by?: {
-        sort?: string
+        sort?: "updated_at" | "rating" | "sells"
         order?: "ASC" | "DESC"
     }
     limit?: number
     offset?: number
     available?: boolean
     category_id?: string
-    tags?: string
-    sells?: string
+
 }
 
 export { IFindProducts }

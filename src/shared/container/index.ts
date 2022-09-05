@@ -10,6 +10,8 @@ import { IFileRepository } from "@modules/File/repositories/IFileRepository";
 import { FileRepository } from "@modules/File/repositories/implementations/FileRepository";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
 import { ProductsRepository } from "@modules/Products/repositories/implementations/ProductsRepository";
+import { ICategoriesRepository } from "@modules/Categories/repositories/ICategoriesRepository";
+import { CategoriesRepository } from "@modules/Categories/repositories/implementation/CategoriesRepository";
 
 
 container.registerSingleton<IUsersRepository>(
@@ -30,4 +32,9 @@ container.registerSingleton<IFileRepository>(
 container.registerSingleton<IProductsRepository>(
     "ProductsRepository",
     ProductsRepository
+)
+
+container.registerSingleton<ICategoriesRepository>(
+    "CategoriesRepository",
+    CategoriesRepository
 )

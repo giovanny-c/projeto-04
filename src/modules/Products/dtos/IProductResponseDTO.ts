@@ -18,7 +18,7 @@ interface IProductResponse {
     category_id?: string
     rating?: number
     votes?: number
-    sells?: string
+    sells?: number
     files: {
         id: string
         url: () => string
