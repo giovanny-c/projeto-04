@@ -15,11 +15,11 @@ interface IProductResponse {
     available: boolean
     created_at: Date
     updated_at: Date
-    category_id?: string
+    category_id: string
     rating?: number
     votes?: number
     sells?: number
-    files: {
+    files?: {
         id: string
         url: () => string
     }[]

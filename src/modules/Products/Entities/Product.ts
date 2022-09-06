@@ -3,7 +3,7 @@
 import { User } from "../../Accounts/entities/User";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid"
-import { Category } from "@modules/Categories/entities/Category";
+import { Category } from "../../Categories/entities/Category";
 
 @Entity("products")
 class Product {
@@ -47,17 +47,17 @@ class Product {
 
     @ManyToOne(() => Category)
     @JoinColumn({ name: "category_id" })
-    category?: Category
+    category: Category
 
 
     @Column()
-    rating?: number
+    rating: number
 
     @Column()
-    votes?: number
+    votes: number
 
     @Column()
-    sells?: number
+    sells: number
 
 
     constructor() {

@@ -10,14 +10,20 @@ class GetProductController {
 
     async handle(req: Request, res: Response) {
 
-        const { product_id } = req.params
+        try {
 
-        const getProductUseCase = container.resolve(GetProductUseCase)
 
-        const product = await getProductUseCase.execute(product_id)
+            const { product_id } = req.params
 
-        return res.json(product)
+            const getProductUseCase = container.resolve(GetProductUseCase)
 
+            const product = await getProductUseCase.execute(product_id)
+
+            return res.json(product)
+
+        } catch (error) {
+            throw error
+        }
     }
 
 }

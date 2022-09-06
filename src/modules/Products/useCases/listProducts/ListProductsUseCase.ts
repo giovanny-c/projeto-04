@@ -25,37 +25,41 @@ class ListProductsUseCase {
     }
 
     async execute({ search_query, available, vendor_name, price_range, order_by, limit, offset }: IRequestListProducts): Promise<IProductResponse[]> {
+        try {
 
-        let products = await this.productsRepository.find({
-            search_query,
-            available,
-            vendor_name,
-            price_range,
-            order_by,
-            limit,
-            offset
-        })
 
-        return await Promise.all(products.map(async (product) => {
-
-            let files = await this.fileRepository.getFileUrlByIdOrProductId({ product_id: product.id }) as File[]
-
-            let filesUrl = files.map(file => {
-
-                return FileMap.return_URL(file)
-
+            let products = await this.productsRepository.find({
+                search_query,
+                available,
+                vendor_name,
+                price_range,
+                order_by,
+                limit,
+                offset
             })
 
-            product = Object.assign(product, {
-                files: filesUrl
-            })
+            return await Promise.all(products.map(async (product) => {
 
-            return product
+                let files = await this.fileRepository.getFileUrlByIdOrProductId({ product_id: product.id }) as File[]
 
-        })) as IProductResponse[]
+                let filesUrl = files.map(file => {
+
+                    return FileMap.return_URL(file)
+
+                })
+
+                product = Object.assign(product, {
+                    files: filesUrl
+                })
+
+                return product
+
+            })) //as IProductResponse[]
 
 
-
+        } catch (error) {
+            throw error
+        }
 
 
     }
