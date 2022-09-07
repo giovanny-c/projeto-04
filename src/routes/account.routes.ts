@@ -13,7 +13,7 @@ import { RetrievePasswordController } from "../modules/Accounts/useCases/retrive
 import { GeneratePdfController } from "../modules/Accounts/useCases/generatePdf/GeneratePdfController";
 import { GetFileFromUserController } from "@modules/File/useCases/getFilesFromUser/GetFileFromUserController";
 import { GetFileController } from "@modules/File/useCases/getFile/GetFileController";
-import { SaveProductController } from "@modules/Products/useCases/createProduct/SaveProductController";
+import { SaveProductController } from "@modules/Products/useCases/saveProduct/SaveProductController";
 
 //middlewares
 import { ensureAuthenticated } from "../shared/middlewares/ensureAuthenticated";
@@ -21,6 +21,7 @@ import { ensureAdmin } from "@shared/middlewares/ensureAdmin";
 import multer from "multer"
 
 import uploadConfig from "@config/upload"
+import { DeleteProductController } from "@modules/Products/useCases/deleteProduct/DeleteProductController";
 
 const upload = multer(uploadConfig)
 
@@ -39,6 +40,7 @@ const generatePdfController = new GeneratePdfController()
 const getFileController = new GetFileController()
 const getFileFromUserController = new GetFileFromUserController()
 const saveProductController = new SaveProductController()
+const deleteProductController = new DeleteProductController()
 
 accountRoutes.post("/sign-in", upload.none(), createUserController.handle)
 accountRoutes.get("/sign-in", signInController.handle)
@@ -63,7 +65,7 @@ accountRoutes.get("/user/file/:id", ensureAuthenticated, getFileController.handl
 //products
 accountRoutes.post(["/user/products/create", "user/announce/new-product"], ensureAuthenticated, upload.array("images"), saveProductController.handle)
 accountRoutes.put("/user/product/:id/edit", ensureAuthenticated, upload.array("images"), saveProductController.handle)
-
+accountRoutes.delete("/user/products/:id/delete", ensureAuthenticated, deleteProductController.handle)
 
 
 export { accountRoutes }
