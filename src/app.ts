@@ -22,6 +22,7 @@ import { errorHandler } from "@shared/errors/ErrorHandler" //colocar em cima?
 import { accountRoutes } from "./routes/account.routes"
 import { fileRoutes } from "routes/file.routes"
 import { productRoutes } from "routes/product.routes"
+import { categoriesRoutes } from "routes/categories.routes"
 //import { config } from "../src/config/auth"
 
 
@@ -73,6 +74,7 @@ app.use(session({
 app.use("/accounts", accountRoutes)
 app.use("/file", fileRoutes)
 app.use(productRoutes)
+app.use(categoriesRoutes)
 
 app.use(["/accounts/user/file/:id", "/accounts/user/files"], express.static(`${upload.tmpFolder}/**/**`))
 //toda vez que uma rota /file for chamada
