@@ -4,13 +4,14 @@ import cors from "cors"
 import "express-async-errors"
 
 import session from "express-session"
-import * as redis from "redis"
-import connectRedis from "connect-redis"
 // import { auth, requiresAuth } from "express-openid-connect"
 
-//db e containers
+//db e containers e redis
 import "./database"
 import "@shared/container"
+import "./shared/redis/redisConnect"
+import { redisClient, RedisStore } from "./shared/redis/redisConfig"
+
 
 
 //multer upload 
@@ -33,28 +34,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))//front
 
 
-//redis e session config
-const RedisStore = connectRedis(session)
-
-//config redis client
-const redisClient = redis.createClient({
-    legacyMode: true,
-    socket: {
-        host: process.env.REDIS_HOST,
-        port: Number(process.env.REDIS_PORT),
-    },
-
-})
-
-redisClient.on("error", (err) => {
-    console.log(`Could not establish  a connection with redis. ${err}`)
-})
-redisClient.on("connect", (err) => {
-    console.log("Connected to redis!")
-})
-
-redisClient.connect()
-
+// session config com redis
 app.use(session({
     store: new RedisStore({ client: redisClient as any }),
     secret: process.env.SESSION_SECRET as string,

@@ -10,6 +10,7 @@ import issueJWT from "../../../../utils/tokensUtils/issueJWT";
 import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
 import { IAuthenticationResponse } from "@modules/Accounts/dtos/IAuthenticationResponseDTO";
 import { IAuthenticateUserRequest } from "./AuthenticateUserDTO";
+import { setRedis } from "@shared/redis/redisConfig";
 
 
 
@@ -51,6 +52,9 @@ class AuthenticateUserUseCase {
                 throw new AppError("email or password incorrect")
             }
 
+            //user-${user.id} = chave 
+            //user em string = valor
+            await setRedis(`user-${user.id}`, JSON.stringify(user))
 
             await this.usersRepository.markUserAsLogged(user.id as string)
 
