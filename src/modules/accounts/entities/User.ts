@@ -14,7 +14,8 @@ class User {
     @Column()
     email: string
 
-    //@Exclude()//nao vai trazer a senha 
+    //@Exclude()//nao vai trazer a senha
+    //excluir condicionalmente
     @Column()
     password_hash: string
 

@@ -1,5 +1,6 @@
 import { Category } from "@modules/Categories/entities/Category";
 import { ICategoriesRepository } from "@modules/Categories/repositories/ICategoriesRepository";
+import { setRedis } from "@shared/redis/redisConfig";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
@@ -20,8 +21,13 @@ class SaveCategoryUseCase {
                 const category = await this.categoriesRepository.findById(id)
 
                 if (category) {
+
+                    setRedis(category.id as string, JSON.stringify(category))
+
                     return await this.categoriesRepository.save({ id: category.id, name, description })
                 }
+
+
             }
 
             return await this.categoriesRepository.save({ name, description })

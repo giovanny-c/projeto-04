@@ -56,18 +56,20 @@ class SaveProductUseCase {
 
                 if (product) {
 
-                    return await this.productsRepository.save({
-                        id,
-                        name,
-                        vendor_id: vendor_id as string,
-                        description: description,
-                        price: price,
-                        old_price: product.price,
-                        quantity: quantity,
-                        available: is_available,
-                        created_at: product.created_at,
-                        updated_at: this.dateProvider.dateNow()
-                    })
+                    if (this.dateProvider.compareDiferenceIn(this.dateProvider.dateNow(), product.updated_at, "hours"))
+
+                        return await this.productsRepository.save({
+                            id,
+                            name,
+                            vendor_id: vendor_id as string,
+                            description: description,
+                            price: price,
+                            old_price: product.price,
+                            quantity: quantity,
+                            available: is_available,
+                            created_at: product.created_at,
+                            updated_at: this.dateProvider.dateNow()
+                        })
                 }
 
             }
