@@ -56,7 +56,10 @@ class SaveProductUseCase {
 
                 if (product) {
 
-                    if (this.dateProvider.compareDiferenceIn(this.dateProvider.dateNow(), product.updated_at, "hours"))
+                    // if (this.dateProvider.compareDiferenceIn(this.dateProvider.dateNow(), product.updated_at, "hours") < 3){
+
+                    //     throw new AppError("You cant update a product to often", 401) 
+                    // }
 
                         return await this.productsRepository.save({
                             id,
