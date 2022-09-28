@@ -5,6 +5,7 @@ import { Exclude } from "class-transformer"
 @Entity("users")
 class User {
 
+    @Exclude()
     @PrimaryColumn()
     id?: string
 
@@ -14,20 +15,23 @@ class User {
     @Column()
     email: string
 
-    //@Exclude()//nao vai trazer a senha
-    //excluir condicionalmente
+    @Exclude()//nao vai trazer a senha
     @Column()
     password_hash: string
 
+    @Exclude()
     @Column()
     salt: string
 
+    @Exclude()
     @Column()
     is_confirmed: boolean
 
+    @Exclude()
     @Column()
     is_logged: boolean
 
+    @Exclude()
     @Column()
     admin: boolean
 

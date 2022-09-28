@@ -5,6 +5,7 @@ import { AppError } from "../../../../shared/errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { IGetProfileRequest, IGetProfileResponse } from "./GetProfileDTO";
 import { getRedis } from "@shared/redis/redisConfig";
+import { instanceToInstance } from "class-transformer";
 
 
 
@@ -46,10 +47,7 @@ class GetProfileUseCase {
         user = JSON.parse(userRedis)
 
 
-        return {
-            name: user.name,
-            email: user.email
-        }
+        return instanceToInstance(user) //vai retornar sem as propriedades com @exclude() do User.ts
     }
 }
 export { GetProfileUseCase }

@@ -10,7 +10,8 @@ import session from "express-session"
 import "./database"
 import "@shared/container"
 import "./shared/redis/redisConnect"
-import { redisClient, RedisStore } from "./shared/redis/redisConfig"
+import { redisClient } from "./shared/redis/redisConfig"
+import { RedisStore } from "@shared/session/redisSession"
 
 
 
@@ -33,8 +34,13 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))//front
 
+app.use(["/accounts/user/file/:id", "/accounts/user/files"], express.static(`${upload.tmpFolder}/**/**`))
+//toda vez que uma rota /file for chamada
+//vai acessar a pasta tmp/
+
 
 // session config com redis
+//user o import redisSession no lugar desse pra ver se funciona
 app.use(session({
     store: new RedisStore({ client: redisClient as any }),
     secret: process.env.SESSION_SECRET as string,
@@ -52,16 +58,13 @@ app.use(session({
 
 
 
+
 // app.use(auth(config)) 
 
 app.use("/accounts", accountRoutes)
 app.use("/file", fileRoutes)
 app.use(productRoutes)
 app.use(categoriesRoutes)
-
-app.use(["/accounts/user/file/:id", "/accounts/user/files"], express.static(`${upload.tmpFolder}/**/**`))
-//toda vez que uma rota /file for chamada
-//vai acessar a pasta tmp/
 
 
 app.use(errorHandler)//middleware de errors
