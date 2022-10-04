@@ -12,7 +12,7 @@ interface IProductforOrder {
 
 
 interface IRequest {
-    order_id?: string
+    
     customer_id: string
     products: IProductforOrder[]
 }
@@ -31,7 +31,7 @@ class SaveOrderUseCase {
 
     }
 
-    async execute({customer_id, products, order_id}: IRequest): Promise<Order>{
+    async execute({customer_id, products}: IRequest): Promise<Order>{
         //costumer validations
         const customerExists = await this.usersRepository.findById(customer_id)
 
@@ -91,7 +91,6 @@ class SaveOrderUseCase {
         }))
 
         const order = await this.ordersRepository.save({
-            id: order_id,
             customer: customerExists,
             products: availableProducts
         })
@@ -109,5 +108,5 @@ class SaveOrderUseCase {
         return order
     }
 }
-
+ 
 export {SaveOrderUseCase}
