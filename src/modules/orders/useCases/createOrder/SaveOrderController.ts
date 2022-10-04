@@ -19,3 +19,5 @@ class SaveOrderController {
         return res.status(201).json(order)
     }
 }
+
+export {SaveOrderController}

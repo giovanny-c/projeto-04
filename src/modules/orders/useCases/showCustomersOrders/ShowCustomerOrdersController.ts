@@ -17,3 +17,5 @@ class ShowCustomersOrdersController {
         return res.status(200).json(orders)
     }
 }
+
+export {ShowCustomersOrdersController}
