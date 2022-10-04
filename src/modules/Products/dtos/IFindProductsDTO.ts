@@ -17,4 +17,8 @@ interface IFindProducts {
 
 }
 
-export { IFindProducts }
+interface IFindProductsById{
+    id: string
+}
+
+export { IFindProducts, IFindProductsById }

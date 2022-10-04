@@ -1,9 +1,9 @@
-import { ISaveProduct } from "@modules/Products/dtos/ISaveProductDTO";
+import { ISaveProduct, IUpdateProductQuantity } from "@modules/Products/dtos/ISaveProductDTO";
 import { Product } from "@modules/Products/entities/Product";
 import { dataSource } from "../../../../database";
-import { Between, Repository } from "typeorm";
+import { Between, In, Repository } from "typeorm";
 import { IProductsRepository } from "../IProductsRepository";
-import { IFindProducts } from "@modules/Products/dtos/IFindProductsDTO";
+import { IFindProducts, IFindProductsById } from "@modules/Products/dtos/IFindProductsDTO";
 
 
 class ProductsRepository implements IProductsRepository {
@@ -12,8 +12,12 @@ class ProductsRepository implements IProductsRepository {
 
     constructor() {
         this.repository = dataSource.getRepository(Product)
+
+        
     }
 
+
+   
 
 
     async save({ id, name, vendor_id, price, old_price, description, quantity, available, created_at, updated_at, category_id, sells, rating, votes }: ISaveProduct): Promise<Product> {
@@ -37,13 +41,26 @@ class ProductsRepository implements IProductsRepository {
 
         return await this.repository.save(product)
 
+    } 
+    
+    
+    async saveMany(products: IUpdateProductQuantity[]): Promise<Product[]> {
+        return await this.repository.save(products)
     }
+    
+
     async findById(id: string): Promise<Product> {
 
         const product = await this.repository.findOneBy({ id })
         //fazer find com relations de user
         return product as Product
 
+    }
+    
+    async findAllByIds(products: IFindProductsById[]): Promise<Product[]> {
+        const productsIds = products.map(product => product.id)
+
+        return await this.repository.find({where: {id: In(productsIds)}})
     }
     async findByVendor(vendor_id: string): Promise<Product[]> {
 

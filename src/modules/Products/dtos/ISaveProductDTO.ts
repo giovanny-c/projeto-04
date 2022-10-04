@@ -19,4 +19,8 @@ interface ISaveProduct {
 
 }
 
-export { ISaveProduct }
+interface IUpdateProductQuantity {
+    id: string
+    quantity: number
+}
+export { ISaveProduct, IUpdateProductQuantity }
