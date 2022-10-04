@@ -1,9 +1,10 @@
 
 
 import { User } from "../../Accounts/entities/User";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid"
 import { Category } from "../../Categories/entities/Category";
+import OrdersProducts from "@modules/orders/entities/OrdersProducts";
 
 @Entity("products")
 class Product {
@@ -58,6 +59,9 @@ class Product {
 
     @Column()
     sells: number
+
+    @OneToMany(() => OrdersProducts, order_products => order_products.product)
+    order_products: OrdersProducts[]
 
 
     constructor() {

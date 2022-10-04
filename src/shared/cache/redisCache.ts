@@ -6,7 +6,7 @@ function getRedis(value: string) { //transforma a func get do redis em async
     return syncRedisGet(value)
 }
 
-function setRedis(key: string, value: string) {
+function setRedis(key: string, value: string){
     const syncRedisSet = promisify(redisClient.set).bind(redisClient)
     return syncRedisSet(key, value)
 }
