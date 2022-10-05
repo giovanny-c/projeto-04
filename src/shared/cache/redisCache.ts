@@ -11,5 +11,68 @@ function setRedis(key: string, value: string){
     return syncRedisSet(key, value)
 }
 
+function delRedis(key: string){
+    const syncRedisSet = promisify(redisClient.del).bind(redisClient)
+    return syncRedisSet(key)
+}
 
-export {getRedis, setRedis}
+
+function addInCart<T>(item_id: string, user_id: string): T | undefined{
+
+    const getItem = promisify(redisClient.hGet).bind(redisClient)
+
+    const itemExists = getItem(`basket: ${user_id}`, item_id)
+
+    
+    if(!itemExists){
+
+        
+        const setItem =  promisify(redisClient.hSet).bind(redisClient)
+
+        return setItem(`basket: ${user_id}`, item_id, 1)
+    }
+
+    if(itemExists){
+        const increaseItem = promisify(redisClient.hIncrBy).bind(redisClient)
+        
+        return increaseItem(`basket: ${user_id}`, item_id, 1)
+    }
+}
+
+function getAllInCart<T>(user_id: string): T | undefined{
+
+    const getAll = promisify(redisClient.hGetAll).bind(redisClient)
+    
+    return getAll(`basket: ${user_id}`)
+}
+
+function delAllInCart<T>(item_id: string, user_id: string): T | undefined{
+
+    const delCart = promisify(redisClient.hDel).bind(redisClient)
+    
+    return delCart(`basket: ${user_id}`, item_id)
+}
+
+function delInCart<T>(item_id: string, user_id: string): T | undefined{
+
+
+    const getItem = promisify(redisClient.hGet).bind(redisClient)
+
+    const itemExists = getItem(`basket: ${user_id}`, item_id)
+  
+    if(!itemExists){
+
+        
+        return undefined
+    }
+
+    if(itemExists){
+        
+        const delInCart = promisify(redisClient.hDel).bind(redisClient)
+        
+        return delInCart(`basket: ${user_id}`, item_id, 1)
+    }
+
+}
+
+export {getRedis, setRedis, delRedis, addInCart, getAllInCart, delAllInCart, delInCart}
