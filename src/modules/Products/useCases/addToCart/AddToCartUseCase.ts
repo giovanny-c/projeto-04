@@ -17,8 +17,9 @@ class AddToCartUseCase {
 
     async execute(product_id: string, user_id: string): Promise<void> {
 
-
-
+//vai por o cart no redis 
+//e o save order vai pegar
+// depois de fazer o pedido o save order vai deletar o carrinho do redis
 
     }
 }

@@ -21,11 +21,8 @@ import upload from "@config/upload"
 import { errorHandler } from "@shared/errors/ErrorHandler" //colocar em cima?
 
 //routes
-import { accountRoutes } from "./routes/account.routes"
-import { fileRoutes } from "routes/file.routes"
-import { productRoutes } from "routes/product.routes"
-import { categoriesRoutes } from "routes/categories.routes"
-import ordersRoutes from "routes/orders.routes"
+import router from "./routes"
+
 //import { config } from "../src/config/auth"
 
 
@@ -62,11 +59,7 @@ app.use(session({
 
 // app.use(auth(config)) 
 
-app.use("/accounts", accountRoutes)
-app.use("/file", fileRoutes)
-app.use(productRoutes)
-app.use(categoriesRoutes)
-app.use("/orders", ordersRoutes)
+app.use(router)
 
 
 app.use(errorHandler)//middleware de errors

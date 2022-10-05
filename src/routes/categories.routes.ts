@@ -21,4 +21,4 @@ categoriesRoutes.post("categories/create", ensureAuthenticated, ensureAdmin, sav
 categoriesRoutes.put("categories/edit", ensureAuthenticated, ensureAdmin, saveCategoryController.handle)
 categoriesRoutes.delete("categories/create", ensureAuthenticated, ensureAdmin, deleteCategoryController.handle)
 
-export { categoriesRoutes }
+export default categoriesRoutes

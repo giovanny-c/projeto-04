@@ -4,8 +4,8 @@ import { inspect } from "../../../../utils/decorators/inspect";
 import { AppError } from "../../../../shared/errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { IGetProfileRequest, IGetProfileResponse } from "./GetProfileDTO";
-import { getRedis } from "@shared/redis/redisConfig";
 import { instanceToInstance } from "class-transformer";
+import { getRedis } from "@shared/cache/redisCache";
 
 
 

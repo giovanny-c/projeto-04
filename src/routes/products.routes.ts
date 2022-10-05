@@ -10,13 +10,13 @@ import { ListProductsController } from "@modules/Products/useCases/listProducts/
 
 const upload = multer(uploadConfig)
 
-const productRoutes = Router()
+const productsRoutes = Router()
 
 const getProductController = new GetProductController()
 const listProductsController = new ListProductsController()
 
 
-productRoutes.get("/product/:product_id", getProductController.handle)
-productRoutes.get("/products", listProductsController.handle)
+productsRoutes.get("/product/:product_id", getProductController.handle)
+productsRoutes.get("/products", listProductsController.handle)
 
-export { productRoutes }
+export default productsRoutes

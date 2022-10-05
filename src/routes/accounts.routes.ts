@@ -25,7 +25,7 @@ import { DeleteProductController } from "@modules/Products/useCases/deleteProduc
 
 const upload = multer(uploadConfig)
 
-const accountRoutes = Router()
+const accountsRoutes = Router()
 
 const createUserController = new CreateUserController()
 const signInController = new SignInController()
@@ -42,30 +42,30 @@ const getFileFromUserController = new GetFileFromUserController()
 const saveProductController = new SaveProductController()
 const deleteProductController = new DeleteProductController()
 
-accountRoutes.post("/sign-in", upload.none(), createUserController.handle)
-accountRoutes.get("/sign-in", signInController.handle)
-accountRoutes.patch("/confirmation", confirmateRegisterController.handle)
+accountsRoutes.post("/sign-in", upload.none(), createUserController.handle)
+accountsRoutes.get("/sign-in", signInController.handle)
+accountsRoutes.patch("/confirmation", confirmateRegisterController.handle)
 //se der problema com sendMail pode ser por causa do // baseUrl: (no tsconfig)
-accountRoutes.post("/log-in", upload.none(), authenticateUserController.handle)
-accountRoutes.post("/refresh-token", upload.none(), refreshTokenController.handle)
-accountRoutes.get("/profile", ensureAuthenticated, getProfileController.handle)
-accountRoutes.patch("/log-out", ensureAuthenticated, logOutController.handle)
-accountRoutes.post("/forgot-password", upload.none(), sendForgotPasswordMailController.handle)
-accountRoutes.put("/retrieve-password", upload.none(), retrievePasswordController.handle)
-//accountRoutes.post("/gen-pdf", ensureAuthenticated, upload.none(), generatePdfController.handle)
+accountsRoutes.post("/log-in", upload.none(), authenticateUserController.handle)
+accountsRoutes.post("/refresh-token", upload.none(), refreshTokenController.handle)
+accountsRoutes.get("/profile", ensureAuthenticated, getProfileController.handle)
+accountsRoutes.patch("/log-out", ensureAuthenticated, logOutController.handle)
+accountsRoutes.post("/forgot-password", upload.none(), sendForgotPasswordMailController.handle)
+accountsRoutes.put("/retrieve-password", upload.none(), retrievePasswordController.handle)
+//accountsRoutes.post("/gen-pdf", ensureAuthenticated, upload.none(), generatePdfController.handle)
 
 //admin // testar
-accountRoutes.post("admin/create-admin-account", ensureAuthenticated, ensureAdmin, upload.none(), createUserController.handle)
+accountsRoutes.post("admin/create-admin-account", ensureAuthenticated, ensureAdmin, upload.none(), createUserController.handle)
 
 //files
-accountRoutes.get("/user/files", ensureAuthenticated, getFileFromUserController.handle)
-accountRoutes.get("/user/file/:id", ensureAuthenticated, getFileController.handle)
+accountsRoutes.get("/user/files", ensureAuthenticated, getFileFromUserController.handle)
+accountsRoutes.get("/user/file/:id", ensureAuthenticated, getFileController.handle)
 
 
 //products
-accountRoutes.post(["/user/products/create", "user/announce/new-product"], ensureAuthenticated, upload.array("images"), saveProductController.handle)
-accountRoutes.put("/user/product/:id/edit", ensureAuthenticated, upload.array("images"), saveProductController.handle)
-accountRoutes.delete("/user/products/:id/delete", ensureAuthenticated, deleteProductController.handle)
+accountsRoutes.post(["/user/products/create", "user/announce/new-product"], ensureAuthenticated, upload.array("images"), saveProductController.handle)
+accountsRoutes.put("/user/product/:id/edit", ensureAuthenticated, upload.array("images"), saveProductController.handle)
+accountsRoutes.delete("/user/products/:id/delete", ensureAuthenticated, deleteProductController.handle)
 
 
-export { accountRoutes }
+export default accountsRoutes

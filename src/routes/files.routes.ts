@@ -8,15 +8,15 @@ import { SaveFileController } from "@modules/File/useCases/saveFile/SaveFileCont
 import { DeleteFileController } from "@modules/File/useCases/deleteFile/DeleteFileController"
 
 
-const fileRoutes = Router()
+const filesRoutes = Router()
 
 const upload = multer(uploadConfig)
 
 const saveFileController = new SaveFileController()
 const deleteFileController = new DeleteFileController()
 
-fileRoutes.post("/save", ensureAuthenticated, upload.single("file"), saveFileController.handle)
-fileRoutes.delete("/delete", ensureAuthenticated, upload.none(), deleteFileController.handle)
+filesRoutes.post("/save", ensureAuthenticated, upload.single("file"), saveFileController.handle)
+filesRoutes.delete("/delete", ensureAuthenticated, upload.none(), deleteFileController.handle)
 
 
-export { fileRoutes }
+export default filesRoutes

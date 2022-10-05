@@ -1,6 +1,6 @@
 import { Category } from "@modules/Categories/entities/Category";
 import { ICategoriesRepository } from "@modules/Categories/repositories/ICategoriesRepository";
-import { setRedis } from "@shared/redis/redisConfig";
+import { setRedis } from "@shared/cache/redisCache";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
