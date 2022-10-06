@@ -11,6 +11,7 @@ import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
 import { IAuthenticationResponse } from "@modules/Accounts/dtos/IAuthenticationResponseDTO";
 import { IAuthenticateUserRequest } from "./AuthenticateUserDTO";
 import { setRedis } from "@shared/cache/redisCache";
+import { instanceToInstance, instanceToPlain } from "class-transformer";
 
 
 
@@ -54,8 +55,9 @@ class AuthenticateUserUseCase {
 
             //user-${user.id} = chave 
             //user em string = valor
-            await setRedis(`user-${user.id}`, JSON.stringify(user))
+            await setRedis(`user-${user.id}`, JSON.stringify(instanceToPlain(user)))
 
+    
             await this.usersRepository.markUserAsLogged(user.id as string)
 
 

@@ -6,6 +6,7 @@ import  fileRoutes  from "routes/files.routes"
 import  productRoutes  from "routes/products.routes"
 import  categoriesRoutes  from "routes/categories.routes"
 import ordersRoutes from "routes/orders.routes"
+import cartRoutes from "routes/cart.routes"
 
 const router = Router()
 
@@ -14,6 +15,7 @@ router.use("/file", fileRoutes)
 router.use(productRoutes)
 router.use(categoriesRoutes)
 router.use("/orders", ordersRoutes)
+router.use("/cart", cartRoutes)
 
 export default router
 

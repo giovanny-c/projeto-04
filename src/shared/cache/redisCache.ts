@@ -29,7 +29,7 @@ function addInCart<T>(item_id: string, user_id: string): T | undefined{
         
         const setItem =  promisify(redisClient.hSet).bind(redisClient)
 
-        return setItem(`basket: ${user_id}`, item_id, 1)
+        return setItem(`basket: ${user_id}`, item_id)
     }
 
     if(itemExists){
@@ -68,9 +68,9 @@ function delInCart<T>(item_id: string, user_id: string): T | undefined{
 
     if(itemExists){
         
-        const delInCart = promisify(redisClient.hDel).bind(redisClient)
+        const delInCart = promisify(redisClient.hIncrBy).bind(redisClient)
         
-        return delInCart(`basket: ${user_id}`, item_id, 1)
+        return delInCart(`basket: ${user_id}`, item_id, -1)
     }
 
 }
