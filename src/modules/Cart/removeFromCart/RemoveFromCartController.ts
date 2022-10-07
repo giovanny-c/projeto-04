@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import { AddToCartUseCase } from "./AddToCartUseCase";
+import { RemoveFromCartUseCase } from "./RemoveFromCartUseCase";
 
 
-class AddToCartController {
+class RemoveFromCartController {
 
 
     async handle(req: Request, res: Response): Promise<Response>{
@@ -12,9 +12,9 @@ class AddToCartController {
 
         const {product_id} = req.body
 
-        const addToCart = container.resolve(AddToCartUseCase)
+        const removeFromCart = container.resolve(RemoveFromCartUseCase)
 
-        const cart = await addToCart.execute(product_id, user_id)
+        const cart = await removeFromCart.execute(product_id, user_id)
 
         return res.json(cart)
         
@@ -28,4 +28,4 @@ class AddToCartController {
 
 }
 
-export {AddToCartController}
+export {RemoveFromCartController}

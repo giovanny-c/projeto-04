@@ -17,11 +17,11 @@ function delRedis(key: string){
 }
 
 
-function addInCart<T>(item_id: string, user_id: string): T | undefined{
+async function addInCart<T>(item_id: string, user_id: string): Promise<T | undefined>{
 
     const getItem = promisify(redisClient.hGet).bind(redisClient)
 
-    const itemExists = getItem(`basket: ${user_id}`, item_id)
+    const itemExists = await getItem(`basket: ${user_id}`, item_id)
 
     
     if(!itemExists){
@@ -29,36 +29,38 @@ function addInCart<T>(item_id: string, user_id: string): T | undefined{
         
         const setItem =  promisify(redisClient.hSet).bind(redisClient)
 
-        return setItem(`basket: ${user_id}`, item_id)
+        return await setItem(`basket: ${user_id}`, item_id, 1)
     }
 
     if(itemExists){
         const increaseItem = promisify(redisClient.hIncrBy).bind(redisClient)
         
-        return increaseItem(`basket: ${user_id}`, item_id, 1)
+        return await increaseItem(`basket: ${user_id}`, item_id, 1)
     }
 }
 
-function getAllInCart<T>(user_id: string): T | undefined{
+async function getAllInCart<T>(user_id: string): Promise<T | undefined>{
 
     const getAll = promisify(redisClient.hGetAll).bind(redisClient)
     
-    return getAll(`basket: ${user_id}`)
+    return await getAll(`basket: ${user_id}`)
 }
 
-function delAllInCart<T>(item_id: string, user_id: string): T | undefined{
+async function delAllInCart<T>(item_id: string, user_id: string): Promise<T | undefined>{
 
     const delCart = promisify(redisClient.hDel).bind(redisClient)
     
-    return delCart(`basket: ${user_id}`, item_id)
+    return  await delCart(`basket: ${user_id}`, item_id)
 }
 
-function delInCart<T>(item_id: string, user_id: string): T | undefined{
+async function delInCart<T>(item_id: string, user_id: string): Promise<T | undefined>{
 
 
     const getItem = promisify(redisClient.hGet).bind(redisClient)
 
-    const itemExists = getItem(`basket: ${user_id}`, item_id)
+    const itemExists = await getItem(`basket: ${user_id}`, item_id)
+
+    
   
     if(!itemExists){
 
@@ -67,11 +69,23 @@ function delInCart<T>(item_id: string, user_id: string): T | undefined{
     }
 
     if(itemExists){
+
+        if(itemExists <= 1){
+
+            const removeFromCart = promisify(redisClient.hDel).bind(redisClient)
+        
+            return await removeFromCart(`basket: ${user_id}`, item_id)         
+        }
         
         const delInCart = promisify(redisClient.hIncrBy).bind(redisClient)
         
-        return delInCart(`basket: ${user_id}`, item_id, -1)
+        return await delInCart(`basket: ${user_id}`, item_id, -1)
+
+        
+
     }
+
+
 
 }
 

@@ -1,12 +1,12 @@
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
-import { addInCart, getAllInCart } from "@shared/cache/redisCache";
+import { addInCart, delInCart, getAllInCart } from "@shared/cache/redisCache";
 import { AppError } from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
 import {v4 as uuidV4} from "uuid"
 
 @injectable()
-class AddToCartUseCase {
+class RemoveFromCartUseCase {
 
     constructor(
         @inject("ProductsRepository")
@@ -37,7 +37,7 @@ class AddToCartUseCase {
 
         
 
-        await addInCart(product_id, user_id as string)
+        await delInCart(product_id, user_id as string)
 
           
         const cart = await getAllInCart(user_id as string) as string
@@ -49,4 +49,4 @@ class AddToCartUseCase {
     }
 }
 
-export {AddToCartUseCase}
+export {RemoveFromCartUseCase}
