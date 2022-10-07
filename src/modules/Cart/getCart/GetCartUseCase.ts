@@ -2,14 +2,12 @@ import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepositor
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
 import {  getCart } from "@shared/cache/redisCache";
 import { AppError } from "@shared/errors/AppError";
-import { array, object } from "joi";
+
 import { inject, injectable } from "tsyringe";
 import {validate} from "uuid"
+import ICart from "../dtos/ICartDTO";
 
-interface ICart{
-    product_id: string
-    quantity: number
-}
+
 
 @injectable()
 class GetCartUseCase {

@@ -1,9 +1,10 @@
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
+import ICart from "@modules/Cart/dtos/ICartDTO";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
 import { addInCart, getCart } from "@shared/cache/redisCache";
 import { AppError } from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
-import {v4 as uuidV4} from "uuid"
+import {v4 as uuidV4, validate} from "uuid"
 
 @injectable()
 class AddToCartUseCase {
@@ -40,11 +41,24 @@ class AddToCartUseCase {
         await addInCart(product_id, user_id as string)
 
           
-        const cart = await getCart(user_id as string) as string
+        const cart = await getCart(user_id as string) as []
 
+        const products = cart.filter(value => validate(value))
+        const quantities = cart.filter(value => !validate(value))
+
+        let res: ICart[] = [] 
+
+        for (let index = 0; index < products.length; index++) {
+            
+            
+            res.push({
+                product_id: products[index],
+                quantity: Number(quantities[index])
+            })
+        }
         
         
-        return cart as T
+        return res as T
 
     }
 }

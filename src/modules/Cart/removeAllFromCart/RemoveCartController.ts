@@ -1,27 +1,26 @@
-import { privateDecrypt } from "crypto";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import { RemoveFromCartUseCase } from "./RemoveFromCartUseCase";
+import { RemoveCartUseCase } from "./RemoveAllFromCartUseCase";
 
 
-class RemoveFromCartController {
+class RemoveCartController {
 
 
     async handle(req: Request, res: Response): Promise<Response>{
 
         const {id: user_id} = req.user
 
-        const {product_id, quantity} = req.body
+        //pegar o user que tem cart mas nao esta logado
 
-        const removeFromCart = container.resolve(RemoveFromCartUseCase)
+        const delCart = container.resolve(RemoveCartUseCase)
 
-        const cart = await removeFromCart.execute(user_id, product_id, quantity)
+        const cart = await delCart.execute(user_id)
 
         return res.json(cart)
         
         //return res.redirect(`/cart/user/${cart_id}`)
         
-        //tirar produto do cart
+        
         //pegar o cart no order
         //ver se funciona o redirect e redirect back(pagina anterior)
         
@@ -29,4 +28,4 @@ class RemoveFromCartController {
 
 }
 
-export {RemoveFromCartController}
+export {RemoveCartController}

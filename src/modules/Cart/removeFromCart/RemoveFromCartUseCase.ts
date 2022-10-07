@@ -1,9 +1,17 @@
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
-import { delInCart, getCart } from "@shared/cache/redisCache";
+import { decreaseInCart, delInCart, getCart } from "@shared/cache/redisCache";
 import { AppError } from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
 import {v4 as uuidV4} from "uuid"
+import {validate} from "uuid"
+import ICart from "../dtos/ICartDTO";
+
+
+
+
+
+
 
 @injectable()
 class RemoveFromCartUseCase {
@@ -17,7 +25,7 @@ class RemoveFromCartUseCase {
 
     }
 
-    async execute<T>(product_id: string, user_id?: string): Promise<T> {
+    async execute<T>(user_id: string, product_id: string, quantity?: boolean): Promise<T | void> {
 //vai por o cart no redis 
 //e o save order vai pegar
 // depois de fazer o pedido o save order vai deletar o carrinho do redis
@@ -28,7 +36,7 @@ class RemoveFromCartUseCase {
             throw new AppError("Product missing", 400)
         }
 
-        const userExists = await this.usersRepository.findById(user_id as string)
+        const userExists = await this.usersRepository.findById(user_id)
 
         if(!userExists){
 
@@ -36,15 +44,37 @@ class RemoveFromCartUseCase {
         }
 
         
+        if(quantity){
 
-        await delInCart(product_id, user_id as string)
+            await decreaseInCart(product_id, user_id)
+        }
+        if(!quantity){
 
-          
-        const cart = await getCart(user_id as string) as string
+            await delInCart(product_id, user_id)
+        }
+        
 
+        let cart = await getCart(user_id) as []
+
+        if(cart){
+
+            const products = cart.filter(value => validate(value))
+            const quantities = cart.filter(value => !validate(value))
+
+        let res: ICart[] = [] 
+
+        for (let index = 0; index < products.length; index++) {
+            
+            
+            res.push({
+                product_id: products[index],
+                quantity: Number(quantities[index])
+            })
+        }
         
         
-        return cart as T
+            return res as T
+        }
 
     }
 }
