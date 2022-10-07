@@ -1,9 +1,12 @@
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository"
 import Order from "@modules/orders/entities/Order"
 import { IOrdersRepository } from "@modules/orders/repositories/IOrdersRepository"
+import { IFindProductsById } from "@modules/Products/dtos/IFindProductsDTO"
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository"
+import { getCart } from "@shared/cache/redisCache"
 import { AppError } from "@shared/errors/AppError"
 import { inject, injectable } from "tsyringe"
+import { validate } from "uuid"
 
 interface IProductforOrder {
     id: string
@@ -14,7 +17,7 @@ interface IProductforOrder {
 interface IRequest {
     
     customer_id: string
-    products: IProductforOrder[]
+    // products: IProductforOrder[]
 }
 
 injectable()
@@ -31,7 +34,25 @@ class SaveOrderUseCase {
 
     }
 
-    async execute({customer_id, products}: IRequest): Promise<Order>{
+    async execute({customer_id}: IRequest): Promise<Order>{
+
+        const cart = await getCart(customer_id) as []
+
+        const products_ids = cart.filter(value => validate(value))
+        const quantities = cart.filter(value => !validate(value))
+
+        let products: IProductforOrder[] = [] 
+
+        for (let index = 0; index < products_ids.length; index++) {
+            
+            
+            products.push({
+                id: products_ids[index],
+                quantity: Number(quantities[index])
+            })
+        }
+        
+
         //costumer validations
         const customerExists = await this.usersRepository.findById(customer_id)
 
