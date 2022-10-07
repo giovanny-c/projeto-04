@@ -1,6 +1,6 @@
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
-import { addInCart, delInCart, getAllInCart } from "@shared/cache/redisCache";
+import { delInCart, getCart } from "@shared/cache/redisCache";
 import { AppError } from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
 import {v4 as uuidV4} from "uuid"
@@ -40,7 +40,7 @@ class RemoveFromCartUseCase {
         await delInCart(product_id, user_id as string)
 
           
-        const cart = await getAllInCart(user_id as string) as string
+        const cart = await getCart(user_id as string) as string
 
         
         

@@ -39,7 +39,7 @@ async function addInCart<T>(item_id: string, user_id: string): Promise<T | undef
     }
 }
 
-async function getAllInCart<T>(user_id: string): Promise<T | undefined>{
+async function getCart<T>(user_id: string): Promise<T | undefined>{
 
     const getAll = promisify(redisClient.hGetAll).bind(redisClient)
     
@@ -89,4 +89,4 @@ async function delInCart<T>(item_id: string, user_id: string): Promise<T | undef
 
 }
 
-export {getRedis, setRedis, delRedis, addInCart, getAllInCart, delAllInCart, delInCart}
+export {getRedis, setRedis, delRedis, addInCart, getCart, delAllInCart, delInCart}
