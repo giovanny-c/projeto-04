@@ -28,21 +28,23 @@ class AddToCartUseCase {
             throw new AppError("Product missing", 400)
         }
 
-        // const userExists = await this.usersRepository.findById(user_id as string)
+        const userExists = await this.usersRepository.findById(user_id as string)
 
-        // if(!userExists){
+        if(!userExists){
 
-        //     user_id = uuidV4()
-        // }
+            user_id = uuidV4()
+        }
 
-        //console.log(user_id)
+        console.log(user_id)
 
-        await addInCart(JSON.stringify(product_id), JSON.stringify(user_id))
+        await addInCart(product_id, user_id as string)
 
           
         const cart = await getAllInCart(user_id as string) as string
 
-        return JSON.parse(cart)
+        
+        
+        return cart as T
 
     }
 }

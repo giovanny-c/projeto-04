@@ -62,6 +62,7 @@ app.use(session({
 app.use(router)
 
 
+
 app.use(errorHandler)//middleware de errors
 
 
