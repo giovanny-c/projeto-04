@@ -12,12 +12,15 @@ class OrdersRepository implements IOrdersRepository{
     constructor(){
         this.repository = dataSource.getRepository(Order)
     }
-
-    async save({id, customer, products}: ISaveOrder): Promise<Order> {
+    
+    async save({id, customer, products, status, updated_at, created_at}: ISaveOrder): Promise<Order> {
         const order = this.repository.create({
             id,
             customer,
-            order_products: products
+            order_products: products,
+            status,
+            created_at,
+            updated_at
         })
 
         return await this.repository.save(order)
@@ -42,7 +45,18 @@ class OrdersRepository implements IOrdersRepository{
             where: {customer_id}
         })
     }
+    
+    
+    async cancelOrder(id: string, status: string, updated_at: Date): Promise<void> {
+        const order = this.repository.create({
+            id,
+            status
+        })
 
+        await this.repository.save(order)
+    }
+
+    
     
 
 }

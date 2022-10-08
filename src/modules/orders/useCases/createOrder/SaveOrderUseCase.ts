@@ -3,7 +3,8 @@ import Order from "@modules/orders/entities/Order"
 import { IOrdersRepository } from "@modules/orders/repositories/IOrdersRepository"
 import { IFindProductsById } from "@modules/Products/dtos/IFindProductsDTO"
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository"
-import { getCart } from "@shared/cache/redisCache"
+import { delCart, getCart } from "@shared/cache/redisCache"
+import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider"
 import { AppError } from "@shared/errors/AppError"
 import { inject, injectable } from "tsyringe"
 import { validate } from "uuid"
@@ -29,7 +30,9 @@ class SaveOrderUseCase {
         @inject("UsersRepository")
         private usersRepository: IUsersRepository,
         @inject("ProductsRepository")
-        private productsRepository: IProductsRepository
+        private productsRepository: IProductsRepository,
+        @inject("DayjsDateProvider")
+        private dateProvider: DayjsDateProvider
     ){
 
     }
@@ -113,7 +116,10 @@ class SaveOrderUseCase {
 
         const order = await this.ordersRepository.save({
             customer: customerExists,
-            products: availableProducts
+            products: availableProducts,
+            status: "PENDING",
+            created_at: this.dateProvider.dateNow(),
+            
         })
 
         //subtract the products quantities
@@ -125,6 +131,8 @@ class SaveOrderUseCase {
         }))
 
         await this.productsRepository.saveMany(updateProductQuantity)
+
+        await delCart(customer_id)
 
         return order
     }

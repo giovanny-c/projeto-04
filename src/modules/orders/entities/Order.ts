@@ -25,6 +25,9 @@ class Order {
     @JoinColumn({ name: "customer_id" })
     customer: User
 
+    @Column()
+    status: string
+
     constructor() {
         if (!this.id) {
             this.id = uuidV4()
