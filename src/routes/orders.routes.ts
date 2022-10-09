@@ -44,4 +44,16 @@ ordersRoutes.get(
     showCustomersOrdersController.handle,
 )
 
+
+ordersRoutes.put(
+    "/cancel",
+    celebrate({
+        [Segments.BODY]: {
+            order_id: Joi.string().uuid().required(),
+        },
+    }),
+    saveOrderController.handle,
+)
+
+
 export default ordersRoutes
