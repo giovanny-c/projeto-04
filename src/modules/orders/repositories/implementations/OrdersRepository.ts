@@ -50,7 +50,8 @@ class OrdersRepository implements IOrdersRepository{
     async cancelOrder(id: string, status: string, updated_at: Date): Promise<void> {
         const order = this.repository.create({
             id,
-            status
+            status,
+            updated_at
         })
 
         await this.repository.save(order)

@@ -51,7 +51,7 @@ class CancelOrderUseCase {
 
         const order = await this.ordersRepository.findById(order_id)
 
-        if(order.status === "SHIPED"){
+        if(order.status !== "PENDING" || "PROCESSING" || "PICKING" ){
             throw new AppError("This order was already on shiping, go to refound product", 400)
         }
 
@@ -70,7 +70,7 @@ class CancelOrderUseCase {
             await this.productsRepository.save(prod)
          })
 
-        const status = "CANCELED"
+        const status = "CANCELED" 
         const updated_at = this.dateProvider.dateNow()
 
         await this.ordersRepository.cancelOrder(order_id, status, updated_at)

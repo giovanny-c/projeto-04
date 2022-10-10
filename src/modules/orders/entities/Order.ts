@@ -2,6 +2,7 @@ import { User } from "@modules/Accounts/entities/User";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, UpdateDateColumn  } from "typeorm";
 
 import { v4 as uuidV4 } from "uuid"
+
 import OrdersProducts from "./OrdersProducts";
 
 @Entity("orders")
