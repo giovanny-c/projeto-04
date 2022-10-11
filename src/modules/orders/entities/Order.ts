@@ -1,4 +1,8 @@
 import { User } from "@modules/Accounts/entities/User";
+
+
+
+
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, UpdateDateColumn  } from "typeorm";
 
 import { v4 as uuidV4 } from "uuid"
@@ -27,7 +31,7 @@ class Order {
     customer: User
 
     @Column()
-    status: string
+    status: OrderStatus 
 
     constructor() {
         if (!this.id) {

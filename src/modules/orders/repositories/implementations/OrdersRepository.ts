@@ -1,5 +1,7 @@
+import ICancelOrder from "@modules/orders/dtos/ICancelOrderDTO";
 import { ISaveOrder } from "@modules/orders/dtos/ISaveOrderDTO";
 import Order from "@modules/orders/entities/Order";
+import { OrderStatus } from "@modules/orders/types/OrderStatus";
 import { dataSource } from "database";
 import { Repository } from "typeorm";
 import { IOrdersRepository } from "../IOrdersRepository";
@@ -47,7 +49,7 @@ class OrdersRepository implements IOrdersRepository{
     }
     
     
-    async cancelOrder(id: string, status: string, updated_at: Date): Promise<void> {
+    async cancelOrder({id, status, updated_at}: ICancelOrder): Promise<void> {
         const order = this.repository.create({
             id,
             status,
