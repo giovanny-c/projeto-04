@@ -19,11 +19,11 @@ const showCustomersOrdersController = new ShowCustomersOrdersController()
 
 ordersRoutes.post(
     "/create",
-    celebrate({
-        [Segments.BODY]: {
-            products: Joi.required(),
-        },
-    }),
+    // celebrate({
+    //     [Segments.BODY]: {
+    //         products: Joi.required(),
+    //     },
+    // }),
     saveOrderController.handle,
 )
 

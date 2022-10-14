@@ -5,9 +5,10 @@ import multer from "multer"
 import uploadConfig from "@config/upload"
 import { ensureAuthenticated } from "@shared/middlewares/ensureAuthenticated"
 import { AddToCartController } from "@modules/Cart/useCases/addToCart/AddToCartController"
-import { RemoveFromCartController } from "@modules/Cart/removeFromCart/RemoveFromCartController"
-import { GetCartController } from "@modules/Cart/getCart/GetCartController"
-import { RemoveCartController } from "@modules/Cart/removeAllFromCart/RemoveCartController"
+
+import { RemoveCartController } from "@modules/Cart/useCases/removeAllFromCart/RemoveCartController"
+import { RemoveFromCartController } from "../modules/Cart/useCases/removeFromCart/RemoveFromCartController"
+import { GetCartController } from "../modules/Cart/useCases/getCart/GetCartController"
 
 
 

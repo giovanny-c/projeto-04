@@ -1,11 +1,11 @@
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
+import ICart from "@modules/Cart/dtos/ICartDTO";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
 import {  getCart } from "@shared/cache/redisCache";
 import { AppError } from "@shared/errors/AppError";
 
 import { inject, injectable } from "tsyringe";
 import {validate} from "uuid"
-import ICart from "../dtos/ICartDTO";
 
 
 
