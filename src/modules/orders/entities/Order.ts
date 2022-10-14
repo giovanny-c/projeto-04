@@ -6,6 +6,7 @@ import { v4 as uuidV4 } from "uuid"
 
 
 import OrdersProducts from "./OrdersProducts";
+import { Exclude } from "class-transformer";
 
 @Entity("orders")
 class Order {
@@ -20,6 +21,7 @@ class Order {
 
     @UpdateDateColumn()
     updated_at: Date
+
 
     @Column()
     customer_id: string

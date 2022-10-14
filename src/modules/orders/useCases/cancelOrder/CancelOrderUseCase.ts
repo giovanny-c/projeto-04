@@ -1,3 +1,4 @@
+import { User } from "@modules/Accounts/entities/User"
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository"
 import Order from "@modules/orders/entities/Order"
 import { IOrdersRepository } from "@modules/orders/repositories/IOrdersRepository"
@@ -5,6 +6,7 @@ import { IProductsRepository } from "@modules/Products/repositories/IProductsRep
 import { delCart, getCart } from "@shared/cache/redisCache"
 import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider"
 import { AppError } from "@shared/errors/AppError"
+import { instanceToInstance, instanceToPlain, plainToInstance } from "class-transformer"
 import { object } from "joi"
 import { inject, injectable } from "tsyringe"
 import { validate } from "uuid"
@@ -74,10 +76,12 @@ class CancelOrderUseCase {
         const updated_at = this.dateProvider.dateNow()
 
         await this.ordersRepository.cancelOrder({id: order_id, status, updated_at})
-
+         //del products da orders_products?
         //avisar o ou os vendedores sobre o cancelamento
 
-        return order
+        order.customer = instanceToPlain(order.customer) as User 
+
+        return order    
     }
 }
  

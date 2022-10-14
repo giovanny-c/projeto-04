@@ -1,3 +1,4 @@
+import { User } from "@modules/Accounts/entities/User"
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository"
 import Order from "@modules/orders/entities/Order"
 import { IOrdersRepository } from "@modules/orders/repositories/IOrdersRepository"
@@ -6,6 +7,7 @@ import { IProductsRepository } from "@modules/Products/repositories/IProductsRep
 import { delCart, getCart } from "@shared/cache/redisCache"
 import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider"
 import { AppError } from "@shared/errors/AppError"
+import { instanceToPlain } from "class-transformer"
 import { inject, injectable } from "tsyringe"
 import { validate } from "uuid"
 
@@ -21,7 +23,7 @@ interface IRequest {
     // products: IProductforOrder[]
 }
 
-injectable()
+@injectable()
 class SaveOrderUseCase {
 
     constructor(
@@ -83,13 +85,14 @@ class SaveOrderUseCase {
         }
 
         //product not available
+        
         const productsUnavailable = products.filter(
             product => foundProducts.filter(p => p.id === product.id)[0].available === false
         ) 
 
         if(productsUnavailable.length){
             const product = await this.productsRepository.findById(productsUnavailable[0].id)
-            
+            console.log(productsUnavailable[0].id)
             throw new AppError(`This product: ${product.name}, is not available at the moment`, 400)
 
         }
@@ -111,7 +114,9 @@ class SaveOrderUseCase {
 
             product_id: product.id,
             quantity: product.quantity,
-            price: foundProducts.filter(p => p.id === product.id)[0].price
+            price: foundProducts.filter(p => p.id === product.id)[0].price,
+            created_at: this.dateProvider.dateNow(),
+            updated_at: this.dateProvider.dateNow(),
         }))
 
         const order = await this.ordersRepository.save({
@@ -119,6 +124,7 @@ class SaveOrderUseCase {
             products: availableProducts,
             status: "PENDING",
             created_at: this.dateProvider.dateNow(),
+            updated_at: this.dateProvider.dateNow(),
             
         })
 
@@ -133,6 +139,8 @@ class SaveOrderUseCase {
         await this.productsRepository.saveMany(updateProductQuantity)
 
         await delCart(customer_id)
+
+        order.customer = instanceToPlain(order.customer) as User 
 
         return order
     }

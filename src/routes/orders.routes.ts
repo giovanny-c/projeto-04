@@ -27,6 +27,16 @@ ordersRoutes.post(
     saveOrderController.handle,
 )
 
+
+
+ordersRoutes.get(
+    "/user",
+    showCustomersOrdersController.handle,
+)
+
+
+
+
 ordersRoutes.get(
     "/:id",
     celebrate({
@@ -39,14 +49,8 @@ ordersRoutes.get(
     showOrderController.handle,
 )
 
-ordersRoutes.get(
-    "/user",
-    showCustomersOrdersController.handle,
-)
-
-
 ordersRoutes.put(
-    "/cancel",
+    "/:id/cancel",
     celebrate({
         [Segments.BODY]: {
             order_id: Joi.string().uuid().required(),
@@ -54,6 +58,5 @@ ordersRoutes.put(
     }),
     saveOrderController.handle,
 )
-
 
 export default ordersRoutes

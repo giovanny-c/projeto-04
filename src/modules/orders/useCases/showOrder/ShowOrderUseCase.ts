@@ -1,7 +1,9 @@
+import { User } from "@modules/Accounts/entities/User";
 import Order from "@modules/orders/entities/Order";
 import { OrdersRepository } from "@modules/orders/repositories/implementations/OrdersRepository";
 import { IOrdersRepository } from "@modules/orders/repositories/IOrdersRepository";
 import { AppError } from "@shared/errors/AppError";
+import { instanceToInstance, instanceToPlain } from "class-transformer";
 import { inject, injectable } from "tsyringe";
 
 interface IRequest {
@@ -25,6 +27,7 @@ class ShowOrderUseCase {
             throw new AppError("Order not found!", 400)
         }
 
+        order.customer = instanceToPlain(order.customer) as User
         return order
         
     }
