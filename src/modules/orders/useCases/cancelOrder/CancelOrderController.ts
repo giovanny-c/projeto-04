@@ -10,7 +10,7 @@ class CancelOrderController {
 
         const {id: customer_id} = req.user
         //const {products} = req.body
-        const {order_id} = req.body
+        const {order_id} = req.params
         
 
         const cancelOrder = container.resolve(CancelOrderUseCase)

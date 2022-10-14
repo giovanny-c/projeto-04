@@ -4,6 +4,7 @@ import { ensureAuthenticated } from "@shared/middlewares/ensureAuthenticated"
 import { SaveOrderController } from "@modules/orders/useCases/createOrder/SaveOrderController"
 import { ShowOrderController } from "@modules/orders/useCases/showOrder/ShowOrderController"
 import { ShowCustomersOrdersController } from "@modules/orders/useCases/showCustomersOrders/ShowCustomerOrdersController"
+import { CancelOrderController } from "@modules/orders/useCases/cancelOrder/CancelOrderController"
 
 
 
@@ -16,6 +17,7 @@ ordersRoutes.use(ensureAuthenticated)
 const saveOrderController = new SaveOrderController()
 const showOrderController = new ShowOrderController()
 const showCustomersOrdersController = new ShowCustomersOrdersController()
+const cancelOrderController = new CancelOrderController()
 
 ordersRoutes.post(
     "/create",
@@ -50,13 +52,13 @@ ordersRoutes.get(
 )
 
 ordersRoutes.put(
-    "/:id/cancel",
+    "/:order_id/cancel",
     celebrate({
-        [Segments.BODY]: {
+        [Segments.PARAMS]: {
             order_id: Joi.string().uuid().required(),
         },
     }),
-    saveOrderController.handle,
+    cancelOrderController.handle,
 )
 
 export default ordersRoutes

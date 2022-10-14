@@ -44,19 +44,20 @@ class OrdersRepository implements IOrdersRepository{
                 order_products: true,
                 customer: true
             },
-            where: {customer_id}
+            where: {customer_id},
+            order: {updated_at: "DESC"}
         })
     }
     
     
-    async cancelOrder({id, status, updated_at}: ICancelOrder): Promise<void> {
+    async cancelOrder({id, status, updated_at}: ICancelOrder): Promise<Order> {
         const order = this.repository.create({
             id,
             status,
             updated_at
         })
 
-        await this.repository.save(order)
+        return await this.repository.save(order)
     }
 
     

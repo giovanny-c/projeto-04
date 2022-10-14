@@ -3,13 +3,11 @@ import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepositor
 import Order from "@modules/orders/entities/Order"
 import { IOrdersRepository } from "@modules/orders/repositories/IOrdersRepository"
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository"
-import { delCart, getCart } from "@shared/cache/redisCache"
 import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider"
 import { AppError } from "@shared/errors/AppError"
-import { instanceToInstance, instanceToPlain, plainToInstance } from "class-transformer"
-import { object } from "joi"
+import {instanceToPlain, } from "class-transformer"
+
 import { inject, injectable } from "tsyringe"
-import { validate } from "uuid"
 
 interface IProductforOrder {
     id: string
@@ -24,7 +22,7 @@ interface IRequest {
     // products: IProductforOrder[]
 }
 
-injectable()
+@injectable()
 class CancelOrderUseCase {
 
     constructor(
@@ -53,35 +51,36 @@ class CancelOrderUseCase {
 
         const order = await this.ordersRepository.findById(order_id)
 
-        if(order.status !== "PENDING" || "PROCESSING" || "PICKING" ){
+        if(order.status !== "PENDING" ){
             throw new AppError("This order was already on shiping, go to refound product", 400)
         }
 
         //adiciona os produtos que foram removidos na criaçao
-        order.order_products.forEach(async (product) => {
+        const {order_products} = order
 
-            // const prod = await this.productsRepository.findById(product.id)
+        order_products.forEach(async (order_product) => {
 
-            // prod.quantity = prod.quantity + product.quantity
+            let product = await this.productsRepository.findById(order_product.product_id)
+           
+            product.quantity = Number(product.quantity) + Number(order_product.quantity)
+           
+            
 
-            const prod = Object.assign({
-                id: product.id,
-                quantity: + product.quantity //?sera que funciona
-            })
-
-            await this.productsRepository.save(prod)
+            await this.productsRepository.save(product)
          })
+
+
 
         const status = "CANCELED" 
         const updated_at = this.dateProvider.dateNow()
 
-        await this.ordersRepository.cancelOrder({id: order_id, status, updated_at})
+        const canceledOrder = await this.ordersRepository.cancelOrder({id: order_id, status, updated_at})
          //del products da orders_products?
         //avisar o ou os vendedores sobre o cancelamento
 
-        order.customer = instanceToPlain(order.customer) as User 
+        canceledOrder.customer = instanceToPlain(canceledOrder.customer) as User 
 
-        return order    
+        return canceledOrder   
     }
 }
  
