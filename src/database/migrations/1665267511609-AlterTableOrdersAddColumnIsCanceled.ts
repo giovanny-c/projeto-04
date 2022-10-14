@@ -5,7 +5,7 @@ export class AlterTableOrdersAddColumnIsCanceled1665267511609 implements Migrati
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.addColumn("orders", new TableColumn({
             name: "status",
-            type: "string",
+            type: "varchar",
             
         }))
     }

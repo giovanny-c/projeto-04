@@ -8,8 +8,8 @@ export const dataSourceORM: DataSource = new DataSource({
     username: "root",
     password: "1234",
     database: "projeto04_database",
-    // migrationsRun: true,
-    // logging: true,
+    migrationsRun: true,
+    logging: false,
     entities: [
         "src/modules/**/entities/*.ts"
     ],
