@@ -92,7 +92,7 @@ class SaveOrderUseCase {
 
         if(productsUnavailable.length){
             const product = await this.productsRepository.findById(productsUnavailable[0].id)
-            console.log(productsUnavailable[0].id)
+            
             throw new AppError(`This product: ${product.name}, is not available at the moment`, 400)
 
         }
