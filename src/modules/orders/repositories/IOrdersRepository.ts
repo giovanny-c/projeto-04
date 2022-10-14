@@ -1,7 +1,6 @@
 import ICancelOrder from "../dtos/ICancelOrderDTO"
 import { ISaveOrder } from "../dtos/ISaveOrderDTO"
 import Order from "../entities/Order"
-import { OrderStatus } from "../types/OrderStatus"
 
 
 interface IOrdersRepository {
