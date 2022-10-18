@@ -1,7 +1,7 @@
-import ICancelOrder from "@modules/orders/dtos/ICancelOrderDTO";
-import { ISaveOrder } from "@modules/orders/dtos/ISaveOrderDTO";
-import Order from "@modules/orders/entities/Order";
-import { OrderStatus } from "@modules/orders/types/OrderStatus";
+import ICancelOrder from "@modules/Orders/dtos/ICancelOrderDTO";
+import { ISaveOrder } from "@modules/Orders/dtos/ISaveOrderDTO";
+import Order from "@modules/Orders/entities/Order";
+
 import { dataSource } from "database";
 import { Repository } from "typeorm";
 import { IOrdersRepository } from "../IOrdersRepository";
@@ -45,7 +45,7 @@ class OrdersRepository implements IOrdersRepository{
                 customer: true
             },
             where: {customer_id},
-            order: {updated_at: "DESC"}
+            order: {updated_at: "ASC"}
         })
     }
     

@@ -12,8 +12,8 @@ import { IProductsRepository } from "@modules/Products/repositories/IProductsRep
 import { ProductsRepository } from "@modules/Products/repositories/implementations/ProductsRepository";
 import { ICategoriesRepository } from "@modules/Categories/repositories/ICategoriesRepository";
 import { CategoriesRepository } from "@modules/Categories/repositories/implementation/CategoriesRepository";
-import { IOrdersRepository } from "@modules/orders/repositories/IOrdersRepository";
-import { OrdersRepository } from "@modules/orders/repositories/implementations/OrdersRepository";
+import { IOrdersRepository } from "@modules/Orders/repositories/IOrdersRepository";
+import { OrdersRepository } from "@modules/Orders/repositories/implementations/OrdersRepository";
 
 
 container.registerSingleton<IUsersRepository>(

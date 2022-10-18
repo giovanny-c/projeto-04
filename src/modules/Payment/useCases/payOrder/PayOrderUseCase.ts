@@ -1,5 +1,5 @@
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
-import { IOrdersRepository } from "@modules/orders/repositories/IOrdersRepository";
+import { IOrdersRepository } from "@modules/Orders/repositories/IOrdersRepository";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
 import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider";
 import { inject, injectable } from "tsyringe";

@@ -1,6 +1,6 @@
 import { User } from "@modules/Accounts/entities/User";
-import Order from "@modules/orders/entities/Order";
-import { IOrdersRepository } from "@modules/orders/repositories/IOrdersRepository";
+import Order from "@modules/Orders/entities/Order";
+import { IOrdersRepository } from "@modules/Orders/repositories/IOrdersRepository";
 import { instanceToInstance, instanceToPlain } from "class-transformer";
 import { inject, injectable } from "tsyringe";
 

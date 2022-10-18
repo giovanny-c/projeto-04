@@ -1,10 +1,10 @@
 import { Router } from "express"
 import { celebrate, Joi, Segments } from "celebrate" // @types/joi tbm
 import { ensureAuthenticated } from "@shared/middlewares/ensureAuthenticated"
-import { SaveOrderController } from "@modules/orders/useCases/createOrder/SaveOrderController"
-import { ShowOrderController } from "@modules/orders/useCases/showOrder/ShowOrderController"
-import { ShowCustomersOrdersController } from "@modules/orders/useCases/showCustomersOrders/ShowCustomerOrdersController"
-import { CancelOrderController } from "@modules/orders/useCases/cancelOrder/CancelOrderController"
+import { SaveOrderController } from "@modules/Orders/useCases/createOrder/SaveOrderController"
+import { ShowOrderController } from "@modules/Orders/useCases/showOrder/ShowOrderController"
+import { ShowCustomersOrdersController } from "@modules/Orders/useCases/showCustomersOrders/ShowCustomerOrdersController"
+import { CancelOrderController } from "@modules/Orders/useCases/cancelOrder/CancelOrderController"
 
 
 

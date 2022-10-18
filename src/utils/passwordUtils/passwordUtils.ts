@@ -21,4 +21,6 @@ function validatePassword(password: string, salt: string, hash: string): boolean
     return hash === hashVerify // se retornar false = senha invalida
 }
 
+
+
 export { genPassword, validatePassword }

@@ -4,7 +4,7 @@ import { User } from "../../Accounts/entities/User";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid"
 import { Category } from "../../Categories/entities/Category";
-import OrdersProducts from "../../../modules/orders/entities/OrdersProducts";
+import OrdersProducts from "../../Orders/entities/OrdersProducts";
 
 @Entity("products")
 class Product {
