@@ -27,7 +27,7 @@ class ShowOrderUseCase {
             throw new AppError("Order not found!", 400)
         }
 
-        order.customer = instanceToPlain(order.customer) as User
+       //order.customer = instanceToPlain(order.customer) as User
         return order
         
     }

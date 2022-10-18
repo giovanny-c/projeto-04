@@ -31,14 +31,26 @@ class OrdersRepository implements IOrdersRepository{
 
     }
     async findById(id: string): Promise<Order> {
-        return await this.repository.findOne({
-            relations: [
-                "order_products",
-                "order_products.product",
-                "customer"
-            ],
-            where: {id}
-        }) as Order
+        
+        const order = await this.repository.createQueryBuilder("order")
+        .leftJoinAndSelect("order.order_products", "order_products")
+        .leftJoin("order_products.product", "product")
+        .leftJoin("order.customer", "customer")
+        .select(["order", "order_products", "product.id", "product.name", "customer.id", "customer.name", "customer.email"])
+        .where("order.id = :id", {id})
+        .getOne()
+
+        return order as Order
+
+
+        // return await this.repository.findOne({
+        //     relations: [
+        //         "order_products",
+        //         "order_products.product",
+        //         "customer"
+        //     ],
+        //     where: {id}
+        // }) as Order
     }
     async findByCustomerId(customer_id: string): Promise<Order[]> {
         return await this.repository.find({
