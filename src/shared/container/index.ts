@@ -14,7 +14,8 @@ import { ICategoriesRepository } from "@modules/Categories/repositories/ICategor
 import { CategoriesRepository } from "@modules/Categories/repositories/implementation/CategoriesRepository";
 import { IOrdersRepository } from "@modules/Orders/repositories/IOrdersRepository";
 import { OrdersRepository } from "@modules/Orders/repositories/implementations/OrdersRepository";
-
+import { IPaymentsRepository } from "@modules/Payment/repositories/IPaymentsRepository";
+import { PaymentsRepository } from "@modules/Payment/repositories/implementations/PaymentsRepository";
 
 container.registerSingleton<IUsersRepository>(
     "UsersRepository",
@@ -44,4 +45,9 @@ container.registerSingleton<ICategoriesRepository>(
 container.registerSingleton<IOrdersRepository>(
     "OrdersRepository",
     OrdersRepository
+)
+
+container.registerSingleton<IPaymentsRepository>(
+    "PaymentsRepository",
+    PaymentsRepository
 )

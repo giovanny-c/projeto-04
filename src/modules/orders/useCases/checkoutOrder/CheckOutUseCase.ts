@@ -1,15 +1,23 @@
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
+
 import { IOrdersRepository } from "@modules/Orders/repositories/IOrdersRepository";
+import { IPaymentsRepository } from "@modules/Payment/repositories/IPaymentsRepository";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
 import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider";
 import { inject, injectable } from "tsyringe";
 
 
+
+
+
 @injectable()
-class PayOrderUseCase {
+class CheckOutUseCase {
 
 
-    constructor(@inject("OrdersRepository")
+    constructor(
+    @inject("PaymentsRepository")
+    private paymentsRepository: IPaymentsRepository,
+    @inject("OrdersRepository")
     private ordersRepository: IOrdersRepository,
     @inject("UsersRepository")
     private usersRepository: IUsersRepository,
@@ -19,10 +27,13 @@ class PayOrderUseCase {
     private dateProvider: DayjsDateProvider){}
 
 
+
+
     async execute(order_id: string, user_id: string):Promise<void>{
 
-        // const order = await this.ordersRepository.findById(order_id)
+        
+       
     }
 }
 
-export {PayOrderUseCase}
+export {CheckOutUseCase}

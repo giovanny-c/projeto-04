@@ -15,14 +15,15 @@ class OrdersRepository implements IOrdersRepository{
         this.repository = dataSource.getRepository(Order)
     }
     
-    async save({id, customer, products, status, updated_at, created_at}: ISaveOrder): Promise<Order> {
+    async save({id, customer, products, status, updated_at, created_at, total}: ISaveOrder): Promise<Order> {
         const order = this.repository.create({
             id,
             customer,
             order_products: products,
             status,
             created_at,
-            updated_at
+            updated_at,
+            total
         })
 
         return await this.repository.save(order)
@@ -31,10 +32,11 @@ class OrdersRepository implements IOrdersRepository{
     }
     async findById(id: string): Promise<Order> {
         return await this.repository.findOne({
-            relations: {
-                order_products: true,
-                customer: true,
-            },
+            relations: [
+                "order_products",
+                "order_products.product",
+                "customer"
+            ],
             where: {id}
         }) as Order
     }

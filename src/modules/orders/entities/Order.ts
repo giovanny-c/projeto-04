@@ -32,6 +32,9 @@ class Order {
 
     @Column()
     status: string
+    
+    @Column("decimal")
+    total: number
 
     constructor() {
         if (!this.id) {

@@ -16,6 +16,7 @@ interface ISaveOrder {
     status: OrderStatus
     created_at?: Date
     updated_at?: Date
+    total: number
 }
 
 export {ISaveOrder, IProductforOrder}

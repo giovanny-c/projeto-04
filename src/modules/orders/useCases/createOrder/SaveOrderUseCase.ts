@@ -119,13 +119,23 @@ class SaveOrderUseCase {
             updated_at: this.dateProvider.dateNow(),
         }))
 
+
+        let totalValue = 0
+
+        availableProducts.forEach(product => {
+
+            totalValue += product.price * product.quantity
+        })
+
+        console.log(totalValue)
+
         const order = await this.ordersRepository.save({
             customer: customerExists,
             products: availableProducts,
             status: "PENDING",
             created_at: this.dateProvider.dateNow(),
             updated_at: this.dateProvider.dateNow(),
-            
+            total: totalValue
         })
 
         //subtract the products quantities

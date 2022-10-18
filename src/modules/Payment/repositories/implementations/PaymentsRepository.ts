@@ -34,3 +34,5 @@ class PaymentsRepository implements IPaymentsRepository{
     }
 
 }
+
+export {PaymentsRepository}
