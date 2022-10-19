@@ -1,3 +1,4 @@
+import { User } from "@modules/Accounts/entities/User";
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 
 import { IOrdersRepository } from "@modules/Orders/repositories/IOrdersRepository";
@@ -45,14 +46,14 @@ class PayOrderUseCase {
 
         const order = await this.ordersRepository.findById(order_id)
 
-        if(order.status !== "PENDING"){
+        // if(order.status !== "PENDING"){
 
-            if(order.status === "CANCELED"){
-                throw new AppError("This order was canceled!", 400)
-            }
+        //     if(order.status === "CANCELED"){
+        //         throw new AppError("This order was canceled!", 400)
+        //     }
             
-            throw new AppError("This order was already payed", 400)
-        }        
+        //     throw new AppError("This order was already payed", 400)
+        // }        
 
         if(order.customer_id !== user_id){
 
@@ -69,37 +70,57 @@ class PayOrderUseCase {
         await this.ordersRepository.updateOrderStatus({id: order_id, status: "PROCESSING", updated_at })
 
 
-
-        let vendors_ids = order.order_products.map(order_product => {
-
-
-            return order_product.product.vendor_id
+        //pega todos os vendedores
+        let vendors = order.order_products.map(order_product => {
+            
+            return order_product.product.vendor as User
 
         })
 
+       //remove os duplices
+        let filtered_vendors: User[] = []
+            
+        vendors.forEach((vendor) => {
 
+            
+            if (!filtered_vendors.find(vendor => vendor)) {
+
+                filtered_vendors.push(vendor)
+            }
+        })
+
+
+        //pega todos os produtos
         let products = order.order_products.map(order_product => {
 
             return order_product.product
 
         })
 
-        
-        let vendors
-        
-        for (let index = 0; index < products.length; index++) {
+
+        let vendorsToMail: any[] = []
+        //poe todos os produtos nos seus respectivos vendedores
+        filtered_vendors.forEach((vendor, index) => {
             
-            vendors = products.filter(p => p.vendor_id === vendors_ids[index])
+            let vendor_products = products.filter(p => p.vendor?.id === filtered_vendors[index].id)
+
+            vendorsToMail.push(
+                {
+                    vendor: vendors[index],
+                    products: vendor_products
+                }
+            )
+
+        })
         
         
-        }
         //array 
         //{vendor:
         //  vendor_id e vendor_name
         // products: [{products}]
         //}
 
-        return vendors
+        return vendorsToMail
 
         // await this.mailProvider.sendMail({
         //     to: email,
