@@ -74,7 +74,7 @@ class CancelOrderUseCase {
         const status = "CANCELED" 
         const updated_at = this.dateProvider.dateNow()
 
-        const canceledOrder = await this.ordersRepository.cancelOrder({id: order_id, status, updated_at})
+        const canceledOrder = await this.ordersRepository.updateOrderStatus({id: order_id, status, updated_at})
          //del products da orders_products?
         //avisar o ou os vendedores sobre o cancelamento
 

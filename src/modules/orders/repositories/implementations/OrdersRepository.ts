@@ -1,10 +1,10 @@
-import ICancelOrder from "@modules/Orders/dtos/ICancelOrderDTO";
 import { ISaveOrder } from "@modules/Orders/dtos/ISaveOrderDTO";
 import Order from "@modules/Orders/entities/Order";
 
 import { dataSource } from "database";
 import { Repository } from "typeorm";
 import { IOrdersRepository } from "../IOrdersRepository";
+import IUpdateStatusOrder from "@modules/Orders/dtos/IUpdateOrderStatusDTO";
 
 
 class OrdersRepository implements IOrdersRepository{
@@ -36,7 +36,8 @@ class OrdersRepository implements IOrdersRepository{
         .leftJoinAndSelect("order.order_products", "order_products")
         .leftJoin("order_products.product", "product")
         .leftJoin("order.customer", "customer")
-        .select(["order", "order_products", "product.id", "product.name", "customer.id", "customer.name", "customer.email"])
+        .leftJoin("product.vendor", "vendor")
+        .select(["order", "order_products", "product.id", "product.name", "customer.id", "customer.name", "customer.email", "vendor.name", "vendor.id", "vendor.email"])
         .where("order.id = :id", {id})
         .getOne()
 
@@ -64,7 +65,7 @@ class OrdersRepository implements IOrdersRepository{
     }
     
     
-    async cancelOrder({id, status, updated_at}: ICancelOrder): Promise<Order> {
+    async updateOrderStatus({id, status, updated_at}: IUpdateStatusOrder): Promise<Order> {
         const order = this.repository.create({
             id,
             status,
