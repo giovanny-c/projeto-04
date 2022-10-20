@@ -11,7 +11,7 @@ class ConfirmateRegisterController {
         try {
 
 
-            const token = req.query.token
+            const {token} = req.query
 
             const confirmateRegister = container.resolve(ConfirmateRegisterUseCase)
 

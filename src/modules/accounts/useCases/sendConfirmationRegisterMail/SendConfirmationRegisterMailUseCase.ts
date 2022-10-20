@@ -25,8 +25,9 @@ class SendConfirmationRegisterMailUseCase {
 
         try {
 
-
             const user = await this.usersRepository.findByEmail(email as string)
+
+            
 
             if (!user) {
                 throw new AppError("User not found", 500)

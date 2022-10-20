@@ -73,6 +73,7 @@ class PayOrderUseCase {
         //pega todos os vendedores
         let vendors = order.order_products.map(order_product => {
             
+
             return order_product.product.vendor as User
 
         })
@@ -114,11 +115,7 @@ class PayOrderUseCase {
         })
         
         
-        //array 
-        //{vendor:
-        //  vendor_id e vendor_name
-        // products: [{products}]
-        //}
+        
 
         return vendorsToMail
 

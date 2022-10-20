@@ -3,6 +3,8 @@ import { ISaveUserDTO } from "../../dtos/ISaveUserDTO";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { AppError } from "../../../../shared/errors/AppError";
 import { genPassword } from "../../../../utils/passwordUtils/passwordUtils"
+import { User } from "@modules/Accounts/entities/User";
+import { instanceToPlain } from "class-transformer";
 
 
 @injectable()
@@ -17,7 +19,7 @@ class CreateUserUseCase {
     }
 
 
-    async execute({ name, email, password, is_confirmed = false }: ISaveUserDTO): Promise<void> {
+    async execute({ name, email, password, is_confirmed = false }: ISaveUserDTO): Promise<User> {
         //pegar os dados por form no front (multer e erc)
         //hash de senha 
         try {
@@ -36,7 +38,9 @@ class CreateUserUseCase {
 
             //const passwordHash = await hash(password as string, 8)
 
-            await this.usersRepository.save({ name, email, password_hash: hash, salt, is_confirmed })
+            const user = await this.usersRepository.save({ name, email, password_hash: hash, salt, is_confirmed })
+            
+            return instanceToPlain(user) as User
 
         } catch (error) {
             // throw new AppError("There was not possible to create a user, please try again. If the error persists contact the suport", 500)

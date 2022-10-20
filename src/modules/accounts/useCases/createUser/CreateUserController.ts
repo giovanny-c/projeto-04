@@ -25,9 +25,11 @@ class CreateUserController {
             //     await createUser.execute({ name, email, password, admin })
             // }
 
-            await createUser.execute({ name, email, password })
+            const user = await createUser.execute({ name, email, password })
 
-            await sendConfirmationRegisterMail.execute(email)
+           
+
+            await sendConfirmationRegisterMail.execute({email: user.email})
 
 
             return res.status(200).json("A confirmation email was sent to the email provided. Please verify your inbox to confirm your sign-in")
