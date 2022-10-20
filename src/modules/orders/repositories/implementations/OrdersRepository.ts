@@ -14,6 +14,7 @@ class OrdersRepository implements IOrdersRepository{
     constructor(){
         this.repository = dataSource.getRepository(Order)
     }
+
     
     async save({id, customer, products, status, updated_at, created_at, total}: ISaveOrder): Promise<Order> {
         const order = this.repository.create({
@@ -42,17 +43,9 @@ class OrdersRepository implements IOrdersRepository{
         .getOne()
 
         return order as Order
-
-
-        // return await this.repository.findOne({
-        //     relations: [
-        //         "order_products",
-        //         "order_products.product",
-        //         "customer"
-        //     ],
-        //     where: {id}
-        // }) as Order
+        
     }
+
     async findByCustomerId(customer_id: string): Promise<Order[]> {
         return await this.repository.find({
             relations: {
@@ -64,6 +57,36 @@ class OrdersRepository implements IOrdersRepository{
         })
     }
     
+    async findByVendorId(vendor_id: string): Promise<Order[]> {
+        const orders = await this.repository.createQueryBuilder("order")
+        .leftJoin("order.order_products", "order_products")
+        .leftJoin("order_products.product", "product")
+        .leftJoin("order.customer", "customer")
+        .leftJoin("product.vendor", "vendor")
+        .select(["order", "order_products", "product.id", "product.name", "customer.id", "customer.name", "customer.email"])
+        .where("vendor.id = :vendor_id", {vendor_id})
+        .orderBy("order.updated_at", "DESC")
+        .addOrderBy("order.status ", "DESC")
+        .getMany()
+
+        return orders
+    }
+
+    async findByIdAndVendorId(id: string, vendor_id: string): Promise<Order> {
+        const order = await this.repository.createQueryBuilder("order")
+        .leftJoin("order.order_products", "order_products")
+        .leftJoin("order_products.product", "product")
+        .leftJoin("order.customer", "customer")
+        .leftJoin("product.vendor", "vendor")
+        .select(["order", "order_products", "product.id", "product.name", "customer.id", "customer.name", "customer.email"])
+        .where("order.id = :id", {id})
+        .andWhere("vendor.id = :vendor_id", {vendor_id})
+        .orderBy("order.updated_at", "DESC")
+        .addOrderBy("order.status ", "DESC")
+        .getOne() 
+
+        return order as Order
+    }
     
     async updateOrderStatus({id, status, updated_at}: IUpdateStatusOrder): Promise<Order> {
         const order = this.repository.create({
