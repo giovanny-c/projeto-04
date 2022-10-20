@@ -3,7 +3,10 @@ import Order from "@modules/Orders/entities/Order";
 import { IOrdersRepository } from "@modules/Orders/repositories/IOrdersRepository";
 import { inject, injectable } from "tsyringe";
 
-
+interface IRequest {
+    order_id: string 
+    vendor_id: string
+}
 
 @injectable()
 class ShowVendorOrdersUseCase {
@@ -16,9 +19,9 @@ class ShowVendorOrdersUseCase {
 
     ) { }
 
-    async execute(vendor_id): Promise<Order[]> {
+    async execute({order_id, vendor_id}: IRequest): Promise<Order> {
 
-        return await this.ordersRepository.findByVendorId(vendor_id)
+        return await this.ordersRepository.findByIdAndVendorId(order_id, vendor_id)
 
         
     }
