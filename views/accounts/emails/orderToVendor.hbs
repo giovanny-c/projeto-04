@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <!-- com o SES tirar alignitems, display e flex direction
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+      -->
+    <!-- com o SES colocar no span{} display: block-->
+    <style>
+        .container {
+            width: 800px;
+            font-family: Arial, Helvetica, sans-serif;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        span {
+            margin: 10px 0;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="" alt="logo">
+        <span>
+            Oi, {{vendor.name}}
+        </span>
+
+        <br>
+        <span>Você recebeu um pedido dos seguintes itens:</span>
+        {{#each products}}
+        <span>{{this.quantity}} - {{this.product.name}} </span>
+        {{/each}}
+        <span>Para gerenciar o pedido entre na sua <a href={{link}}> area de vendedor </a></span>
+
+        <strong>Obrigado!</strong>
+
+
+    </div>
+</body>
+
+</html>

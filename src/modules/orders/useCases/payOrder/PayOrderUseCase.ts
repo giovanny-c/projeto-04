@@ -1,5 +1,6 @@
 import { User } from "@modules/Accounts/entities/User";
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
+import OrdersProducts from "@modules/Orders/entities/OrdersProducts";
 
 import { IOrdersRepository } from "@modules/Orders/repositories/IOrdersRepository";
 import { IPaymentsRepository } from "@modules/Payment/repositories/IPaymentsRepository";
@@ -8,6 +9,7 @@ import { DayjsDateProvider } from "@shared/container/providers/dateProvider/impl
 import { IMailProvider } from "@shared/container/providers/mailProvider/IMailProvider";
 import { AppError } from "@shared/errors/AppError";
 import { OrderStatus } from "aws-sdk/clients/outposts";
+import { resolve } from "path";
 import { inject, injectable } from "tsyringe";
 
 
@@ -92,48 +94,34 @@ class PayOrderUseCase {
         })
 
 
-        //pega todos os produtos
-        let products = order.order_products.map(order_product => {
+        const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderToVendor.hbs")
+        const linkToOrder = `${process.env.APP_API_URL}${process.env.URL_VENDOR_ORDER as string}`
+        
 
-            return order_product.product
-
-        })
-
-
-        let vendorsToMail: any[] = []
         //poe todos os produtos nos seus respectivos vendedores
-        filtered_vendors.forEach((vendor, index) => {
+        filtered_vendors.forEach(async (vendor, index) => {
             
             let vendor_products = order.order_products.filter(op => 
-                op.product.vendor?.id === filtered_vendors[index].id 
-                
+                op.product.vendor?.id === filtered_vendors[index].id     
             )
 
-            vendorsToMail.push(
-                {
-                    vendor: vendors[index],
-                    products: vendor_products
-                }
-            )
+            
+
+            await this.mailProvider.sendMail({
+                to: vendor.email,
+                subject: `Pedido ${vendor_products[0].order_id}`,
+                variables: {
+                    vendor,
+                    products: vendor_products,
+                    link: `${linkToOrder}${vendor_products[0].order_id}`
+                },
+                path: templatePath
+                })
+            
 
         })
-        
-        
-        
 
-        return vendorsToMail
-
-        // await this.mailProvider.sendMail({
-        //     to: email,
-        //     subject: "Recuperação de senha",
-        //     variables,
-        //     path: templatePath
-        // })
-
-
-
-
-        
+    
        
     }
 }
