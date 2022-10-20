@@ -84,9 +84,10 @@ class PayOrderUseCase {
         vendors.forEach((vendor) => {
 
             
-            if (!filtered_vendors.find(vendor => vendor)) {
-
+            if (!filtered_vendors.find(v => v.id === vendor.id)) {
+                
                 filtered_vendors.push(vendor)
+                
             }
         })
 
@@ -103,7 +104,10 @@ class PayOrderUseCase {
         //poe todos os produtos nos seus respectivos vendedores
         filtered_vendors.forEach((vendor, index) => {
             
-            let vendor_products = products.filter(p => p.vendor?.id === filtered_vendors[index].id)
+            let vendor_products = order.order_products.filter(op => 
+                op.product.vendor?.id === filtered_vendors[index].id 
+                
+            )
 
             vendorsToMail.push(
                 {
