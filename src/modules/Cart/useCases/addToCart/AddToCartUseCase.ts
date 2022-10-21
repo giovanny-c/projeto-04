@@ -36,6 +36,10 @@ class AddToCartUseCase {
             user_id = uuidV4()
         }
 
+        if(productExists.vendor_id === userExists.id){
+            throw new AppError("You can't buy your own products", 400)
+        }
+
         
 
         await addInCart(product_id, user_id as string)

@@ -48,14 +48,14 @@ class PayOrderUseCase {
 
         const order = await this.ordersRepository.findById(order_id)
 
-        // if(order.status !== "PENDING"){
+        if(order.status !== "PENDING"){
 
-        //     if(order.status === "CANCELED"){
-        //         throw new AppError("This order was canceled!", 400)
-        //     }
+            if(order.status === "CANCELED"){
+                throw new AppError("This order was canceled!", 400)
+            }
             
-        //     throw new AppError("This order was already payed", 400)
-        // }        
+            throw new AppError("This order was already payed", 400)
+        }        
 
         if(order.customer_id !== user_id){
 
