@@ -9,8 +9,8 @@ import { ensureAdmin } from "@shared/middlewares/ensureAdmin";
 import multer from "multer"
 
 import uploadConfig from "@config/upload"
-import { ListVendorOrdersController } from "@modules/Accounts/useCases/ListVendorOrders/ListVendorOrderController";
-import { ShowVendorOrderController } from "@modules/Accounts/useCases/showVendorOrder/ShowVendorOrderController";
+import { ListVendorOrdersController } from "@modules/Orders/useCases/ListVendorOrders/ListVendorOrderController";
+import { ShowVendorOrderController } from "@modules/Orders/useCases/showVendorOrder/ShowVendorOrderController";
 import { celebrate, Segments } from "celebrate";
 import Joi from "joi";
 

@@ -33,7 +33,9 @@ class AddToCartUseCase {
 
         if(!userExists){
 
-            user_id = uuidV4()
+            //user_id = uuidV4()
+
+            throw new AppError("You need to be logged for that", 400)
         }
 
         if(productExists.vendor_id === userExists.id){
@@ -41,14 +43,14 @@ class AddToCartUseCase {
         }
 
         
-
+//poe no redis
         await addInCart(product_id, user_id as string)
 
-          
+//pega do redis pra retornar
         const cart = await getCart(user_id as string) as []
-
-        const products = cart.filter(value => validate(value))
-        const quantities = cart.filter(value => !validate(value))
+//reorganiza os dados retornados do redis
+        const products = cart.filter(value => validate(value))//se for uuid, é produto
+        const quantities = cart.filter(value => !validate(value))// se nao, é quantidade
 
         let res: ICart[] = [] 
 
