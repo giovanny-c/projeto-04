@@ -6,7 +6,7 @@ import uploadConfig from "@config/upload"
 import { ensureAuthenticated } from "@shared/middlewares/ensureAuthenticated"
 import { AddToCartController } from "@modules/Cart/useCases/addToCart/AddToCartController"
 
-import { RemoveCartController } from "@modules/Cart/useCases/removeAllFromCart/RemoveCartController"
+import { RemoveCartController } from "@modules/Cart/useCases/removeAllFromCart/RemoveAllCartController"
 import { RemoveFromCartController } from "../modules/Cart/useCases/removeFromCart/RemoveFromCartController"
 import { GetCartController } from "../modules/Cart/useCases/getCart/GetCartController"
 

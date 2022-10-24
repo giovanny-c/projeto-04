@@ -8,6 +8,7 @@ import  categoriesRoutes  from "routes/categories.routes"
 import ordersRoutes from "routes/orders.routes"
 import cartRoutes from "routes/cart.routes"
 import vendorRoutes from "./vendors.routes"
+import paymentRoutes from "./payment.routes"
 
 const router = Router()
 
@@ -18,6 +19,7 @@ router.use(categoriesRoutes)
 router.use("/orders", ordersRoutes)
 router.use("/cart", cartRoutes)
 router.use("/vendor", vendorRoutes)
+router.use("/payment", paymentRoutes)
 
 
 export default router
