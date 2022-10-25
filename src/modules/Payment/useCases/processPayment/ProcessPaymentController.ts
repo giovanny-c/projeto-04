@@ -11,7 +11,7 @@ class ProcessPaymentController {
         
         const processPayment = container.resolve(ProcessPaymentUseCase)
 
-        await processPayment.execute("")
+        await processPayment.execute()
 
         return res.status(200).send()
 
