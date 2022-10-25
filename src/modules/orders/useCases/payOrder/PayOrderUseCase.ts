@@ -3,12 +3,10 @@ import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepositor
 import OrdersProducts from "@modules/Orders/entities/OrdersProducts";
 
 import { IOrdersRepository } from "@modules/Orders/repositories/IOrdersRepository";
-import { IPaymentsRepository } from "@modules/Payment/repositories/IPaymentsRepository";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
 import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider";
 import { IMailProvider } from "@shared/container/providers/mailProvider/IMailProvider";
 import { AppError } from "@shared/errors/AppError";
-import { OrderStatus } from "aws-sdk/clients/outposts";
 import { resolve } from "path";
 import { inject, injectable } from "tsyringe";
 
@@ -25,8 +23,7 @@ class PayOrderUseCase {
 
 
     constructor(
-    @inject("PaymentsRepository")
-    private paymentsRepository: IPaymentsRepository,
+    
     @inject("OrdersRepository")
     private ordersRepository: IOrdersRepository,
     @inject("UsersRepository")

@@ -1,7 +1,7 @@
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 
 import { IOrdersRepository } from "@modules/Orders/repositories/IOrdersRepository";
-import { IPaymentsRepository } from "@modules/Payment/repositories/IPaymentsRepository";
+import { IPaymentsRepository } from "@modules/Transactions/repositories/ITransactionsRepository";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
 import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider";
 import { inject, injectable } from "tsyringe";

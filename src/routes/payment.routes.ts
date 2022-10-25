@@ -1,7 +1,7 @@
 import { Router } from "express"
 import { celebrate, Joi, Segments } from "celebrate" // @types/joi tbm
 import { ensureAuthenticated } from "@shared/middlewares/ensureAuthenticated"
-import { ProcessPaymentController } from "@modules/Payment/useCases/processPayment/ProcessPaymentController"
+import { ProcessPaymentController } from "@modules/Transactions/useCases/processPayment/ProcessPaymentController"
 
 
 const paymentRoutes = Router()

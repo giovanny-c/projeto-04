@@ -14,8 +14,8 @@ import { ICategoriesRepository } from "@modules/Categories/repositories/ICategor
 import { CategoriesRepository } from "@modules/Categories/repositories/implementation/CategoriesRepository";
 import { IOrdersRepository } from "@modules/Orders/repositories/IOrdersRepository";
 import { OrdersRepository } from "@modules/Orders/repositories/implementations/OrdersRepository";
-import { IPaymentsRepository } from "@modules/Payment/repositories/IPaymentsRepository";
-import { PaymentsRepository } from "@modules/Payment/repositories/implementations/PaymentsRepository";
+import { ITransactionsRepository } from "@modules/Transactions/repositories/ITransactionsRepository";
+import { TransactionsRepository } from "@modules/Transactions/repositories/implementations/TransactionsRepository";
 
 container.registerSingleton<IUsersRepository>(
     "UsersRepository",
@@ -47,7 +47,7 @@ container.registerSingleton<IOrdersRepository>(
     OrdersRepository
 )
 
-container.registerSingleton<IPaymentsRepository>(
-    "PaymentsRepository",
-    PaymentsRepository
+container.registerSingleton<ITransactionsRepository>(
+    "TransactionsRepository",
+    TransactionsRepository
 )
