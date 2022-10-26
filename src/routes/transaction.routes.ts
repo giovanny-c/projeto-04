@@ -20,11 +20,11 @@ transactionRoutes.post("/create" , ensureAuthenticated,
     celebrate({ // trocar pelo yup
         [Segments.BODY]: {
             order_id: Joi.string().uuid().required(),
-            payment_type: Joi.string().allow([
+            payment_type: Joi.string().allow(
                 "billet",
                 "credit_cart",
                 "pix",
-                "other"]).required(), //permite só esses valores
+                "other").required(), //permite só esses valores
             installments: Joi.number().min(1)
             .when("payment_type", 
             {
@@ -42,25 +42,25 @@ transactionRoutes.post("/create" , ensureAuthenticated,
             billing_number: Joi.string().required(),
             billing_state: Joi.string().required(), 
             billing_zipcode: Joi.string().pattern(/^[0-9]+$/).required(),
-            cardNumber: Joi
+            card_number: Joi
                 .when("payment_type", {
                     is: "credit_card",
                     then: Joi.string().length(16).pattern(/^[0-9]+$/).required(),
                     otherwise: Joi.string()
                 }),
-            cardExpiration: Joi
+            card_expiration: Joi
                 .when("payment_type", {
                     is: "credit_card",
                     then: Joi.string().length(5).pattern(/^([0-9]{2})\/([0-9]{2})$/).required(), // permite só 00/00
                     otherwise: Joi.string()
             }),
-            cardHolderName: Joi
+            card_holderName: Joi
                 .when("payment_type", {
                     is: "credit_card",
                     then: Joi.string().min(3).required(), // permite só 00/00
                     otherwise: Joi.string()
             }),
-            cardCvv: Joi
+            card_cvv: Joi
                 .when("payment_type", {
                     is: "credit_card",
                     then: Joi.string().length(3).pattern(/^[0-9]+$/).required(), // permite só 00/00
@@ -69,7 +69,8 @@ transactionRoutes.post("/create" , ensureAuthenticated,
             
         }
     })
-,transactionController.handle)
+    
+, transactionController.handle)
 
 
 

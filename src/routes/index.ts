@@ -9,7 +9,7 @@ import ordersRoutes from "routes/orders.routes"
 import cartRoutes from "routes/cart.routes"
 import vendorRoutes from "./vendors.routes"
 
-import transactionRoutes from "./payment.routes"
+import transactionRoutes from "./transaction.routes"
 
 const router = Router()
 

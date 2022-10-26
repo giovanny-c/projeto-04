@@ -65,6 +65,10 @@ export class createTablePayment1666053883650 implements MigrationInterface {
                     
                 },
                 {
+                    name: "order_id",
+                    type: "uuid"
+                },
+                {
                     name: "vendor_id",
                     type: "uuid",
                     
@@ -139,13 +143,31 @@ export class createTablePayment1666053883650 implements MigrationInterface {
                 
             ],
 
-            foreignKeys: [{
-                name: "FKUserstransactions",
-                referencedTableName: "users",
-                referencedColumnNames: ["id"],
-                columnNames: ["customer_id"],
-                onDelete: "SET NULL"
-            }]
+            foreignKeys: [
+                {
+                    name: "FKCustomersTransactions",
+                    referencedTableName: "users",
+                    referencedColumnNames: ["id"],
+                    columnNames: ["customer_id"],
+                    onDelete: "SET NULL"
+                },
+
+                {
+                    name: "FKVendorsTransactions",
+                    referencedTableName: "users",
+                    referencedColumnNames: ["id"],
+                    columnNames: ["vendor_id"],
+                    onDelete: "SET NULL"
+                },
+
+                {
+                    name: "FKOrdersTransactions",
+                    referencedTableName: "orders",
+                    referencedColumnNames: ["id"],
+                    columnNames: ["order_id"],
+                    onDelete: "SET NULL"
+                }
+            ]
         }))
     }
 

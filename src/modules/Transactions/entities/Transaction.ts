@@ -1,18 +1,20 @@
-import { User } from "@modules/Accounts/entities/User";
+import { User } from "../../Accounts/entities/User";
+import Order from "../../Orders/entities/Order";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import {v4 as uuidV4} from "uuid"
+import { TransactionStatus } from "../types/TransactionStatus";
 
 
 @Entity("transactions")
 class Transaction {
 
     @PrimaryColumn()
-    id: string
+    id: string //id gerado pelo DB
 
-    @Column()
+    @Column() //id gerado pelo gateway
     transaction_id: string
 
-    @Column()
+    @Column() //codigo gerado app?
     transaction_code: string
 
     @Column()
@@ -29,6 +31,13 @@ class Transaction {
 
     @Column()
     processor_response: string
+
+    @Column()
+    order_id: string
+
+    @ManyToOne(() => Order)
+    @JoinColumn({ name: "order_id" })
+    order: User
 
     @Column()
     vendor_id: string

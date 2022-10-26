@@ -1,16 +1,17 @@
 import { User } from "@modules/Accounts/entities/User"
+import { TransactionStatus } from "../types/TransactionStatus"
 
 
 
 export default interface ISaveTransaction{
 
-    id: string
+    id?: string
 
     transaction_id: string
 
     transaction_code: string
 
-    status: string //Enumerator?
+    status: TransactionStatus //Enumerator?
 
     payment_type: string //Enumerator
 
@@ -18,7 +19,9 @@ export default interface ISaveTransaction{
     
     total: number
 
-    processor_response: string
+    processor_response?: string
+
+    order_id: string
 
     vendor_id?: string
 
