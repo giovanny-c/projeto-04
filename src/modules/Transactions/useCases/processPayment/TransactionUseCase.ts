@@ -6,7 +6,7 @@ import { inject, injectable } from "tsyringe";
 import axios from 'axios';
 
 @injectable()
-class ProcessPaymentUseCase {
+class TransactionUseCase {
 
 
     constructor(
@@ -20,4 +20,4 @@ class ProcessPaymentUseCase {
    
     }
 }
-export { ProcessPaymentUseCase }
+export { TransactionUseCase }
