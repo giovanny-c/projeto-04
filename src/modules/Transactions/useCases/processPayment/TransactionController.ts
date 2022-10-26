@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { parsePhoneNumber } from "libphonenumber-js";
 import { container } from "tsyringe";
 import { TransactionUseCase } from "./TransactionUseCase";
 
@@ -35,7 +36,7 @@ class TransactionController {
             id: customer_id,
             name: customer_name,
             email: customer_email,
-            mobile: customer_mobile,
+            mobile: parsePhoneNumber(customer_mobile, "BR").format("E.164") ,
             document: customer_document
         }
 
@@ -58,7 +59,7 @@ class TransactionController {
         
         
         const transaction = container.resolve(TransactionUseCase)
-        
+
         const response = await transaction.execute({
             order_id,
             payment_type,

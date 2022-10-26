@@ -1,4 +1,5 @@
-
+import {cpf} from "cpf-cnpj-validator"
+import { title } from "process"
 
 class PagarMeTransactionProvider  {
 
@@ -10,7 +11,7 @@ class PagarMeTransactionProvider  {
         card,
         customer,
         billing,
-        items,
+        items, //itens do order products
 
     }){
 
@@ -55,9 +56,77 @@ class PagarMeTransactionProvider  {
             
         }
 
-        const transactionParams = {
-
+        const customerParams = {
+            customer: {
+                external_id: customer.id,
+                name: customer.name,
+                email: customer.email,
+                type: cpf.isValid(customer.document) ? "individual" : "corporation", // se é pf ou pj
+                country: "br",
+                phone_numbers: [customer.mobile],
+                documents: [
+                    {
+                        type: cpf.isValid(customer.document) ? "cpf" : "cnpj",
+                        number: customer.document.replace(/[^?0-9]/g, "")
+                    }
+                ]
+            }
         }
+
+        const billingParams = billing?.zipcode ? { //se existir zipcode
+            billing: {
+                name: "Billing Address",
+                address: {
+                    country: "br",
+                    state: billing.state,
+                    city: billing.city,
+                    neighborhood: billing.neighborhood,
+                    street: billing.street,
+                    street_number: billing.number,
+                    zipcode: billing.zipcode
+                }
+            }
+        } : {}
+
+        const itemsParams = items && items.length > 0 ? {
+            items: items.map((item) => ({
+                id: item?.product_id, //? para nao dar exepton se nao existir
+                title item?.product.name,
+                unit_price: item?.price * 100, // ver se precisa converter para number
+                quantity: item.quantity || 1,
+                tangible: true, //se é produto fisico ou nao
+            }))
+        } : {
+            items: [ // se nao tiver produto, for produ digital, curso etc
+                {
+                    id: "1",
+                    title: `t-${transaction_code}`,
+                    unit_price: total * 100, // ver se precisa converter para number
+                    quantity:  1,
+                    tangible: false,
+                },
+            ],
+        }
+
+        //qualquer coisa que vc quiser colocar que vai estar disponivel
+        // no campo de busca dele
+        const metadataParams = {
+            metadata: {
+                transaction_code: transaction_code
+            }
+        }
+
+        const transactionParams = {
+            async: false, //false = aguarda a resposta,  se true nao espera processar o pagamento e retorna como pendente
+            //postback_url: "",
+            ...paymentParams,
+            ...customerParams,
+            ...billingParams,
+            ...itemsParams,
+            ...metadataParams
+        }
+
+        console.debug("transactionParams", transactionParams)
     }
 }
 

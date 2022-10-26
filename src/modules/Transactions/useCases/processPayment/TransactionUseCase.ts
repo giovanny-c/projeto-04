@@ -10,37 +10,18 @@ import {IOrdersRepository}  from "@modules/Orders/repositories/IOrdersRepository
 import { ITransactionsRepository } from "@modules/Transactions/repositories/ITransactionsRepository";
 import { IDateProvider } from "@shared/container/providers/dateProvider/IDateProvider";
 import { Transaction } from "@modules/Transactions/entities/Transaction";
+import IBilling from "@modules/Transactions/dtos/IBillingDTO";
+import ICard from "@modules/Transactions/dtos/ICardDTO";
+import ICustomerForTransaction from "@modules/Transactions/dtos/ICustomerForTransactionDTO";
 
-interface ICustomer {
-    id: string
-    email: string
-    name: string
-    mobile: string
-    document: string
 
-}
-interface IBilling {
-    address: string
-    city: string
-    neighborhood: string
-    number: string 
-    state: string
-    zipcode: string
-}
-
-interface ICard {
-    number: string
-    expiration: string
-    holder_name: string
-    cvv: string
-}
 
 interface IRequest {
 
     order_id: string
     payment_type: string
     installments: number
-    customer: ICustomer
+    customer: ICustomerForTransaction
     billing: IBilling
     card: ICard
 }
@@ -102,6 +83,7 @@ class TransactionUseCase {
 
         await this.ordersRepository.updateOrderStatus({id: order.id, status:"PROCESSING PAYMENT", updated_at: date_now})
 
+        
         return transaction
         //integrar com pagar.me
         //processar regras de status
