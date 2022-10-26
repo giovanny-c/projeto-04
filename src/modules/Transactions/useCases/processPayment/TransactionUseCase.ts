@@ -69,15 +69,21 @@ class TransactionUseCase {
             throw new AppError("Order not found", 404)
         }
 
+        if(order.status !== "PENDING"){
+            throw new AppError("This order is either on processing payment or was already paid")
+        }
+
         //criar transaction
+        const date_now = this.dateProvider.dateNow()
 
         const transaction = await this.transactionsRepository.save({
-            transaction_code: "DA3D083KH6H7",
+            transaction_code: "DA3D083KH6H7", // trocar para uuid?
             transaction_id: "?",
             total: order.total,
             payment_type,
             installments,
             status: "started",
+            processor_response: "",
             order_id,
             customer_id: customer.id,
             customer_email: customer.email,
@@ -90,8 +96,11 @@ class TransactionUseCase {
             billing_city: billing.city,
             billing_state: billing.state,
             billing_zipcode: billing.zipcode,
-            created_at: this.dateProvider.dateNow()
+            created_at: date_now,
+            updated_at: date_now
         })
+
+        await this.ordersRepository.updateOrderStatus({id: order.id, status:"PROCESSING PAYMENT", updated_at: date_now})
 
         return transaction
         //integrar com pagar.me

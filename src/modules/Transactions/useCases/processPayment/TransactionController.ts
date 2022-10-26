@@ -55,19 +55,20 @@ class TransactionController {
             cvv: card_cvv
         }
 
-        return res.send()
+        
         
         const transaction = container.resolve(TransactionUseCase)
-        // const response = await transaction.execute({
-        //     order_id,
-        //     payment_type,
-        //     installments,
-        //     customer,
-        //     billing,
-        //     card
-        // })
+        
+        const response = await transaction.execute({
+            order_id,
+            payment_type,
+            installments,
+            customer,
+            billing,
+            card
+        })
 
-       // return res.status(200).json(response)
+       return res.status(200).json(response)
 
         
         

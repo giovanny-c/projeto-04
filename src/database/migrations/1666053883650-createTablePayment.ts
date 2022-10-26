@@ -12,7 +12,7 @@ export class createTablePayment1666053883650 implements MigrationInterface {
                     type: "uuid",
                     isPrimary: true
                 },
-                {
+                {// del?
                 
                     name: "transaction_id",
                     type: "varchar",
@@ -71,6 +71,7 @@ export class createTablePayment1666053883650 implements MigrationInterface {
                 {
                     name: "vendor_id",
                     type: "uuid",
+                    isNullable: true
                     
                 },
                 {

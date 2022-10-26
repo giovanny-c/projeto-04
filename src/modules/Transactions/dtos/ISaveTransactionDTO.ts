@@ -19,7 +19,7 @@ export default interface ISaveTransaction{
     
     total: number
 
-    processor_response?: string
+    processor_response: string
 
     order_id: string
 

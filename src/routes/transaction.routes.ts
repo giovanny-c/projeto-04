@@ -20,9 +20,9 @@ transactionRoutes.post("/create" , ensureAuthenticated,
     celebrate({ // trocar pelo yup
         [Segments.BODY]: {
             order_id: Joi.string().uuid().required(),
-            payment_type: Joi.string().allow(
+            payment_type: Joi.string().valid(
                 "billet",
-                "credit_cart",
+                "credit_card",
                 "pix",
                 "other").required(), //permite só esses valores
             installments: Joi.number().min(1)

@@ -51,7 +51,7 @@ class PayOrderUseCase {
                 throw new AppError("This order was canceled!", 400)
             }
             
-            throw new AppError("This order was already payed", 400)
+            throw new AppError("This order was already paid", 400)
         }        
 
         if(order.customer_id !== user_id){
@@ -66,7 +66,7 @@ class PayOrderUseCase {
 
         const updated_at = this.dateProvider.dateNow()
 
-        await this.ordersRepository.updateOrderStatus({id: order_id, status: "PROCESSING", updated_at })
+        await this.ordersRepository.updateOrderStatus({id: order_id, status: "PAYMENT ACEPPTED", updated_at })
 
 
         //pega todos os vendedores
