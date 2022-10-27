@@ -13,8 +13,10 @@ import { Transaction } from "@modules/Transactions/entities/Transaction";
 import IBilling from "@modules/Transactions/dtos/IBillingDTO";
 import ICard from "@modules/Transactions/dtos/ICardDTO";
 import ICustomerForTransaction from "@modules/Transactions/dtos/ICustomerForTransactionDTO";
+import { ITransactionProvider } from "@shared/container/providers/transactionProvider/ITransactionProvider";
 
-
+import {v4 as uuidv4} from "uuid"
+import { cpf, cnpj } from "cpf-cnpj-validator";
 
 interface IRequest {
 
@@ -40,10 +42,14 @@ class TransactionUseCase {
         private transactionsRepository: ITransactionsRepository,
         @inject("DayjsDateProvider")
         private dateProvider: IDateProvider ,
+        @inject("TransactionProvider")
+        private transactionProvider: ITransactionProvider
     ) { }
 
     async execute({order_id, billing, card, customer, installments, payment_type}: IRequest): Promise<Transaction> {
         
+        
+
         const order = await this.ordersRepository.findById(order_id)
 
         if(!order){
@@ -51,15 +57,16 @@ class TransactionUseCase {
         }
 
         if(order.status !== "PENDING"){
-            throw new AppError("This order is either on processing payment or was already paid")
+            throw new AppError("This order is either processing the payment or was already paid")
         }
+
 
         //criar transaction
         const date_now = this.dateProvider.dateNow()
 
         const transaction = await this.transactionsRepository.save({
-            transaction_code: "DA3D083KH6H7", // trocar para uuid?
-            transaction_id: "?",
+            transaction_code: uuidv4(), 
+            transaction_id: "?", //deletar
             total: order.total,
             payment_type,
             installments,
@@ -79,6 +86,17 @@ class TransactionUseCase {
             billing_zipcode: billing.zipcode,
             created_at: date_now,
             updated_at: date_now
+        })
+
+        await this.transactionProvider.proccess({
+            transaction_code: transaction.transaction_code,
+            total: transaction.total,
+            payment_type,
+            installments, 
+            customer,
+            card,
+            billing,
+            items: order.order_products,
         })
 
         await this.ordersRepository.updateOrderStatus({id: order.id, status:"PROCESSING PAYMENT", updated_at: date_now})

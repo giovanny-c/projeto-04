@@ -1,7 +1,8 @@
 import {cpf} from "cpf-cnpj-validator"
-import { title } from "process"
+import { ITransactionProvider, ITransactionProviderRequest } from "../ITransactionProvider"
+import pagarme from "pagarme"
 
-class PagarMeTransactionProvider  {
+class PagarMeTransactionProvider implements ITransactionProvider  {
 
     async proccess({
         transaction_code,
@@ -13,7 +14,7 @@ class PagarMeTransactionProvider  {
         billing,
         items, //itens do order products
 
-    }){
+    }: ITransactionProviderRequest){
 
         const billetParams = {
             payment_method: "boleto", // pagarme trabalha com credit_card ou boleto
@@ -81,17 +82,18 @@ class PagarMeTransactionProvider  {
                     state: billing.state,
                     city: billing.city,
                     neighborhood: billing.neighborhood,
-                    street: billing.street,
+                    street: billing.address,
                     street_number: billing.number,
                     zipcode: billing.zipcode
                 }
             }
         } : {}
 
+        
         const itemsParams = items && items.length > 0 ? {
             items: items.map((item) => ({
                 id: item?.product_id, //? para nao dar exepton se nao existir
-                title item?.product.name,
+                title: item?.product.name,
                 unit_price: item?.price * 100, // ver se precisa converter para number
                 quantity: item.quantity || 1,
                 tangible: true, //se é produto fisico ou nao
@@ -126,6 +128,9 @@ class PagarMeTransactionProvider  {
             ...metadataParams
         }
 
+        const client = await pagarme.client.connect({
+            api_key: process.env.PAGARME_API_KEY as string
+        })
         console.debug("transactionParams", transactionParams)
     }
 }

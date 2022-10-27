@@ -16,7 +16,7 @@ interface ITransactionProviderRequest{
 
 interface ITransactionProvider {
 
-    process(data: ITransactionProviderRequest ): Promise<any>
+    proccess(data: ITransactionProviderRequest ): Promise<any>
 }
 
 export {ITransactionProvider, ITransactionProviderRequest}

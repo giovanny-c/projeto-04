@@ -10,5 +10,5 @@ const gateway = {
 
 container.registerSingleton<ITransactionProvider>(
     "TransactionProvider",
-    gateway[process.env.STORAGE as string]
+    gateway[process.env.PAYMENT_GATEWAY as string]
 )

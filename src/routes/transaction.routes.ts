@@ -2,7 +2,7 @@ import { Router } from "express"
 import { celebrate, Joi, Segments, } from "celebrate" // @types/joi tbm
 import { ensureAuthenticated } from "@shared/middlewares/ensureAuthenticated"
 import { TransactionController } from "@modules/Transactions/useCases/processPayment/TransactionController"
-import validator from "cpf-cnpj-validator"
+import validator, { cnpj, cpf } from "cpf-cnpj-validator"
 import { JoinColumn, MinKey } from "typeorm"
 
 
@@ -32,7 +32,12 @@ transactionRoutes.post("/create" , ensureAuthenticated,
                 then: Joi.number().max(1), 
                 otherwise: Joi.number().max(12)
             }).required(), // if payment type = billet , instalments max = 1 else max = 12 
-            customer_document: Joi.string().min(11).max(14).pattern(/^[0-9]+$/).required(),
+            customer_document: Joi.string().custom((customer_document, helpers) => {
+                if(!cpf.isValid(customer_document) && !cnpj.isValid(customer_document)){
+                    return helpers.error("400", {key: "insert a valid cpf or cnpj"})
+                } //arrumar o erro
+                return customer_document
+            }, "validate document"),
             customer_email: Joi.string().email().required(), 
             customer_mobile: Joi.string().min(9).max(11).pattern(/^[0-9]+$/).required(), //max 12 char com numero apenas
             customer_name: Joi.string().min(3).required(),//min characters
