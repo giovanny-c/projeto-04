@@ -11,7 +11,7 @@ class Transaction {
     @PrimaryColumn()
     id: string //id gerado pelo DB
 
-    @Column() //deletar
+    @Column() //que retorna do gateway
     transaction_id: string
 
     @Column() //codigo gerado app?

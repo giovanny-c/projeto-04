@@ -1,20 +1,22 @@
-import {cpf} from "cpf-cnpj-validator"
-import { ITransactionProvider, ITransactionProviderRequest } from "../ITransactionProvider"
+import { cpf } from "cpf-cnpj-validator"
+import { ITransactionProvider } from "../ITransactionProvider"
 import pagarme from "pagarme"
+import { TransactionStatus } from "@modules/Transactions/types/TransactionStatus"
+import { IPagarMeProviderRequest, IPagarMeProviderResponse } from "../dtos/IPagarmeProviderDTOs"
 
-class PagarMeTransactionProvider implements ITransactionProvider  {
+class PagarMeTransactionProvider implements ITransactionProvider {
 
     async proccess({
         transaction_code,
         total,
         payment_type,
-        installments, 
+        installments,
         card,
         customer,
         billing,
         items, //itens do order products
 
-    }: ITransactionProviderRequest){
+    }: IPagarMeProviderRequest): Promise<IPagarMeProviderResponse> {
 
         const billetParams = {
             payment_method: "boleto", // pagarme trabalha com credit_card ou boleto
@@ -26,6 +28,7 @@ class PagarMeTransactionProvider implements ITransactionProvider  {
             payment_method: "credit_card",
             amount: total * 100,
             installments,
+            card_holder_name: card.holder_name,
             card_number: card.number.replace(/[^?0-9]/g, ""),// substitui tudo oque nao for numero por vazio "1234.1233..." => "12341234..."
             card_expiration_date: card.expiration.replace(/[^?0-9]/g, ""), // "mm/yy" => "mmyy" 
             card_cvv: card.cvv,
@@ -41,20 +44,20 @@ class PagarMeTransactionProvider implements ITransactionProvider  {
 
                 paymentParams = credit_cardParams
                 break
-        
-            case "billet": 
+
+            case "billet":
 
                 paymentParams = billetParams
                 break
 
-            case "pix": 
+            case "pix":
 
                 paymentParams = pixParams
                 break
-            
-            default :
+
+            default:
                 throw `Payment type: ${payment_type} not found!`
-            
+
         }
 
         const customerParams = {
@@ -84,12 +87,12 @@ class PagarMeTransactionProvider implements ITransactionProvider  {
                     neighborhood: billing.neighborhood,
                     street: billing.address,
                     street_number: billing.number,
-                    zipcode: billing.zipcode
+                    zipcode: billing.zipcode.replace(/[^?0-9]/g, "")
                 }
             }
         } : {}
 
-        
+
         const itemsParams = items && items.length > 0 ? {
             items: items.map((item) => ({
                 id: item?.product_id, //? para nao dar exepton se nao existir
@@ -104,7 +107,7 @@ class PagarMeTransactionProvider implements ITransactionProvider  {
                     id: "1",
                     title: `t-${transaction_code}`,
                     unit_price: total * 100, // ver se precisa converter para number
-                    quantity:  1,
+                    quantity: 1,
                     tangible: false,
                 },
             ],
@@ -131,8 +134,47 @@ class PagarMeTransactionProvider implements ITransactionProvider  {
         const client = await pagarme.client.connect({
             api_key: process.env.PAGARME_API_KEY as string
         })
-        console.debug("transactionParams", transactionParams)
+
+        const response = await client.transactions.create(transactionParams)
+
+        console.debug("response:", response)
+
+        return {
+            transaction_id: response.id,
+            status: this.translateStatus(response.status),
+            billet: {
+                url: response.boleto_url,
+                barCode: response.boleto_barcode,
+            },
+            card: {
+                id: response.card?.id //id do cartao salvo no pagarme
+                //nao é numero em si,
+                //pode salvar no banco
+                //ao fazer uma nova compra o cliente nao precisa digitar
+                //todo o cartao dnv, usando o gateway do pagarme
+            },
+
+            processorResponse: JSON.stringify(response)
+        }
     }
+
+    translateStatus(status: string): TransactionStatus { //pega o status da response do gateway e 
+        //transforma ele em status do app para transactions
+
+        const statusMap = {
+            processing: "processing", 
+            waiting_payment: "pending",
+            authorized: "pending",
+            paid: "approved",
+            refused: "refused ",
+            chargedback: "chargeback"
+        }
+        
+
+          return statusMap[status]
+          //vai retornar o valor do propriedade de statusMap em que a propriedade corresponder
+        // ao valor do parametro status
+    } 
 }
 
-export {PagarMeTransactionProvider}
+export { PagarMeTransactionProvider }

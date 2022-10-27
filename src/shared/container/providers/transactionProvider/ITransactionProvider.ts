@@ -1,22 +1,10 @@
-import OrdersProducts from "@modules/Orders/entities/OrdersProducts";
-import IBilling from "@modules/Transactions/dtos/IBillingDTO";
-import ICard from "@modules/Transactions/dtos/ICardDTO";
-import ICustomerForTransaction from "@modules/Transactions/dtos/ICustomerForTransactionDTO";
 
-interface ITransactionProviderRequest{
-    transaction_code: string,
-    total: number,
-    payment_type: string,
-    installments: number, 
-    card: ICard,
-    customer: ICustomerForTransaction,
-    billing: IBilling,
-    items: OrdersProducts[],
-}
+import { IPagarMeProviderRequest, IPagarMeProviderResponse } from "./dtos/IPagarmeProviderDTOs";
+
 
 interface ITransactionProvider {
 
-    proccess(data: ITransactionProviderRequest ): Promise<any>
+    proccess(data: IPagarMeProviderRequest): Promise<IPagarMeProviderResponse>
 }
 
-export {ITransactionProvider, ITransactionProviderRequest}
+export {ITransactionProvider}
