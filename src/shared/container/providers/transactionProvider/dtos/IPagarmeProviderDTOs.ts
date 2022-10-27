@@ -2,6 +2,7 @@ import OrdersProducts from "@modules/Orders/entities/OrdersProducts";
 import IBilling from "@modules/Transactions/dtos/IBillingDTO";
 import ICard from "@modules/Transactions/dtos/ICardDTO";
 import ICustomerForTransaction from "@modules/Transactions/dtos/ICustomerForTransactionDTO";
+import { TransactionStatus } from "@modules/Transactions/types/TransactionStatus";
 
 interface IPagarMeProviderRequest{
     transaction_code: string,
@@ -17,7 +18,7 @@ interface IPagarMeProviderRequest{
 
 interface IPagarMeProviderResponse{
     transaction_id: string
-    status: string
+    status: TransactionStatus
     billet: {
         url: string,
         barCode: string | number,

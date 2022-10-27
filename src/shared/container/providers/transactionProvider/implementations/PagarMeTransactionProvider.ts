@@ -32,7 +32,7 @@ class PagarMeTransactionProvider implements ITransactionProvider {
             card_number: card.number.replace(/[^?0-9]/g, ""),// substitui tudo oque nao for numero por vazio "1234.1233..." => "12341234..."
             card_expiration_date: card.expiration.replace(/[^?0-9]/g, ""), // "mm/yy" => "mmyy" 
             card_cvv: card.cvv,
-            capture: true // pesquisar sobre captura do cartao
+            capture: true // pesquisar sobre captura do cartao// nao por false
         }
 
         const pixParams = {}
@@ -123,7 +123,7 @@ class PagarMeTransactionProvider implements ITransactionProvider {
 
         const transactionParams = {
             async: false, //false = aguarda a resposta,  se true nao espera processar o pagamento e retorna como pendente
-            //postback_url: "",
+            postback_url: process.env.PAGARME_WEBHOOK_URL, // se a transaction retornar como pending, quando for accepted, vai mandar para essa rota, (atualizar o order nessa rota)
             ...paymentParams,
             ...customerParams,
             ...billingParams,
@@ -137,7 +137,7 @@ class PagarMeTransactionProvider implements ITransactionProvider {
 
         const response = await client.transactions.create(transactionParams)
 
-        console.debug("response:", response)
+        console.log("response:", response)
 
         return {
             transaction_id: response.id,
@@ -173,7 +173,7 @@ class PagarMeTransactionProvider implements ITransactionProvider {
 
           return statusMap[status]
           //vai retornar o valor do propriedade de statusMap em que a propriedade corresponder
-        // ao valor do parametro status
+          // ao valor do parametro status
     } 
 }
 

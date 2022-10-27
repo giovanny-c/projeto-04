@@ -17,6 +17,7 @@ import { ITransactionProvider } from "@shared/container/providers/transactionPro
 
 import {v4 as uuidv4} from "uuid"
 import { cpf, cnpj } from "cpf-cnpj-validator";
+import Order from "@modules/Orders/entities/Order";
 
 interface IRequest {
 
@@ -46,7 +47,7 @@ class TransactionUseCase {
         private transactionProvider: ITransactionProvider
     ) { }
 
-    async execute({order_id, billing, card, customer, installments, payment_type}: IRequest): Promise<Transaction> {
+    async execute({order_id, billing, card, customer, installments, payment_type}: IRequest): Promise<Order> {
         
         
 
@@ -56,7 +57,7 @@ class TransactionUseCase {
             throw new AppError("Order not found", 404)
         }
 
-        if(order.status !== "PENDING"){
+        if(order.status !== "PENDING" && order.status !== "PAYMENT REFUSED"){
             throw new AppError("This order is either processing the payment or was already paid")
         }
 
@@ -66,7 +67,7 @@ class TransactionUseCase {
 
         const transaction = await this.transactionsRepository.save({
             transaction_code: uuidv4(), 
-            transaction_id: "?", //deletar
+            transaction_id: "", 
             total: order.total,
             payment_type,
             installments,
@@ -88,7 +89,7 @@ class TransactionUseCase {
             updated_at: date_now
         })
 
-        await this.transactionProvider.proccess({
+        const providerResponse = await this.transactionProvider.proccess({
             transaction_code: transaction.transaction_code,
             total: transaction.total,
             payment_type,
@@ -99,10 +100,38 @@ class TransactionUseCase {
             items: order.order_products,
         })
 
-        await this.ordersRepository.updateOrderStatus({id: order.id, status:"PROCESSING PAYMENT", updated_at: date_now})
+        //
+        await this.transactionsRepository.save({
+            ...transaction,
+            transaction_id: providerResponse.transaction_id,
+            status: providerResponse.status,
+            updated_at: this.dateProvider.dateNow(),
+            processor_response: providerResponse.processorResponse
+        })
+
 
         
-        return transaction
+        let orderStatus: Order
+
+        if(providerResponse.status === "approved"){
+
+            orderStatus = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PAYMENT ACEPPTED", updated_at: this.dateProvider.dateNow(),})
+        }
+        if(providerResponse.status === "refused"){
+            
+            orderStatus = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PAYMENT REFUSED", updated_at: this.dateProvider.dateNow(),})
+
+        }
+        else{
+            
+            orderStatus = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PROCESSING PAYMENT", updated_at: this.dateProvider.dateNow(),})
+        }
+
+        
+        
+
+        
+        return  orderStatus
         //integrar com pagar.me
         //processar regras de status
 
