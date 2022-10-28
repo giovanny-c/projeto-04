@@ -4,6 +4,7 @@ import { ensureAuthenticated } from "@shared/middlewares/ensureAuthenticated"
 import { TransactionController } from "@modules/Transactions/useCases/processPayment/TransactionController"
 import validator, { cnpj, cpf } from "cpf-cnpj-validator"
 import { JoinColumn, MinKey } from "typeorm"
+import { PagarMePostBackController } from "@modules/Transactions/useCases/postBackUsecase/PagarMePostBackController"
 
 
 
@@ -14,7 +15,7 @@ const transactionRoutes = Router()
 transactionRoutes.use(ensureAuthenticated)
 
 const transactionController = new TransactionController()
-
+const pagarMePostBackController = new PagarMePostBackController()
 
 transactionRoutes.post("/create" , ensureAuthenticated,
     celebrate({ // trocar pelo yup
@@ -76,6 +77,9 @@ transactionRoutes.post("/create" , ensureAuthenticated,
     })
     
 , transactionController.handle)
+
+//webhook
+transactionRoutes.post("/postbacks/pagarme", pagarMePostBackController.handle)
 
 
 

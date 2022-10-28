@@ -1,6 +1,6 @@
 import { cpf } from "cpf-cnpj-validator"
 import { ITransactionProvider } from "../ITransactionProvider"
-import pagarme from "pagarme"
+import *  as pagarme from "pagarme" 
 import { TransactionStatus } from "@modules/Transactions/types/TransactionStatus"
 import { IPagarMeProviderRequest, IPagarMeProviderResponse } from "../dtos/IPagarmeProviderDTOs"
 
@@ -114,7 +114,7 @@ class PagarMeTransactionProvider implements ITransactionProvider {
         }
 
         //qualquer coisa que vc quiser colocar que vai estar disponivel
-        // no campo de busca dele
+        // no campo de busca do pagarme para  consulta
         const metadataParams = {
             metadata: {
                 transaction_code: transaction_code
@@ -123,7 +123,7 @@ class PagarMeTransactionProvider implements ITransactionProvider {
 
         const transactionParams = {
             async: false, //false = aguarda a resposta,  se true nao espera processar o pagamento e retorna como pendente
-            postback_url: process.env.PAGARME_WEBHOOK_URL, // se a transaction retornar como pending, quando for accepted, vai mandar para essa rota, (atualizar o order nessa rota)
+            postback_url: process.env.PAGARME_WEBHOOK_URL as string, // se a transaction retornar como pending, quando for accepted, vai mandar para essa rota, (atualizar o order nessa rota)
             ...paymentParams,
             ...customerParams,
             ...billingParams,
@@ -162,16 +162,18 @@ class PagarMeTransactionProvider implements ITransactionProvider {
         //transforma ele em status do app para transactions
 
         const statusMap = {
-            processing: "processing", 
+            processing: "pending", 
             waiting_payment: "pending",
-            authorized: "pending",
+            pending_review: "pending",
+            authorized: "processing",
+            analyzing: "processing",
             paid: "approved",
             refused: "refused ",
-            chargedback: "chargeback"
+            chargedback: "chargeback",
         }
         
-
-          return statusMap[status]
+        
+        return statusMap[status]
           //vai retornar o valor do propriedade de statusMap em que a propriedade corresponder
           // ao valor do parametro status
     } 

@@ -12,7 +12,7 @@ class TransactionsRepository implements ITransactionsRepository{
     constructor(){
         this.repository = dataSource.getRepository(Transaction)
     }
-
+    
     async save({id, 
         transaction_id,
         transaction_code, 
@@ -62,9 +62,9 @@ class TransactionsRepository implements ITransactionsRepository{
             billing_zipcode,
             updated_at,
             created_at, 
-
+            
         })
-
+        
         return await this.repository.save(Transaction)
         
     }
@@ -72,12 +72,17 @@ class TransactionsRepository implements ITransactionsRepository{
         
         return await this.repository.findOneBy({id}) as Transaction
     }
-
+    
+    async findByTransactionId(transaction_id: string): Promise<Transaction> {
+        
+        return await this.repository.findOneBy({transaction_id}) as Transaction
+    }
+    
     async findByUserId(customer_id): Promise<Transaction[]> {
-
+        
         return await this.repository.findBy(customer_id)
     }
-
+    
 }
 
 export {TransactionsRepository}

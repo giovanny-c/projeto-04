@@ -20,7 +20,7 @@ router.use(categoriesRoutes)
 router.use("/orders", ordersRoutes)
 router.use("/cart", cartRoutes)
 router.use("/vendor", vendorRoutes)
-router.use("/transaction", transactionRoutes)
+router.use("/transactions", transactionRoutes)
 
 
 export default router

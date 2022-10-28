@@ -36,6 +36,8 @@ class Order {
     @Column("decimal")
     total: number
 
+    
+
     constructor() {
         if (!this.id) {
             this.id = uuidV4()

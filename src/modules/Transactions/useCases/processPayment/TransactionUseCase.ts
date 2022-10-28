@@ -2,7 +2,6 @@
 
 import { inject, injectable } from "tsyringe";
 
-import axios from 'axios';
 
 import { AppError } from "@shared/errors/AppError";
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
@@ -18,6 +17,7 @@ import { ITransactionProvider } from "@shared/container/providers/transactionPro
 import {v4 as uuidv4} from "uuid"
 import { cpf, cnpj } from "cpf-cnpj-validator";
 import Order from "@modules/Orders/entities/Order";
+import TransactionStatusToOrderStatus from "@modules/Orders/mapper/TransactionStatusToOrderStatus";
 
 interface IRequest {
 
@@ -62,9 +62,10 @@ class TransactionUseCase {
         }
 
 
-        //criar transaction
+        
         const date_now = this.dateProvider.dateNow()
 
+        //cria a transaction
         const transaction = await this.transactionsRepository.save({
             transaction_code: uuidv4(), 
             transaction_id: "", 
@@ -89,6 +90,7 @@ class TransactionUseCase {
             updated_at: date_now
         })
 
+        //manda ela para o provider (pagarme)
         const providerResponse = await this.transactionProvider.proccess({
             transaction_code: transaction.transaction_code,
             total: transaction.total,
@@ -100,7 +102,7 @@ class TransactionUseCase {
             items: order.order_products,
         })
 
-        //
+        //pega a resposta do provider e poe no transaction
         await this.transactionsRepository.save({
             ...transaction,
             transaction_id: providerResponse.transaction_id,
@@ -112,20 +114,31 @@ class TransactionUseCase {
 
         
         let orderStatus: Order
+        //atualiza o status da order 
+        //(fazer um mapper para order status igual o do provider?)
 
-        if(providerResponse.status === "approved"){
+        const translatedStatusForOrder = TransactionStatusToOrderStatus(providerResponse.status)
 
-            orderStatus = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PAYMENT ACEPPTED", updated_at: this.dateProvider.dateNow(),})
-        }
-        if(providerResponse.status === "refused"){
+        orderStatus = await this.ordersRepository.updateOrderStatus({id: order.id, status: translatedStatusForOrder , updated_at: this.dateProvider.dateNow(),})
+
+        // if(providerResponse.status === "approved"){
+
+        //     orderStatus = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PAYMENT ACEPPTED", updated_at: this.dateProvider.dateNow(),})
+        // }
+        // if(providerResponse.status === "processing" ){
+
+        //     orderStatus = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PROCESSING PAYMENT", updated_at: this.dateProvider.dateNow(),})
+
+        // }
+        // if(providerResponse.status === "refused"){
+
+        //     orderStatus = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PAYMENT REFUSED", updated_at: this.dateProvider.dateNow(),})
+
+        // }
+        // else{ //providerResponse.status === "pending"
             
-            orderStatus = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PAYMENT REFUSED", updated_at: this.dateProvider.dateNow(),})
-
-        }
-        else{
-            
-            orderStatus = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PROCESSING PAYMENT", updated_at: this.dateProvider.dateNow(),})
-        }
+        //     orderStatus = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PENDING", updated_at: this.dateProvider.dateNow(),})
+        // }
 
         
         

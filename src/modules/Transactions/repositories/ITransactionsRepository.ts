@@ -6,6 +6,7 @@ interface ITransactionsRepository{
 
     save(data: ISaveTransaction): Promise<Transaction>
     findById(id: string): Promise<Transaction>
+    findByTransactionId(transaction_id: string): Promise<Transaction>
     findByUserId(customer_id: string): Promise<Transaction[]>
 }
 

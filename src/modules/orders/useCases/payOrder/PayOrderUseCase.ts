@@ -44,6 +44,8 @@ class PayOrderUseCase {
         
 
         const order = await this.ordersRepository.findById(order_id)
+//if("PAYMENT ACCEPTD") passar pra ca na rota quando for paga?
+// REFAZER ATÉ...
 
         if(order.status !== "PENDING"){
 
@@ -54,6 +56,7 @@ class PayOrderUseCase {
             throw new AppError("This order was already paid", 400)
         }        
 
+        
         if(order.customer_id !== user_id){
 
             throw new AppError("Order not found! user differs from customer", 400)
@@ -63,10 +66,11 @@ class PayOrderUseCase {
             throw new AppError("A error ocurred with your payment", 400)
         }
         
-
+        
+// ...AQUI
         const updated_at = this.dateProvider.dateNow()
 
-        await this.ordersRepository.updateOrderStatus({id: order_id, status: "PAYMENT ACEPPTED", updated_at })
+        await this.ordersRepository.updateOrderStatus({id: order_id, status: "PROCESSING ORDER", updated_at })
 
 
         //pega todos os vendedores

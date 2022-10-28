@@ -25,6 +25,7 @@ export class CreateOrdersTable1664843790183 implements MigrationInterface {
                     type: "timestamp"
                 },
                 
+                
             ],
             foreignKeys: [
                 {
