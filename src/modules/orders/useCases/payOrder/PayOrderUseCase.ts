@@ -1,5 +1,6 @@
 import { User } from "@modules/Accounts/entities/User";
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
+import Order from "@modules/Orders/entities/Order";
 import OrdersProducts from "@modules/Orders/entities/OrdersProducts";
 
 import { IOrdersRepository } from "@modules/Orders/repositories/IOrdersRepository";
@@ -12,14 +13,14 @@ import { inject, injectable } from "tsyringe";
 
 
 interface IRequest{
-    order_id: string
+    order: Order
     user_id: string
-    payment_validation: boolean
+    payment_validatior: boolean
 }
 
 
 @injectable()
-class PayOrderUseCase {
+class PayOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
 
 
     constructor(
@@ -39,30 +40,32 @@ class PayOrderUseCase {
 
 
 
-    async execute({order_id, user_id, payment_validation}: IRequest):Promise<any>{
+    async execute({order, user_id, payment_validatior}: IRequest):Promise<any>{
 
-        
-
-        const order = await this.ordersRepository.findById(order_id)
+        //pensar sobre a segurança dessa rota ? usar o processor response ?
 //if("PAYMENT ACCEPTD") passar pra ca na rota quando for paga?
 // REFAZER ATÉ...
 
-        if(order.status !== "PENDING"){
+        if(order.status !== "PAYMENT ACCEPTED"){
 
-            if(order.status === "CANCELED"){
-                throw new AppError("This order was canceled!", 400)
+
+            if(order.status === "PROCESSING PAYMENT"){
+                throw new AppError("The payment of this order is still processing!", 401)
+            }
+
+            if(order.status === "PENDING"){
+                throw new AppError("Awaiting payment confirmation", 401)
+            }
+
+            if(order.status === "PAYMENT REFUSED"){
+                throw new AppError("The payment for this order was refused", 401)
             }
             
-            throw new AppError("This order was already paid", 400)
+            throw new AppError("There is an error with this order, or it is already paid", 401)
         }        
 
         
-        if(order.customer_id !== user_id){
-
-            throw new AppError("Order not found! user differs from customer", 400)
-        }
-
-        if(!payment_validation){
+        if(!payment_validatior){
             throw new AppError("A error ocurred with your payment", 400)
         }
         
@@ -70,7 +73,7 @@ class PayOrderUseCase {
 // ...AQUI
         const updated_at = this.dateProvider.dateNow()
 
-        await this.ordersRepository.updateOrderStatus({id: order_id, status: "PROCESSING ORDER", updated_at })
+        await this.ordersRepository.updateOrderStatus({id: order.id, status: "PROCESSING ORDER", updated_at })
 
 
         //pega todos os vendedores
@@ -81,7 +84,10 @@ class PayOrderUseCase {
 
         })
 
-       //remove os duplices
+        //const map_filtered_vendors = new Map(vendors)
+        // teria só valores unicos?
+       
+        //remove os duplices
         let filtered_vendors: User[] = []
             
         vendors.forEach((vendor) => {
@@ -94,6 +100,7 @@ class PayOrderUseCase {
             }
         })
 
+        
 
         const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderToVendor.hbs")
         const linkToOrder = `${process.env.APP_API_URL}${process.env.URL_VENDOR_ORDER as string}`
@@ -117,7 +124,7 @@ class PayOrderUseCase {
                     link: `${linkToOrder}${vendor_products[0].order_id}`
                 },
                 path: templatePath
-                })
+            })
             
 
         })

@@ -35,7 +35,7 @@ class PagarMePostBackUseCase {
 
     async execute({current_status, object, transaction_id}: IRequest): Promise<any> {
         
-        
+        ///////////////////////////////////
         //pagarme.postback.verifySignature()
 
         let transaction

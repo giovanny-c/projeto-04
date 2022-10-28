@@ -111,40 +111,40 @@ class TransactionUseCase {
             processor_response: providerResponse.processorResponse
         })
 
-
         
-        let orderStatus: Order
+        
+        let response: Order
         //atualiza o status da order 
         //(fazer um mapper para order status igual o do provider?)
 
         const translatedStatusForOrder = TransactionStatusToOrderStatus(providerResponse.status)
 
-        orderStatus = await this.ordersRepository.updateOrderStatus({id: order.id, status: translatedStatusForOrder , updated_at: this.dateProvider.dateNow(),})
+        response = await this.ordersRepository.updateOrderStatus({id: order.id, status: translatedStatusForOrder , updated_at: this.dateProvider.dateNow(),})
 
         // if(providerResponse.status === "approved"){
 
-        //     orderStatus = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PAYMENT ACEPPTED", updated_at: this.dateProvider.dateNow(),})
+        //    response = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PAYMENT ACEPPTED", updated_at: this.dateProvider.dateNow(),})
         // }
         // if(providerResponse.status === "processing" ){
 
-        //     orderStatus = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PROCESSING PAYMENT", updated_at: this.dateProvider.dateNow(),})
+        //    response = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PROCESSING PAYMENT", updated_at: this.dateProvider.dateNow(),})
 
         // }
         // if(providerResponse.status === "refused"){
 
-        //     orderStatus = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PAYMENT REFUSED", updated_at: this.dateProvider.dateNow(),})
+        //    response = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PAYMENT REFUSED", updated_at: this.dateProvider.dateNow(),})
 
         // }
         // else{ //providerResponse.status === "pending"
             
-        //     orderStatus = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PENDING", updated_at: this.dateProvider.dateNow(),})
+        //    response = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PENDING", updated_at: this.dateProvider.dateNow(),})
         // }
 
         
         
 
         
-        return  orderStatus
+        return response
         //integrar com pagar.me
         //processar regras de status
 
