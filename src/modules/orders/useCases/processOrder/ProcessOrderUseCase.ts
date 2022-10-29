@@ -14,13 +14,15 @@ import { inject, injectable } from "tsyringe";
 
 interface IRequest{
     order: Order
-    user_id: string
-    payment_validatior: boolean
+}
+interface IResponse{
+    message: string,
+    order: Order
 }
 
 
 @injectable()
-class PayOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
+class ProcessOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
 
 
     constructor(
@@ -40,11 +42,8 @@ class PayOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
 
 
 
-    async execute({order, user_id, payment_validatior}: IRequest):Promise<any>{
+    async execute({order}: IRequest):Promise<any>{
 
-        //pensar sobre a segurança dessa rota ? usar o processor response ?
-//if("PAYMENT ACCEPTD") passar pra ca na rota quando for paga?
-// REFAZER ATÉ...
 
         if(order.status !== "PAYMENT ACCEPTED"){
 
@@ -65,33 +64,28 @@ class PayOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
         }        
 
         
-        if(!payment_validatior){
-            throw new AppError("A error ocurred with your payment", 400)
+        if(!order.order_products || !order.order_products.length){
+
+            order = await this.ordersRepository.findById(order.id)
+
         }
         
-        
-// ...AQUI
-        const updated_at = this.dateProvider.dateNow()
-
-        await this.ordersRepository.updateOrderStatus({id: order.id, status: "PROCESSING ORDER", updated_at })
-
-
         //pega todos os vendedores
         let vendors = order.order_products.map(order_product => {
             
-
+            
             return order_product.product.vendor as User
-
+            
         })
 
         //const map_filtered_vendors = new Map(vendors)
         // teria só valores unicos?
-       
+        
         //remove os duplices
         let filtered_vendors: User[] = []
-            
+        
         vendors.forEach((vendor) => {
-
+            
             
             if (!filtered_vendors.find(v => v.id === vendor.id)) {
                 
@@ -99,39 +93,52 @@ class PayOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
                 
             }
         })
-
         
-
+        
         const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderToVendor.hbs")
         const linkToOrder = `${process.env.APP_API_URL}${process.env.URL_VENDOR_ORDER as string}`
         
-
+        
         //poe todos os produtos nos seus respectivos vendedores
         filtered_vendors.forEach(async (vendor, index) => {
             
             let vendor_products = order.order_products.filter(op => 
                 op.product.vendor?.id === filtered_vendors[index].id     
-            )
+                )
+                
+                
 
-            
-
-            await this.mailProvider.sendMail({
-                to: vendor.email,
-                subject: `Pedido ${vendor_products[0].order_id}`,
-                variables: {
-                    vendor,
-                    products: vendor_products,
-                    link: `${linkToOrder}${vendor_products[0].order_id}`
-                },
-                path: templatePath
+                await this.mailProvider.sendMail({
+                    to: vendor.email,
+                    subject: `Pedido ${vendor_products[0].order_id}`,
+                    variables: {
+                        vendor,
+                        products: vendor_products,
+                        link: `${linkToOrder}${vendor_products[0].order_id}`
+                    },
+                    path: templatePath
+                })
+                
+                
             })
             
-
-        })
-
+            
+            const updated_at = this.dateProvider.dateNow()
     
-       
-    }
+            const response = await this.ordersRepository.updateOrderStatus({...order, status: "PROCESSING ORDER", updated_at })
+            
+
+            //Postback nao manda pro cliente,fazer o envio de email para o cliente, confirmando o pagamento e processamento
+            // fazer o envio de email p/ client na transaction usecase e na postback como compra aprovada
+            // fazer o envio de email p/ client na ProcessOrderUseCase como order processada
+            
+            return {
+                message: "The paymet was approved and your order was sent to the vendor(s)",
+                response
+            }
+
+            
+        }
 }
 
-export {PayOrderUseCase}
+export {ProcessOrderUseCase}

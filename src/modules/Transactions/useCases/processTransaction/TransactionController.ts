@@ -1,3 +1,4 @@
+import { ProcessOrderUseCase } from "@modules/Orders/useCases/processOrder/ProcessOrderUseCase";
 import { Request, Response } from "express";
 import { parsePhoneNumber } from "libphonenumber-js";
 import { container } from "tsyringe";
@@ -60,7 +61,7 @@ class TransactionController {
         
         const transaction = container.resolve(TransactionUseCase)
 
-        const response = await transaction.execute({
+        const order = await transaction.execute({
             order_id,
             payment_type,
             installments,
@@ -68,6 +69,10 @@ class TransactionController {
             billing,
             card
         })
+
+        const processOrder = container.resolve(ProcessOrderUseCase)
+
+        const response = await processOrder.execute({order})
 
        return res.status(200).json(response)
 

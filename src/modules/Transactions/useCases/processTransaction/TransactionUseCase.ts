@@ -4,18 +4,15 @@ import { inject, injectable } from "tsyringe";
 
 
 import { AppError } from "@shared/errors/AppError";
-import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 import {IOrdersRepository}  from "@modules/Orders/repositories/IOrdersRepository"
 import { ITransactionsRepository } from "@modules/Transactions/repositories/ITransactionsRepository";
 import { IDateProvider } from "@shared/container/providers/dateProvider/IDateProvider";
-import { Transaction } from "@modules/Transactions/entities/Transaction";
 import IBilling from "@modules/Transactions/dtos/IBillingDTO";
 import ICard from "@modules/Transactions/dtos/ICardDTO";
 import ICustomerForTransaction from "@modules/Transactions/dtos/ICustomerForTransactionDTO";
 import { ITransactionProvider } from "@shared/container/providers/transactionProvider/ITransactionProvider";
 
 import {v4 as uuidv4} from "uuid"
-import { cpf, cnpj } from "cpf-cnpj-validator";
 import Order from "@modules/Orders/entities/Order";
 import TransactionStatusToOrderStatus from "@modules/Orders/mapper/TransactionStatusToOrderStatus";
 
@@ -35,8 +32,7 @@ class TransactionUseCase {
 
 
     constructor(
-        @inject("UsersRepository")
-        private usersRepository: IUsersRepository,
+        
         @inject("OrdersRepository")
         private ordersRepository: IOrdersRepository,
         @inject("TransactionsRepository")
@@ -119,7 +115,8 @@ class TransactionUseCase {
 
         const translatedStatusForOrder = TransactionStatusToOrderStatus(providerResponse.status)
 
-        response = await this.ordersRepository.updateOrderStatus({id: order.id, status: translatedStatusForOrder , updated_at: this.dateProvider.dateNow(),})
+        
+        response = await this.ordersRepository.updateOrderStatus({...order, status: translatedStatusForOrder , updated_at: this.dateProvider.dateNow(),})
 
         // if(providerResponse.status === "approved"){
 
@@ -141,12 +138,7 @@ class TransactionUseCase {
         // }
 
         
-        
-
-        
         return response
-        //integrar com pagar.me
-        //processar regras de status
 
 
    

@@ -1,10 +1,10 @@
 import { Router } from "express"
 import { celebrate, Joi, Segments, } from "celebrate" // @types/joi tbm
 import { ensureAuthenticated } from "@shared/middlewares/ensureAuthenticated"
-import { TransactionController } from "@modules/Transactions/useCases/processPayment/TransactionController"
-import validator, { cnpj, cpf } from "cpf-cnpj-validator"
-import { JoinColumn, MinKey } from "typeorm"
-import { PagarMePostBackController } from "@modules/Transactions/useCases/postBackUsecase/PagarMePostBackController"
+import { TransactionController } from "@modules/Transactions/useCases/processTransaction/TransactionController"
+import { cnpj, cpf } from "cpf-cnpj-validator"
+
+import { PagarMePostBackController } from "@modules/Transactions/useCases/pagarMePostBackUsecase/PagarMePostBackController"
 
 
 

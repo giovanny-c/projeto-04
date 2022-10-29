@@ -2,13 +2,12 @@
 
 import { inject, injectable } from "tsyringe";
 
-import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 import {IOrdersRepository}  from "@modules/Orders/repositories/IOrdersRepository"
 import { ITransactionsRepository } from "@modules/Transactions/repositories/ITransactionsRepository";
 import { IDateProvider } from "@shared/container/providers/dateProvider/IDateProvider";
 import { ITransactionProvider } from "@shared/container/providers/transactionProvider/ITransactionProvider";
-import *  as pagarme from "pagarme" 
 import TransactionStatusToOrderStatus from "@modules/Orders/mapper/TransactionStatusToOrderStatus";
+import Order from "@modules/Orders/entities/Order";
 
 interface IRequest {
 
@@ -16,13 +15,16 @@ interface IRequest {
 }
 
 
+interface IStatusResponse{
+    status: number
+}
+
 @injectable()
 class PagarMePostBackUseCase {
 
 
     constructor(
-        @inject("UsersRepository")
-        private usersRepository: IUsersRepository,
+        
         @inject("OrdersRepository")
         private ordersRepository: IOrdersRepository,
         @inject("TransactionsRepository")
@@ -33,7 +35,7 @@ class PagarMePostBackUseCase {
         private transactionProvider: ITransactionProvider
     ) { }
 
-    async execute({current_status, object, transaction_id}: IRequest): Promise<any> {
+    async execute({current_status, object, transaction_id}: IRequest): Promise< Order | IStatusResponse > {
         
         ///////////////////////////////////
         //pagarme.postback.verifySignature()
@@ -71,7 +73,6 @@ class PagarMePostBackUseCase {
         })
 
         //atualiza o status da order
-        //, ver se é possivel voltar mais status alem de approved e refused na rota de postback 
         const order = await this.ordersRepository.findById(transaction.order_id)
 
         const translatedStatusForOrder = TransactionStatusToOrderStatus(newStatus)
@@ -83,9 +84,8 @@ class PagarMePostBackUseCase {
             updated_at: this.dateProvider.dateNow(),
         })
         
-        return response     
-        //integrar com pagar.me
-        //processar regras de status
+        return response
+        
 
 
    

@@ -5,7 +5,7 @@ import { SaveOrderController } from "@modules/Orders/useCases/createOrder/SaveOr
 import { ShowOrderController } from "@modules/Orders/useCases/showOrder/ShowOrderController"
 import { ShowCustomersOrdersController } from "@modules/Orders/useCases/showCustomersOrders/ShowCustomerOrdersController"
 import { CancelOrderController } from "@modules/Orders/useCases/cancelOrder/CancelOrderController"
-import { PayOrderController } from "@modules/Orders/useCases/payOrder/PayOrderController"
+
 
 
 
@@ -19,7 +19,7 @@ const saveOrderController = new SaveOrderController()
 const showOrderController = new ShowOrderController()
 const showCustomersOrdersController = new ShowCustomersOrdersController()
 const cancelOrderController = new CancelOrderController()
-const payOrderController = new PayOrderController()
+
 
 ordersRoutes.post(
     "/create",
@@ -63,17 +63,6 @@ ordersRoutes.put(
     cancelOrderController.handle,
 )
 
-ordersRoutes.put(
-    "/:order_id/confirm-payment",
-    celebrate({
-        [Segments.PARAMS]: {
-            order_id: Joi.string().uuid().required(),
-        },
-        [Segments.BODY]: {
-            payment_validation: Joi.boolean().required()
-        }
-    }),
-    payOrderController.handle,
-)
+
 
 export default ordersRoutes
