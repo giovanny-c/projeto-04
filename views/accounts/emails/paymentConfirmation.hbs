@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <!-- com o SES tirar alignitems, display e flex direction
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+      -->
+    <!-- com o SES colocar no span{} display: block-->
+    <style>
+        .container {
+            width: 800px;
+            font-family: Arial, Helvetica, sans-serif;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        span {
+            margin: 10px 0;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="" alt="logo">
+        <span>
+            Oi, {{order.customer.name}}. Seu pagamento para o pedido {{order.id}} foi aprovado!
+            
+        </span>
+
+        <br>
+        <span>Produtos Comprados</span>
+        {{#each order.order_products}}
+        <span>{{this.quantity}} - {{this.product.name}} </span>
+        <span>Comprado de {{this.vendedor.name}}</span>
+        {{/each}}
+        <span>Para mais detalhes do seu pedido entre na sua <a href={{link}}> area de pedidos </a></span>
+
+        <strong>Obrigado!</strong>
+
+
+    </div>
+</body>
+
+</html>

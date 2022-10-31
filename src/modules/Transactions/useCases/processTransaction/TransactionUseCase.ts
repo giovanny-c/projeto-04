@@ -15,6 +15,9 @@ import { ITransactionProvider } from "@shared/container/providers/transactionPro
 import {v4 as uuidv4} from "uuid"
 import Order from "@modules/Orders/entities/Order";
 import TransactionStatusToOrderStatus from "@modules/Orders/mapper/TransactionStatusToOrderStatus";
+import { IMailProvider } from "@shared/container/providers/mailProvider/IMailProvider";
+import { Subject } from "typeorm/persistence/Subject";
+import { resolve } from "path";
 
 interface IRequest {
 
@@ -40,7 +43,9 @@ class TransactionUseCase {
         @inject("DayjsDateProvider")
         private dateProvider: IDateProvider ,
         @inject("TransactionProvider")
-        private transactionProvider: ITransactionProvider
+        private transactionProvider: ITransactionProvider,
+        @inject("MailProvider")
+        private mailProvider: IMailProvider,
     ) { }
 
     async execute({order_id, billing, card, customer, installments, payment_type}: IRequest): Promise<Order> {
@@ -116,8 +121,24 @@ class TransactionUseCase {
         const translatedStatusForOrder = TransactionStatusToOrderStatus(providerResponse.status)
 
         
+        
+        const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "paymentConfirmation.hbs")
+        const linkToOrder = `${process.env.APP_API_URL}${process.env.URL_CUSTOMER_ORDER as string}`
+        
         response = await this.ordersRepository.updateOrderStatus({...order, status: translatedStatusForOrder , updated_at: this.dateProvider.dateNow(),})
 
+        await this.mailProvider.sendMail({
+            to: order.customer.email,
+            subject: `Your payment was approved for order: ${order.id}` ,
+            variables: {
+                order,
+                link: linkToOrder
+            },
+            path: templatePath,
+        })
+
+
+        
         // if(providerResponse.status === "approved"){
 
         //    response = await this.ordersRepository.updateOrderStatus({id: order.id, status:"PAYMENT ACEPPTED", updated_at: this.dateProvider.dateNow(),})

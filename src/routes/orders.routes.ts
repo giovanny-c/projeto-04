@@ -22,7 +22,7 @@ const cancelOrderController = new CancelOrderController()
 
 
 ordersRoutes.post(
-    "/create",
+    "/create", ensureAuthenticated,
     // celebrate({
     //     [Segments.BODY]: {
     //         products: Joi.required(),
@@ -34,7 +34,7 @@ ordersRoutes.post(
 
 
 ordersRoutes.get(
-    "/user",
+    "/user",  ensureAuthenticated,
     showCustomersOrdersController.handle,
 )
 
@@ -42,7 +42,7 @@ ordersRoutes.get(
 
 
 ordersRoutes.get(
-    "/:id",
+    "user/order/:id", ensureAuthenticated,
     celebrate({
         //middleware
         [Segments.PARAMS]: {
@@ -54,7 +54,7 @@ ordersRoutes.get(
 )
 
 ordersRoutes.put(
-    "/:order_id/cancel",
+    "/:order_id/cancel", ensureAuthenticated,
     celebrate({
         [Segments.PARAMS]: {
             order_id: Joi.string().uuid().required(),

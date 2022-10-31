@@ -12,9 +12,6 @@ export class CreateTableUsersTokens1653558826133 implements MigrationInterface {
                         name: "id",
                         type: "uuid",
                         isPrimary: true,
-                        isGenerated: true,
-                        generationStrategy: "uuid",
-                        default: "uuid_generate_v4()"
 
                     },
                     {
