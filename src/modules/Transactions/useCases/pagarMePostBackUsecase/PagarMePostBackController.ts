@@ -12,18 +12,15 @@ class PagarMePostBackController {
     async handle(req: Request, res: Response): Promise<Response>{
 
         
-        const {
-            id: transaction_id,
-            object,
-            current_status
-        } = req.body
+        const postBackBody = req.body
 
+        const signature = req.headers["X-Hub-Signature"] as string
         
 
         const transaction = container.resolve(PagarMePostBackUseCase)
 
         const transaction_response = await transaction.execute({
-            transaction_id, object, current_status
+            postBackBody, signature
         })
 
         if(transaction_response.status && transaction_response.status === 404){

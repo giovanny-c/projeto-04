@@ -9,11 +9,13 @@ import { ITransactionProvider } from "@shared/container/providers/transactionPro
 import TransactionStatusToOrderStatus from "@modules/Orders/mapper/TransactionStatusToOrderStatus";
 import Order from "@modules/Orders/entities/Order";
 import { resolve } from "path";
+import * as pagarme from "pagarme"
 import { IMailProvider } from "@shared/container/providers/mailProvider/IMailProvider";
+import { AppError } from "@shared/errors/AppError";
 
 interface IRequest {
 
-    transaction_id: string, object: string, current_status: string
+    postBackBody: any , signature: string
 }
 
 
@@ -39,17 +41,24 @@ class PagarMePostBackUseCase {
         private mailProvider: IMailProvider,
     ) { }
 
-    async execute({current_status, object, transaction_id}: IRequest): Promise< Order | IStatusResponse > {
+    async execute({postBackBody, signature}: IRequest): Promise< Order | IStatusResponse > {
         
-        ///////////////////////////////////
-        //pagarme.postback.verifySignature()
+        
+        const apiKey = process.env.PAGARME_API_KEY as string
+   
+        console.log(postBackBody)
+
+        if(!pagarme.postback.verifySignature(apiKey, JSON.stringify(postBackBody), signature)){
+
+            throw new AppError("Invalid signature", 401)
+        }
 
         let transaction
         
         
-        if(object === "transaction"){
+        if(postBackBody.object === "transaction"){
             
-            transaction = await this.transactionsRepository.findByTransactionId(transaction_id)
+            transaction = await this.transactionsRepository.findByTransactionId(postBackBody.transaction_id)
          
         }
 
@@ -61,7 +70,7 @@ class PagarMePostBackUseCase {
         }
 
     
-        const newStatus = this.transactionProvider.translateStatus(current_status)
+        const newStatus = this.transactionProvider.translateStatus(postBackBody.current_status)
 
         if(!newStatus){
             return {
