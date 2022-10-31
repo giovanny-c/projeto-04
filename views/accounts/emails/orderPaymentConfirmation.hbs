@@ -34,6 +34,7 @@
             Oi, {{order.customer.name}}. Seu pagamento para o pedido {{order.id}} foi aprovado!
             
         </span>
+        <span>Seu pedido foi encaminhado para o(s) vendedor(res) e logo mais estara na sua casa</span>
 
         <br>
         <span>Produtos Comprados</span>
@@ -41,6 +42,7 @@
         <span>{{this.quantity}} - {{this.product.name}} </span>
         <span>Comprado de {{this.vendedor.name}}</span>
         {{/each}}
+
         <span>Para mais detalhes do seu pedido entre na sua <a href={{link}}> area de pedidos </a></span>
 
         <strong>Obrigado!</strong>

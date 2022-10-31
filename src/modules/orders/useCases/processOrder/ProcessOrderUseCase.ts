@@ -128,9 +128,7 @@ class ProcessOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
             const response = await this.ordersRepository.updateOrderStatus({...order, status: "PROCESSING ORDER", updated_at })
             
 
-            //Postback nao manda pro cliente,fazer o envio de email para o cliente, confirmando o pagamento e processamento
-            // fazer o envio de email p/ client na transaction usecase e na postback como compra aprovada
-            // fazer o envio de email p/ client na ProcessOrderUseCase como order processada
+            
             
             return {
                 message: "The paymet was approved and your order was sent to the vendor(s)",

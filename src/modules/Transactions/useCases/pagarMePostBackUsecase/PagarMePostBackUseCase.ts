@@ -8,6 +8,8 @@ import { IDateProvider } from "@shared/container/providers/dateProvider/IDatePro
 import { ITransactionProvider } from "@shared/container/providers/transactionProvider/ITransactionProvider";
 import TransactionStatusToOrderStatus from "@modules/Orders/mapper/TransactionStatusToOrderStatus";
 import Order from "@modules/Orders/entities/Order";
+import { resolve } from "path";
+import { IMailProvider } from "@shared/container/providers/mailProvider/IMailProvider";
 
 interface IRequest {
 
@@ -32,7 +34,9 @@ class PagarMePostBackUseCase {
         @inject("DayjsDateProvider")
         private dateProvider: IDateProvider ,
         @inject("TransactionProvider")
-        private transactionProvider: ITransactionProvider
+        private transactionProvider: ITransactionProvider,
+        @inject("MailProvider")
+        private mailProvider: IMailProvider,
     ) { }
 
     async execute({current_status, object, transaction_id}: IRequest): Promise< Order | IStatusResponse > {
@@ -83,6 +87,21 @@ class PagarMePostBackUseCase {
             status: translatedStatusForOrder,
             updated_at: this.dateProvider.dateNow(),
         })
+        
+
+        const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderPaymentConfirmation.hbs")
+        const linkToOrder = `${process.env.APP_API_URL}${process.env.URL_CUSTOMER_ORDER as string}${order.id}`
+        
+        await this.mailProvider.sendMail({
+            to: order.customer.email,
+            subject: `Seu pagamento para o pedido: ${order.id}, foi aprovado! ` ,
+            variables: {
+                order,
+                link: linkToOrder
+            },
+            path: templatePath,
+        })
+
         
         return response
         

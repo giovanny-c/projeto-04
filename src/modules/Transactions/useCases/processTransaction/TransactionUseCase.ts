@@ -18,6 +18,7 @@ import TransactionStatusToOrderStatus from "@modules/Orders/mapper/TransactionSt
 import { IMailProvider } from "@shared/container/providers/mailProvider/IMailProvider";
 import { Subject } from "typeorm/persistence/Subject";
 import { resolve } from "path";
+import { updateLanguageServiceSourceFile } from "typescript";
 
 interface IRequest {
 
@@ -54,12 +55,24 @@ class TransactionUseCase {
 
         const order = await this.ordersRepository.findById(order_id)
 
+
         if(!order){
             throw new AppError("Order not found", 404)
         }
 
+        if(order.status === "CANCELED"){
+            throw new AppError("This order was canceled")
+        }
         if(order.status !== "PENDING" && order.status !== "PAYMENT REFUSED"){
-            throw new AppError("This order is either processing the payment or was already paid")
+            throw new AppError("This order is either processing the payment or was already paid", 400)
+        }
+
+        if( this.dateProvider.compareDiferenceIn(order.updated_at, this.dateProvider.dateNow(), "hours") >= 24){
+            
+            await this.ordersRepository.updateOrderStatus({id: order_id, status: "CANCELED", updated_at: this.dateProvider.dateNow()})
+
+            throw new AppError("Payment took too long, this order was canceled, please make a new order", 401)
+
         }
 
 
@@ -120,16 +133,16 @@ class TransactionUseCase {
 
         const translatedStatusForOrder = TransactionStatusToOrderStatus(providerResponse.status)
 
-        
-        
-        const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "paymentConfirmation.hbs")
-        const linkToOrder = `${process.env.APP_API_URL}${process.env.URL_CUSTOMER_ORDER as string}`
-        
+        //retorna toda a order?
         response = await this.ordersRepository.updateOrderStatus({...order, status: translatedStatusForOrder , updated_at: this.dateProvider.dateNow(),})
+        console.log(response)
 
+        const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderPaymentConfirmation.hbs")
+        const linkToOrder = `${process.env.APP_API_URL}${process.env.URL_CUSTOMER_ORDER as string}${order.id}`
+        
         await this.mailProvider.sendMail({
             to: order.customer.email,
-            subject: `Your payment was approved for order: ${order.id}` ,
+            subject: `Seu pagamento para o pedido: ${order.id}, foi aprovado! ` ,
             variables: {
                 order,
                 link: linkToOrder
