@@ -2,9 +2,8 @@ import { User } from "@modules/Accounts/entities/User"
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository"
 import Order from "@modules/Orders/entities/Order"
 import { IOrdersRepository } from "@modules/Orders/repositories/IOrdersRepository"
-import { IFindProductsById } from "@modules/Products/dtos/IFindProductsDTO"
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository"
-import { delCart, getCart } from "@shared/cache/redisCache"
+import ICacheProvider from "@shared/container/providers/cacheProvider/ICacheProvider"
 import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider"
 import { AppError } from "@shared/errors/AppError"
 import { instanceToPlain } from "class-transformer"
@@ -34,14 +33,16 @@ class SaveOrderUseCase {
         @inject("ProductsRepository")
         private productsRepository: IProductsRepository,
         @inject("DayjsDateProvider")
-        private dateProvider: DayjsDateProvider
+        private dateProvider: DayjsDateProvider,
+        @inject("CacheProvider")
+        private cacheProvider: ICacheProvider,
     ){
 
     }
 
     async execute({customer_id}: IRequest): Promise<Order>{
 
-        const cart = await getCart(customer_id) as []
+        const cart = await this.cacheProvider.getCart(customer_id) as []
 
         const products_ids = cart.filter(value => validate(value))
         const quantities = cart.filter(value => !validate(value))
@@ -148,7 +149,7 @@ class SaveOrderUseCase {
 
         await this.productsRepository.saveMany(updateProductQuantity)
 
-        await delCart(customer_id)
+        await this.cacheProvider.delCart(customer_id)
 
         order.customer = instanceToPlain(order.customer) as User 
 

@@ -1,7 +1,8 @@
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 import ICart from "@modules/Cart/dtos/ICartDTO";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
-import {  getCart } from "@shared/cache/redisCache";
+
+import ICacheProvider from "@shared/container/providers/cacheProvider/ICacheProvider";
 import { AppError } from "@shared/errors/AppError";
 
 import { inject, injectable } from "tsyringe";
@@ -17,6 +18,8 @@ class GetCartUseCase {
         private productsRepository: IProductsRepository,
         @inject("UsersRepository")
         private usersRepository: IUsersRepository,
+        @inject("CacheProvider")
+        private cacheProvider: ICacheProvider,
     ) {
 
     }
@@ -33,7 +36,7 @@ class GetCartUseCase {
             throw new AppError("User not found!", 400)
         }
           
-        const cart = await getCart(user_id as string) as []
+        const cart = await this.cacheProvider.getCart(user_id as string) as []
 
         const products = cart.filter(value => validate(value))
         const quantities = cart.filter(value => !validate(value))

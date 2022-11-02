@@ -1,7 +1,8 @@
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 import ICart from "@modules/Cart/dtos/ICartDTO";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
-import { addInCart, getCart } from "@shared/cache/redisCache";
+import ICacheProvider from "@shared/container/providers/cacheProvider/ICacheProvider";
+
 import { AppError } from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
 import {v4 as uuidV4, validate} from "uuid"
@@ -14,6 +15,8 @@ class AddToCartUseCase {
         private productsRepository: IProductsRepository,
         @inject("UsersRepository")
         private usersRepository: IUsersRepository,
+        @inject("CacheProvider")
+        private cacheProvider: ICacheProvider,
     ) {
 
     }
@@ -44,10 +47,10 @@ class AddToCartUseCase {
 
         
 //poe no redis
-        await addInCart(product_id, user_id as string)
+        await this.cacheProvider.addInCart(product_id, user_id as string)
 
 //pega do redis pra retornar
-        const cart = await getCart(user_id as string) as []
+        const cart = await this.cacheProvider.getCart(user_id as string) as []
 //reorganiza os dados retornados do redis
         const products = cart.filter(value => validate(value))//se for uuid, é produto
         const quantities = cart.filter(value => !validate(value))// se nao, é quantidade

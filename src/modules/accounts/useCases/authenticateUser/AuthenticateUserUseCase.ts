@@ -10,8 +10,8 @@ import issueJWT from "../../../../utils/tokensUtils/issueJWT";
 import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
 import { IAuthenticationResponse } from "@modules/Accounts/dtos/IAuthenticationResponseDTO";
 import { IAuthenticateUserRequest } from "./AuthenticateUserDTO";
-import { setRedis } from "@shared/cache/redisCache";
 import { instanceToInstance, instanceToPlain } from "class-transformer";
+import ICacheProvider from "@shared/container/providers/cacheProvider/ICacheProvider";
 
 
 
@@ -27,7 +27,9 @@ class AuthenticateUserUseCase {
         @inject("UsersTokensRepository")
         private usersTokensRepository: IUsersTokensRepository,
         @inject("DayjsDateProvider")
-        private dateProvider: IDateProvider
+        private dateProvider: IDateProvider,
+        @inject("CacheProvider")
+        private cacheProvider: ICacheProvider,
     ) {
 
     }
@@ -55,7 +57,7 @@ class AuthenticateUserUseCase {
 
             //user-${user.id} = chave 
             //user em string = valor
-            await setRedis(`user-${user.id}`, JSON.stringify(instanceToPlain(user)))
+            await this.cacheProvider.setRedis(`user-${user.id}`, JSON.stringify(instanceToPlain(user)))
 
     
             await this.usersRepository.markUserAsLogged(user.id as string)

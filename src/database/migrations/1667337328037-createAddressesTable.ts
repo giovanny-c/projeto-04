@@ -61,7 +61,7 @@ export class createAddressesTable1667337328037 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropColumn("addresses")
+        await queryRunner.dropTable("addresses")
     }
 
 }

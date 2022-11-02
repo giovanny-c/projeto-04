@@ -1,7 +1,7 @@
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 import ICart from "@modules/Cart/dtos/ICartDTO";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
-import { decreaseInCart, delInCart, getCart } from "@shared/cache/redisCache";
+import ICacheProvider from "@shared/container/providers/cacheProvider/ICacheProvider";
 import { AppError } from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
 import {v4 as uuidV4} from "uuid"
@@ -22,6 +22,8 @@ class RemoveFromCartUseCase {
         private productsRepository: IProductsRepository,
         @inject("UsersRepository")
         private usersRepository: IUsersRepository,
+        @inject("CacheProvider")
+        private cacheProvider: ICacheProvider,
     ) {
 
     }
@@ -47,15 +49,15 @@ class RemoveFromCartUseCase {
         
         if(quantity){
 
-            await decreaseInCart(product_id, user_id)
+            await this.cacheProvider.decreaseInCart(product_id, user_id)
         }
         if(!quantity){
 
-            await delInCart(product_id, user_id)
+            await this.cacheProvider.delInCart(product_id, user_id)
         }
         
 
-        let cart = await getCart(user_id) as []
+        let cart = await this.cacheProvider.getCart(user_id) as []
 
         if(cart){
 

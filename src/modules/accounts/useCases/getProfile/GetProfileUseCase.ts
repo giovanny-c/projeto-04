@@ -5,7 +5,8 @@ import { AppError } from "../../../../shared/errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { IGetProfileRequest, IGetProfileResponse } from "./GetProfileDTO";
 import { instanceToInstance, instanceToPlain,  } from "class-transformer";
-import { getRedis, setRedis } from "@shared/cache/redisCache";
+import ICacheProvider from "@shared/container/providers/cacheProvider/ICacheProvider";
+
 
 
 
@@ -15,7 +16,10 @@ class GetProfileUseCase {
 
     constructor(
         @inject("UsersRepository")
-        private usersRepository: IUsersRepository
+        private usersRepository: IUsersRepository,
+        @inject("CacheProvider")
+        private cacheProvider: ICacheProvider,
+
     ) { }
 
     @inspect()
@@ -30,7 +34,7 @@ class GetProfileUseCase {
 
         let user
 
-        const userRedis = await getRedis(`user-${id}`)
+        const userRedis = await this.cacheProvider.getRedis(`user-${id}`) as string
         console.log(userRedis)
 
 
@@ -45,9 +49,9 @@ class GetProfileUseCase {
             }
             
             
-            await setRedis(`user-${user.id}`, JSON.stringify(instanceToPlain(user)))
+            await this.cacheProvider.setRedis(`user-${user.id}`, JSON.stringify(instanceToPlain(user)))
 
-            return  JSON.parse(await getRedis(`user-${id}`))
+            return  JSON.parse(await this.cacheProvider.getRedis(`user-${id}`) as string)
         }
 
 

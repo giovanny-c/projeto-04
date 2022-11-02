@@ -1,6 +1,7 @@
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
-import { delCart } from "@shared/cache/redisCache";
+import ICacheProvider from "@shared/container/providers/cacheProvider/ICacheProvider";
+
 import { AppError } from "@shared/errors/AppError";
 
 import { inject, injectable } from "tsyringe";
@@ -19,6 +20,8 @@ class RemoveCartUseCase {
         private productsRepository: IProductsRepository,
         @inject("UsersRepository")
         private usersRepository: IUsersRepository,
+        @inject("CacheProvider")
+        private cacheProvider: ICacheProvider,
     ) {
 
     }
@@ -37,7 +40,7 @@ class RemoveCartUseCase {
             throw new AppError("User not found!", 400)
         }
 
-        await delCart(user_id)
+        await this.cacheProvider.delCart(user_id)
 
     }
 }
