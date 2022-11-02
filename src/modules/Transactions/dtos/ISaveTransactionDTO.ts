@@ -31,7 +31,7 @@ export default interface ISaveTransaction{
 
     customer?: User
 
-    //passar todos os campos de customer e billing para tb User
+    //passar todos os campos de customer para tb User
 
     customer_name: string
 

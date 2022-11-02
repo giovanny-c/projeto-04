@@ -99,14 +99,22 @@ class PagarMePostBackUseCase {
         
 
         const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderPaymentConfirmation.hbs")
+        
+        const approved = translatedStatusForOrder === "PAYMENT ACEPPTED" ? true : false
+        
+        const subject = approved ? `Seu pagamento para o pedido: ${order.id}, foi aprovado! ` : `Seu pagamento para o pedido: ${order.id}, foi recusado`
+
         const linkToOrder = `${process.env.APP_API_URL}${process.env.URL_CUSTOMER_ORDER as string}${order.id}`
         
+
+
         await this.mailProvider.sendMail({
             to: order.customer.email,
-            subject: `Seu pagamento para o pedido: ${order.id}, foi aprovado! ` ,
+            subject,
             variables: {
                 order,
-                link: linkToOrder
+                link: linkToOrder,
+                approved
             },
             path: templatePath,
         })

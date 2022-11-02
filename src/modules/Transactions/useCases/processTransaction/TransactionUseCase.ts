@@ -67,7 +67,7 @@ class TransactionUseCase {
             throw new AppError("This order is either processing the payment or was already paid", 400)
         }
 
-        if( this.dateProvider.compareDiferenceIn(order.updated_at, this.dateProvider.dateNow(), "hours") >= 24){
+        if( this.dateProvider.compareDiferenceIn(order.updated_at, this.dateProvider.dateNow(), "hours") >= 2){//duas hrs para fazer a transação
             
             await this.ordersRepository.updateOrderStatus({id: order_id, status: "CANCELED", updated_at: this.dateProvider.dateNow()})
 
@@ -134,21 +134,33 @@ class TransactionUseCase {
         const translatedStatusForOrder = TransactionStatusToOrderStatus(providerResponse.status)
 
         //retorna toda a order?
-        response = await this.ordersRepository.updateOrderStatus({...order, status: translatedStatusForOrder , updated_at: this.dateProvider.dateNow(),})
+        response = await this.ordersRepository.updateOrderStatus({...order, status: translatedStatusForOrder , updated_at: this.dateProvider.dateNow()})
         console.log(response)
 
-        const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderPaymentConfirmation.hbs")
-        const linkToOrder = `${process.env.APP_API_URL}${process.env.URL_CUSTOMER_ORDER as string}${order.id}`
         
+
+        //mandai email de confirmaçao de pagamento para o customer
+        const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderPaymentConfirmation.hbs")
+
+        const approved = translatedStatusForOrder === "PAYMENT ACEPPTED" ? true : false
+        
+        const subject = approved ? `Seu pagamento para o pedido: ${order.id}, foi aprovado! ` : `Seu pagamento para o pedido: ${order.id}, foi recusado`
+    
+        const linkToOrder = `${process.env.APP_API_URL}${process.env.URL_CUSTOMER_ORDER as string}${order.id}`
+    
         await this.mailProvider.sendMail({
             to: order.customer.email,
-            subject: `Seu pagamento para o pedido: ${order.id}, foi aprovado! ` ,
+            subject,
             variables: {
                 order,
-                link: linkToOrder
+                link: linkToOrder,
+                approved
             },
             path: templatePath,
         })
+    
+    
+       
 
 
         

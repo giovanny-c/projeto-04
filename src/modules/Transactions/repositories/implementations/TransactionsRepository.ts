@@ -78,6 +78,11 @@ class TransactionsRepository implements ITransactionsRepository{
         return await this.repository.findOneBy({transaction_id}) as Transaction
     }
     
+    async findByTransactionCode(transaction_code: string): Promise<Transaction> {
+        return await this.repository.findOneBy({transaction_code}) as Transaction
+    
+    }
+    
     async findByUserId(customer_id): Promise<Transaction[]> {
         
         return await this.repository.findBy(customer_id)

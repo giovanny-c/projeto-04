@@ -40,7 +40,7 @@ class Transaction {
     order: User
 
     @Column()
-    vendor_id: string
+    vendor_id?: string
 
     @ManyToOne(() => User)
     @JoinColumn({ name: "vendor_id" })

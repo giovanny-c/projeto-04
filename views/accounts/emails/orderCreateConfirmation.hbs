@@ -31,15 +31,10 @@
     <div class="container">
         <img src="" alt="logo">
         <span>
-            Oi, {{order.customer.name}}. Seu pagamento para o pedido {{order.id}} foi {{#if approved}}aprovado!{{else}}recusado.{{/if}}
+            Oi, {{order.customer.name}}. Seu pedido {{order.id}} foi criado!
             
         </span>
-        <span>
-            {{#if approved}}Seu pedido foi encaminhado para o(s) vendedor(res) e logo mais estara na sua casa
-            {{else}}
-            Seu pagamento foi recusado
-            {{/if}}
-        </span>
+        <span></span>
 
         <br>
         <span>Produtos Comprados</span>

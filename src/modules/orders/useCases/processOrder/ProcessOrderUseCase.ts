@@ -63,7 +63,8 @@ class ProcessOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
             throw new AppError("There is an error with this order, or it is already paid", 401)
         }        
 
-        
+        //Fazer a logica de pagamento recusado (cancela o pedido e volta os produtos para o estoque)
+
         if(!order.order_products || !order.order_products.length){
 
             order = await this.ordersRepository.findById(order.id)
@@ -95,7 +96,7 @@ class ProcessOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
         })
         
         
-        const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderToVendor.hbs")
+        const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "confirmateOrderPaymentToVendor.hbs")
         const linkToOrder = `${process.env.APP_API_URL}${process.env.URL_VENDOR_ORDER as string}`
         
         
@@ -110,7 +111,7 @@ class ProcessOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
 
                 await this.mailProvider.sendMail({
                     to: vendor.email,
-                    subject: `Pedido ${vendor_products[0].order_id}`,
+                    subject: `Confirmação de pagamento - Pedido ${vendor_products[0].order_id}`,
                     variables: {
                         vendor,
                         products: vendor_products,
@@ -131,7 +132,7 @@ class ProcessOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
             
             
             return {
-                message: "The paymet was approved and your order was sent to the vendor(s)",
+                message: "The payment was approved and your order was sent to the vendor(s)",
                 response
             }
 

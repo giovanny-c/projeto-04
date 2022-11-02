@@ -31,24 +31,15 @@
     <div class="container">
         <img src="" alt="logo">
         <span>
-            Oi, {{order.customer.name}}. Seu pagamento para o pedido {{order.id}} foi {{#if approved}}aprovado!{{else}}recusado.{{/if}}
-            
-        </span>
-        <span>
-            {{#if approved}}Seu pedido foi encaminhado para o(s) vendedor(res) e logo mais estara na sua casa
-            {{else}}
-            Seu pagamento foi recusado
-            {{/if}}
+            Oi, {{vendor.name}}
         </span>
 
         <br>
-        <span>Produtos Comprados</span>
-        {{#each order.order_products}}
+        <span>O pagameno do pedido: {{products[0].order_id}}, foi confirmado</span>
+        {{#each products}}
         <span>{{this.quantity}} - {{this.product.name}} </span>
-        <span>Comprado de {{this.vendedor.name}}</span>
         {{/each}}
-
-        <span>Para mais detalhes do seu pedido entre na sua <a href={{link}}> area de pedidos </a></span>
+        <span>Para gerenciar o pedido entre na sua <a href={{link}}> area de vendedor </a></span>
 
         <strong>Obrigado!</strong>
 

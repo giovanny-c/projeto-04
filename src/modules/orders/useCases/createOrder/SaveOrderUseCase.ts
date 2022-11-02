@@ -5,8 +5,10 @@ import { IOrdersRepository } from "@modules/Orders/repositories/IOrdersRepositor
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository"
 import ICacheProvider from "@shared/container/providers/cacheProvider/ICacheProvider"
 import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider"
+import { IMailProvider } from "@shared/container/providers/mailProvider/IMailProvider"
 import { AppError } from "@shared/errors/AppError"
 import { instanceToPlain } from "class-transformer"
+import { resolve } from "path"
 import { inject, injectable } from "tsyringe"
 import { validate } from "uuid"
 
@@ -36,6 +38,8 @@ class SaveOrderUseCase {
         private dateProvider: DayjsDateProvider,
         @inject("CacheProvider")
         private cacheProvider: ICacheProvider,
+        @inject("MailProvider")
+        private mailProvider: IMailProvider,
     ){
 
     }
@@ -152,6 +156,69 @@ class SaveOrderUseCase {
         await this.cacheProvider.delCart(customer_id)
 
         order.customer = instanceToPlain(order.customer) as User 
+
+        //pega todos os vendedores
+        let vendors = order.order_products.map(order_product => {
+            
+            
+            return order_product.product.vendor as User
+            
+        })
+
+        //const map_filtered_vendors = new Map(vendors)
+        // teria só valores unicos?
+        
+        //remove os duplices
+        let filtered_vendors: User[] = []
+        
+        vendors.forEach((vendor) => {
+            
+            
+            if (!filtered_vendors.find(v => v.id === vendor.id)) {
+                
+                filtered_vendors.push(vendor)
+                
+            }
+        })
+        
+        
+        const templatePathToVendor = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderToVendor.hbs")
+        const templatePathToCustomer = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderCreateConfirmation.hbs")
+        const linkToOrder = `${process.env.APP_API_URL}${process.env.URL_VENDOR_ORDER as string}`
+        
+        
+        //poe todos os produtos nos seus respectivos vendedores
+        filtered_vendors.forEach(async (vendor, index) => {
+            
+            let vendor_products = order.order_products.filter(op => 
+                op.product.vendor?.id === filtered_vendors[index].id     
+                )
+                
+                
+
+                await this.mailProvider.sendMail({
+                    to: vendor.email,
+                    subject: `Pedido recebido. Pedido: ${vendor_products[0].order_id}`,
+                    variables: {
+                        vendor,
+                        products: vendor_products,
+                        link: `${linkToOrder}${vendor_products[0].order_id}`
+                    },
+                    path: templatePathToVendor
+                })
+                
+                
+        })
+
+        await this.mailProvider.sendMail({
+            to: order.customer.email,
+            subject: `Seu Pedido foi recebido`,
+            variables: {
+                order
+            } ,
+            path: templatePathToCustomer
+        })
+
 
         return order
     }
