@@ -35,7 +35,7 @@
         </span>
 
         <br>
-        <span>O pagameno do pedido: {{products[0].order_id}}, foi confirmado</span>
+        <span>O pagameno do pedido: {{products[0].order_id}}, {{#if approved}}foi CONFIRMADO{{else}}foi RECUSADO {{/if}}</span>
         {{#each products}}
         <span>{{this.quantity}} - {{this.product.name}} </span>
         {{/each}}

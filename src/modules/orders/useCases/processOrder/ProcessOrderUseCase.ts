@@ -45,9 +45,7 @@ class ProcessOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
     async execute({order}: IRequest):Promise<any>{
 
 
-        if(order.status !== "PAYMENT ACCEPTED"){
-
-
+        
             if(order.status === "PROCESSING PAYMENT"){
                 throw new AppError("The payment of this order is still processing!", 401)
             }
@@ -60,10 +58,11 @@ class ProcessOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
                 throw new AppError("The payment for this order was refused", 401)
             }
             
-            throw new AppError("There is an error with this order, or it is already paid", 401)
-        }        
+           
+                
 
         //Fazer a logica de pagamento recusado (cancela o pedido e volta os produtos para o estoque)
+///////////////////////////////////////////////////////////////////////////////
 
         if(!order.order_products || !order.order_products.length){
 
@@ -95,12 +94,52 @@ class ProcessOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
             }
         })
         
-        
         const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "confirmateOrderPaymentToVendor.hbs")
         const linkToOrder = `${process.env.APP_API_URL}${process.env.URL_VENDOR_ORDER as string}`
         
         
-        //poe todos os produtos nos seus respectivos vendedores
+        if(order.status !== "PAYMENT REFUSED"){
+
+
+            //pegar os produtos comprados e recolocar no estoque
+
+
+            filtered_vendors.forEach(async (vendor, index) => {
+            
+                let vendor_products = order.order_products.filter(op => 
+                    op.product.vendor?.id === filtered_vendors[index].id     
+                    )
+                    
+                    
+    
+                    await this.mailProvider.sendMail({
+                        to: vendor.email,
+                        subject: `Pagamento recusado - Pedido ${vendor_products[0].order_id}`,
+                        variables: {
+                            vendor,
+                            products: vendor_products,
+                            link: `${linkToOrder}${vendor_products[0].order_id}`
+                        },
+                        path: templatePath
+                    })
+                    
+                    
+                })
+                
+                
+            const updated_at = this.dateProvider.dateNow()
+    
+            const response = await this.ordersRepository.updateOrderStatus({...order, status: "CANCELED", updated_at })
+
+
+            return {
+                message: "The payment was refused",
+                response
+            }
+        }
+
+
+
         filtered_vendors.forEach(async (vendor, index) => {
             
             let vendor_products = order.order_products.filter(op => 
@@ -115,7 +154,8 @@ class ProcessOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
                     variables: {
                         vendor,
                         products: vendor_products,
-                        link: `${linkToOrder}${vendor_products[0].order_id}`
+                        link: `${linkToOrder}${vendor_products[0].order_id}`,
+                        approved: true
                     },
                     path: templatePath
                 })
@@ -127,15 +167,19 @@ class ProcessOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
             const updated_at = this.dateProvider.dateNow()
     
             const response = await this.ordersRepository.updateOrderStatus({...order, status: "PROCESSING ORDER", updated_at })
-            
-
-            
-            
+        
             return {
-                message: "The payment was approved and your order was sent to the vendor(s)",
-                response
+                    message: "The payment was approved and your order was sent to the vendor(s)",
+                    response
             }
 
+        
+        
+        
+        //if(status approved) manda os emails
+        //if(status refused) cancela a order e coloca os produtos de volta no estoque
+        //poe todos os produtos nos seus respectivos vendedores
+                
             
         }
 }
