@@ -22,5 +22,6 @@ interface ISaveProduct {
 interface IUpdateProductQuantity {
     id: string
     quantity: number
+    add?: boolean
 }
 export { ISaveProduct, IUpdateProductQuantity }

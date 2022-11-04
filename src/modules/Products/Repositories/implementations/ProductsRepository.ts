@@ -16,6 +16,24 @@ class ProductsRepository implements IProductsRepository {
         
     }
 
+    async addOrDecreaseFromStock({id, quantity: amount, add}: IUpdateProductQuantity): Promise<any> {
+        
+        let set = `quantity + ${amount}`
+        
+        if(!add){
+
+            set = `quantity - ${amount}`
+
+        }
+
+        return await this.repository.createQueryBuilder()
+        .update("products")
+        .set({quantity: () =>  set })
+        .where("id = :id", {id})
+        .returning(["id", "name", "quantity"])
+        .execute()
+    }
+
 
    
 

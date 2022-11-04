@@ -12,6 +12,7 @@ interface IProductsRepository {
     findByVendor(vendor_id: string): Promise<Product[]>
     deleteProduct(id: string): Promise<void>
     find(data: IFindProducts): Promise<Product[]>
+    addOrDecreaseFromStock(product: IUpdateProductQuantity): Promise<any>
 
 }
 

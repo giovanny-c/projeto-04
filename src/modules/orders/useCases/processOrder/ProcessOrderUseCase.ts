@@ -61,8 +61,7 @@ class ProcessOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
            
                 
 
-        //Fazer a logica de pagamento recusado (cancela o pedido e volta os produtos para o estoque)
-///////////////////////////////////////////////////////////////////////////////
+        
 
         if(!order.order_products || !order.order_products.length){
 
@@ -101,7 +100,12 @@ class ProcessOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
         if(order.status !== "PAYMENT REFUSED"){
 
 
-            //pegar os produtos comprados e recolocar no estoque
+            //adiciona os produtos de volta no estoque
+            order.order_products.forEach(async (order_product) => {
+
+                await this.productsRepository.addOrDecreaseFromStock({id: order_product.product_id, quantity: order_product.quantity, add: true})
+            });
+            
 
 
             filtered_vendors.forEach(async (vendor, index) => {

@@ -16,7 +16,10 @@ const getProductController = new GetProductController()
 const listProductsController = new ListProductsController()
 
 
+
 productsRoutes.get("/product/:product_id", getProductController.handle)
 productsRoutes.get("/products", listProductsController.handle)
+
+
 
 export default productsRoutes
