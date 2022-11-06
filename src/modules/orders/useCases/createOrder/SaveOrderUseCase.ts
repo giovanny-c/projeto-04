@@ -157,8 +157,10 @@ class SaveOrderUseCase {
 
         order.customer = instanceToPlain(order.customer) as User 
 
-        //pega todos os vendedores
-        let vendors = order.order_products.map(order_product => {
+        //pega do banco para pega todos os vendedores
+        const orderForMail = await this.ordersRepository.findById(order.id)
+
+        let vendors = orderForMail.order_products.map(order_product => {
             
             
             return order_product.product.vendor as User
@@ -190,7 +192,7 @@ class SaveOrderUseCase {
         //poe todos os produtos nos seus respectivos vendedores
         filtered_vendors.forEach(async (vendor, index) => {
             
-            let vendor_products = order.order_products.filter(op => 
+            let vendor_products = orderForMail.order_products.filter(op => 
                 op.product.vendor?.id === filtered_vendors[index].id     
                 )
                 
@@ -209,12 +211,12 @@ class SaveOrderUseCase {
                 
                 
         })
-
+//para o user
         await this.mailProvider.sendMail({
-            to: order.customer.email,
+            to: orderForMail.customer.email,
             subject: `Seu Pedido foi recebido`,
             variables: {
-                order
+                order: orderForMail
             } ,
             path: templatePathToCustomer
         })
