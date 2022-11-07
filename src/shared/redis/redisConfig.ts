@@ -1,4 +1,5 @@
-
+import session from "express-session"
+import connectRedis from "connect-redis"
 import * as redis from "redis"
 
 
@@ -16,6 +17,7 @@ const redisClient = redis.createClient({
 })
 
 
+const RedisStore = connectRedis(session)
 
 
-export {redisClient}
+export {redisClient, RedisStore}

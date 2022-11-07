@@ -7,19 +7,21 @@ import { CreateUserUseCase } from "@modules/Accounts/useCases/createUser/CreateU
 import { AuthenticateUserUseCase } from "./AuthenticateUserUseCase";
 
 import { AppError } from "@shared/errors/AppError";
+import { RedisCacheProvider } from "@shared/container/providers/cacheProvider/implementations/RedisCacheProvider";
 
 let authenticateUserUseCase: AuthenticateUserUseCase
 let usersRepositoryInMemory: UsersRepositoryInMemory
 let usersTokensRepositoryInMemory: UsersTokensRepositoryInMemory
 let dateProvider: DayjsDateProvider
 let createUserUseCase: CreateUserUseCase
+let cacheProvider: RedisCacheProvider
 
 describe("Authenticate a User", () => {
     beforeEach(() => {
         usersRepositoryInMemory = new UsersRepositoryInMemory()
         usersTokensRepositoryInMemory = new UsersTokensRepositoryInMemory()
         dateProvider = new DayjsDateProvider()
-        authenticateUserUseCase = new AuthenticateUserUseCase(usersRepositoryInMemory, usersTokensRepositoryInMemory, dateProvider)
+        authenticateUserUseCase = new AuthenticateUserUseCase(usersRepositoryInMemory, usersTokensRepositoryInMemory, dateProvider, cacheProvider)
         createUserUseCase = new CreateUserUseCase(usersRepositoryInMemory)
 
     })

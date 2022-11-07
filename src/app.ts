@@ -10,8 +10,8 @@ import session from "express-session"
 import "./database"
 import "@shared/container"
 import "./shared/redis/redisConnect"
-import { redisClient } from "./shared/redis/redisConfig"
-import { RedisStore } from "@shared/session/redisSession"
+import { redisClient, RedisStore } from "./shared/redis/redisConfig"
+
 
 
 
@@ -49,7 +49,7 @@ app.use(session({
         secure: false, //true: so transmite o cookie via https
         httpOnly: false, //true: nao deixa o cookie ser lido por client-side js
         maxAge: 1000 * 60 * 60 * 24 * 7 * 30,  //1 mes
-
+        
     }
 }))
 
