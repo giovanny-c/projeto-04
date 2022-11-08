@@ -22,6 +22,8 @@ import { errorHandler } from "@shared/errors/ErrorHandler" //colocar em cima?
 
 //routes
 import router from "./routes"
+import { redisSession } from "@shared/session/redisSession"
+import { AppError } from "@shared/errors/AppError"
 
 //import { config } from "../src/config/auth"
 
@@ -39,20 +41,13 @@ app.use(["/accounts/user/file/:id", "/accounts/user/files"], express.static(`${u
 
 // session config com redis
 //user o import redisSession no lugar desse pra ver se funciona
-app.use(session({
-    store: new RedisStore({ client: redisClient as any }),
-    secret: process.env.SESSION_SECRET as string,
-    resave: false,
-    saveUninitialized: false,
-
-    cookie: {           //habilitar em produçao
-        secure: false, //true: so transmite o cookie via https
-        httpOnly: false, //true: nao deixa o cookie ser lido por client-side js
-        maxAge: 1000 * 60 * 60 * 24 * 7 * 30,  //1 mes
-        
+app.use(session(redisSession))
+app.use(function(req, res, next) {
+    if(!req.session){
+        return next( new AppError("Redis down!"))
     }
-}))
-
+    next()
+})
 
 
 
