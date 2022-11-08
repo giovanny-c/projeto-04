@@ -1,23 +1,19 @@
-import session from "express-session"
-import connectRedis from "connect-redis"
+
 import * as redis from "redis"
 
 
-
-
+//const Redis = require("ioredis")
 
 //config redis client
 const redisClient = redis.createClient({
     legacyMode: true,
     socket: {
-        host: process.env.REDIS_HOST,
+        host: process.env.REDIS_HOST as string,
         port: Number(process.env.REDIS_PORT),
+        
     },
     //password:
 })
 
 
-const RedisStore = connectRedis(session)
-
-
-export {redisClient, RedisStore}
+export {redisClient}

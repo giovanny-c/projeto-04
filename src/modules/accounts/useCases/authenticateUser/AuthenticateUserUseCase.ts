@@ -55,11 +55,11 @@ class AuthenticateUserUseCase {
                 throw new AppError("email or password incorrect")
             }
 
+            //poe 
             //user-${user.id} = chave 
             //user em string = valor
             await this.cacheProvider.setRedis(`user-${user.id}`, JSON.stringify(instanceToPlain(user)))
 
-    
             await this.usersRepository.markUserAsLogged(user.id as string)
 
 
@@ -113,6 +113,7 @@ class AuthenticateUserUseCase {
                     admin: user.admin
                 }
             }
+
 
 
 
