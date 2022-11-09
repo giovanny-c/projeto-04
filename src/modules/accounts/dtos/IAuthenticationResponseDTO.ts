@@ -5,6 +5,7 @@ interface IAuthenticationResponse {
         email?: string
         admin?: boolean
     }
+    ttl?: Date
     token?: string
     refresh_token?: string
 

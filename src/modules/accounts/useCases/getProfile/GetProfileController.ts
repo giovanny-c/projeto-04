@@ -14,7 +14,9 @@ class GetProfileController {
 
             const profile = await getProfile.execute({ id })
 
-            return res.json(profile)
+            
+
+            return res.json({profile, sesseion: req.session })
         } catch (error) {
             throw error
         }

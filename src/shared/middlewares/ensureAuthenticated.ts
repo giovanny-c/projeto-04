@@ -3,10 +3,12 @@ import { JsonWebTokenError, JwtPayload, TokenExpiredError, verify } from "jsonwe
 import { AppError } from "../errors/AppError";
 import { PUB_KEY } from "../../utils/keyUtils/readKeys";
 import axios from "axios";
+import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider";
 
 
 
 export async function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
+
 
     if (process.env.SESSION_TYPE === "JWT") {
         const bearerToken = req.headers.authorization
@@ -89,6 +91,14 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
         throw new AppError("Session expired please log-in again", 401)
 
 
+    }
+
+    const dateProvider = new DayjsDateProvider()
+    
+    
+    if(req.session.ttl && !dateProvider.compareIfBefore(dateProvider.dateNow(), req.session.ttl)){
+        console.log("ttl")
+        throw new AppError("Session expired please log-in again", 401)
     }
 
     req.user = {

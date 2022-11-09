@@ -55,6 +55,7 @@ class GetProfileUseCase {
         }
 
 
+        
         user = JSON.parse(userRedis)
 
 

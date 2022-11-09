@@ -18,6 +18,7 @@ class AuthenticateUserController {
             if (process.env.SESSION_TYPE === "SESSION") {
 
                 req.session.user = response.user
+                req.session.ttl = response.ttl
 
                 return res.json({ "session": req.session })
             }
