@@ -62,7 +62,7 @@ class AuthenticateUserUseCase {
 
             await this.usersRepository.markUserAsLogged(user.id as string)
 
-            const ttl = this.dateProvider.addOrSubtractTime("add", "minutes", 3, this.dateProvider.dateNow())
+            const created_at = this.dateProvider.dateNow()
 
             if (process.env.SESSION_TYPE === "JWT") {
                 //deleta todos os tokens de outros logins
@@ -113,7 +113,7 @@ class AuthenticateUserUseCase {
                     email: user.email as string,
                     admin: user.admin
                 },
-                ttl
+                created_at
             }
 
 

@@ -9,7 +9,6 @@ import { DayjsDateProvider } from "@shared/container/providers/dateProvider/impl
 
 export async function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
 
-
     if (process.env.SESSION_TYPE === "JWT") {
         const bearerToken = req.headers.authorization
         const refresh_token = req.headers["refresh_token"]
@@ -93,11 +92,19 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
 
     }
 
+
     const dateProvider = new DayjsDateProvider()
+
     
+    // 
+    let [amount, time_unit] = String(process.env.ABSOLUTE_SESSION_TIME_OUT).split(" ")
     
-    if(req.session.ttl && !dateProvider.compareIfBefore(dateProvider.dateNow(), req.session.ttl)){
-        console.log("ttl")
+    const absoluteSessionTimeOut = dateProvider.addOrSubtractTime("add", time_unit, Number(amount), req.session.created_at)
+    
+    console.log(absoluteSessionTimeOut)
+    //para nao permitir que e sessao seja prolongada indefinidamente
+    if(req.session.ttl && !dateProvider.compareIfBefore(dateProvider.dateNow(), absoluteSessionTimeOut)){
+        
         throw new AppError("Session expired please log-in again", 401)
     }
 

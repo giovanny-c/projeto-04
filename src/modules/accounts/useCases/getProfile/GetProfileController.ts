@@ -16,7 +16,7 @@ class GetProfileController {
 
             
 
-            return res.json({profile, sesseion: req.session })
+            return res.json({profile})
         } catch (error) {
             throw error
         }
