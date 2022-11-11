@@ -185,7 +185,7 @@ class SaveOrderUseCase {
         
         
         const templatePathToVendor = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderToVendor.hbs")
-        const templatePathToCustomer = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderCreateConfirmation.hbs")
+        const templatePathToCustomer = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderCreationToUser.hbs")
         const linkToOrder = `${process.env.APP_API_URL}${process.env.URL_VENDOR_ORDER as string}`
         
         

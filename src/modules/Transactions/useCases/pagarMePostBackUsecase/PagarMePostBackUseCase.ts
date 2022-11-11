@@ -98,7 +98,7 @@ class PagarMePostBackUseCase {
         })
         
 
-        const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderPaymentConfirmation.hbs")
+        const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderPaymentStatusToUser.hbs")
         
         const approved = translatedStatusForOrder === "PAYMENT ACEPPTED" ? true : false
         
