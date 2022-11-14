@@ -107,7 +107,6 @@ class PagarMePostBackUseCase {
         const linkToOrder = `${process.env.APP_API_URL}${process.env.URL_CUSTOMER_ORDER as string}${order.id}`
         
 
-
         await this.mailProvider.sendMail({
             to: order.customer.email,
             subject,

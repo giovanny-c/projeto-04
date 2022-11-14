@@ -140,7 +140,7 @@ class TransactionUseCase {
         
 
         //mandai email de confirmaçao de pagamento para o customer
-        const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderPaymentConfirmation.hbs")
+        const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderPaymentStatusToUser.hbs")
 
         const approved = translatedStatusForOrder === "PAYMENT ACEPPTED" ? true : false
         

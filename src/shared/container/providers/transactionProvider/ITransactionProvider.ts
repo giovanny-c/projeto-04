@@ -1,11 +1,11 @@
 
 import { TransactionStatus } from "@modules/Transactions/types/TransactionStatus";
-import { IPagarMeProviderRequest, IPagarMeProviderResponse } from "./dtos/IPagarmeProviderDTOs";
+import { ITransactionProviderRequest, ITransactionProviderResponse} from "./dtos/ITransactionProviderDTOs";
 
 
 interface ITransactionProvider {
 
-    proccess(data: IPagarMeProviderRequest): Promise<IPagarMeProviderResponse>
+    proccess(data: ITransactionProviderRequest): Promise<ITransactionProviderResponse>
     translateStatus(status: string): TransactionStatus 
 }
 

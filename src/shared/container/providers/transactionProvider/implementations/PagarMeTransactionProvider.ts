@@ -2,7 +2,7 @@ import { cpf } from "cpf-cnpj-validator"
 import { ITransactionProvider } from "../ITransactionProvider"
 import *  as pagarme from "pagarme" 
 import { TransactionStatus } from "@modules/Transactions/types/TransactionStatus"
-import { IPagarMeProviderRequest, IPagarMeProviderResponse } from "../dtos/IPagarmeProviderDTOs"
+import { ITransactionProviderRequest, ITransactionProviderResponse } from "../dtos/ITransactionProviderDTOs"
 
 class PagarMeTransactionProvider implements ITransactionProvider {
 
@@ -16,7 +16,7 @@ class PagarMeTransactionProvider implements ITransactionProvider {
         billing,
         items, //itens do order products
 
-    }: IPagarMeProviderRequest): Promise<IPagarMeProviderResponse> {
+    }: ITransactionProviderRequest): Promise<ITransactionProviderResponse> {
 
         const billetParams = {
             payment_method: "boleto", // pagarme trabalha com credit_card ou boleto

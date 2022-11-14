@@ -93,9 +93,9 @@ class ProcessOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
             }
         })
         
-        const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "confirmateOrderPaymentToVendor.hbs")
+        const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderPaymentStatusToVendor.hbs")
         const linkToOrder = `${process.env.APP_API_URL}${process.env.URL_VENDOR_ORDER as string}`
-        //melhorar os nomes dos arquivos de email
+        
         
         if(order.status !== "PAYMENT REFUSED"){
 

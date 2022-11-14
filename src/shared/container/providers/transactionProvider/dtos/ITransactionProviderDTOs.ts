@@ -4,7 +4,7 @@ import ICard from "@modules/Transactions/dtos/ICardDTO";
 import ICustomerForTransaction from "@modules/Transactions/dtos/ICustomerForTransactionDTO";
 import { TransactionStatus } from "@modules/Transactions/types/TransactionStatus";
 
-interface IPagarMeProviderRequest{
+interface ITransactionProviderRequest{
     transaction_code: string,
     total: number,
     payment_type: string,
@@ -16,7 +16,7 @@ interface IPagarMeProviderRequest{
 }
 
 
-interface IPagarMeProviderResponse{
+interface ITransactionProviderResponse{
     transaction_id: string
     status: TransactionStatus
     billet: {
@@ -35,4 +35,4 @@ interface IPagarMeProviderResponse{
 }
 
 
-export {IPagarMeProviderRequest, IPagarMeProviderResponse}
+export {ITransactionProviderRequest, ITransactionProviderResponse}
