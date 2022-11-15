@@ -16,8 +16,15 @@ class StripeTransactionProvider implements ITransactionProvider{
         items} : ITransactionProviderRequest): Promise<ITransactionProviderResponse> {
 
         const paymentIntent = await stripe.paymentIntents.create({
-            amount: total,
+            amount: total * 100,
             currency: "brl",
+            payment_method_types: [
+                payment_type
+            ],
+            metadata: {
+                order_id: transaction_code
+            }
+            //shipping:
 
         })
 
