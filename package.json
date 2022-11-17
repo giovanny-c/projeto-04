@@ -1,7 +1,7 @@
 {
-  "name": "projeto03",
+  "name": "projeto04",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "",
   "repository": "https://github.com/giovanny-c/projeto-03.git",
   "author": "Giovanny Castanharo <giovanycast@hotmail.com>",
   "license": "MIT",
@@ -28,6 +28,7 @@
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-async-errors": "^3.1.1",
+    "express-handlebars": "^6.0.6",
     "express-openid-connect": "^2.7.3",
     "express-session": "^1.17.3",
     "fs": "^0.0.1-security",

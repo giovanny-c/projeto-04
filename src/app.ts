@@ -4,6 +4,7 @@ import cors from "cors"
 import "express-async-errors"
 
 
+
 // import { auth, requiresAuth } from "express-openid-connect"
 
 //db e containers e redis
@@ -18,12 +19,15 @@ import { redisSession } from "@shared/session/redisSession"
 //multer upload 
 import upload from "@config/upload"
 
+//error
 import { errorHandler } from "@shared/errors/ErrorHandler" //colocar em cima?
 
 //routes
 import router from "./routes"
 import { AppError } from "@shared/errors/AppError"
 
+//view engine
+import nunjucks from "nunjucks"
 
 //import { config } from "../src/config/auth"
 
@@ -34,7 +38,16 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))//front
 
-app.use(["/accounts/user/file/:id", "/accounts/user/files"], express.static(`${upload.tmpFolder}/**/**`))
+
+//views
+nunjucks.configure("views", {
+    autoescape: true,
+    express: app
+})
+app.set("view engine", ".njk")
+app.use(express.static("../views"))
+
+//app.use(["/accounts/user/file/:id", "/accounts/user/files"], express.static(`${upload.tmpFolder}/**/**`))
 //toda vez que uma rota /file for chamada
 //vai acessar a pasta tmp/
 
@@ -42,7 +55,6 @@ app.use(["/accounts/user/file/:id", "/accounts/user/files"], express.static(`${u
 // session config com redis
 //user o import redisSession no lugar desse pra ver se funciona
 app.use(session(redisSession))
-
 app.use(function(req, res, next) {
     if(!req.session){
         return next( new AppError("Redis down!"))
@@ -51,10 +63,7 @@ app.use(function(req, res, next) {
 })
 
 
-
-
 // app.use(auth(config)) 
-
 app.use(router)
 
 
