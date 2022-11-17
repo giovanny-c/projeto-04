@@ -138,6 +138,7 @@ class ProcessOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
 
             return {
                 message: "The payment was refused",
+                status: "refused",
                 response
             }
         }
@@ -174,6 +175,7 @@ class ProcessOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
         
             return {
                     message: "The payment was approved and your order was sent to the vendor(s)",
+                    status: "approved",
                     response
             }
 

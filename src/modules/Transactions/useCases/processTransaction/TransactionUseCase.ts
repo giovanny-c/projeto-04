@@ -16,9 +16,7 @@ import {v4 as uuidv4} from "uuid"
 import Order from "@modules/Orders/entities/Order";
 import TransactionStatusToOrderStatus from "@modules/Orders/mapper/TransactionStatusToOrderStatus";
 import { IMailProvider } from "@shared/container/providers/mailProvider/IMailProvider";
-import { Subject } from "typeorm/persistence/Subject";
 import { resolve } from "path";
-import { updateLanguageServiceSourceFile } from "typescript";
 
 interface IRequest {
 
@@ -137,7 +135,7 @@ class TransactionUseCase {
         response = await this.ordersRepository.updateOrderStatus({...order, status: translatedStatusForOrder , updated_at: this.dateProvider.dateNow()})
         console.log(response)
 
-        
+       
 
         //mandai email de confirmaçao de pagamento para o customer
         const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "orderPaymentStatusToUser.hbs")

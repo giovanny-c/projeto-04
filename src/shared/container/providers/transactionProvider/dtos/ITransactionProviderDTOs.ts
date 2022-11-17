@@ -19,7 +19,7 @@ interface ITransactionProviderRequest{
 interface ITransactionProviderResponse{
     transaction_id: string
     status: TransactionStatus
-    billet: {
+    billet?: {
         url: string,
         barCode: string | number,
     },
