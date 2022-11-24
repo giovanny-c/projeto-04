@@ -47,7 +47,7 @@ class CorreiosShippingProvider {
 
     async orderTracking(trackingCode: string){
 
-        return await rastrearEncomendas(trackingCode)
+        return await rastrearEncomendas([trackingCode])
     }
 
 

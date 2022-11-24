@@ -7,6 +7,7 @@ interface ICategoriesRepository {
 
     save(data: ISaveCategory): Promise<Category>
     findById(id: string): Promise<Category>
+    findByName(name: string): Promise<Category>
     delete(id): Promise<void>
 
 }

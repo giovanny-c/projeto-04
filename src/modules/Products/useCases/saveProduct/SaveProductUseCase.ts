@@ -7,6 +7,7 @@ import { AppError } from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
 import { IFile } from "@modules/File/dtos/IFileDTO"
 import { IRequestSaveProduct } from "./IRequestSaveProductDTO";
+import { ICategoriesRepository } from "@modules/Categories/repositories/ICategoriesRepository";
 
 @injectable()
 class SaveProductUseCase {
@@ -18,15 +19,30 @@ class SaveProductUseCase {
         private usersRepository: IUsersRepository,
         @inject("DayjsDateProvider")
         private dateProvider: IDateProvider,
+        @inject("CategoriesRepository")
+        private categoriesRepository: ICategoriesRepository,
 
     ) {
 
     }
 
 
-    async execute({ id, name, vendor_id, available, description, price, quantity }: IRequestSaveProduct): Promise<Product> {
-        try {
-
+    async execute({ 
+        id, 
+        name, 
+        vendor_id, 
+        available, 
+        description, 
+        price,
+        quantity,
+        category,   
+        shape,
+        weight,
+        lenght,
+        height,
+        width,
+        diameter }: IRequestSaveProduct): Promise<Product> {
+        
 
             const userExist = await this.usersRepository.findById(vendor_id)
 
@@ -37,6 +53,9 @@ class SaveProductUseCase {
             let is_available
 
             available === "true" ? is_available = true : is_available = false
+
+
+            const {id: category_id} = await this.categoriesRepository.findByName(category as string)
 
 
 
@@ -71,7 +90,14 @@ class SaveProductUseCase {
                             quantity: quantity,
                             available: is_available,
                             created_at: product.created_at,
-                            updated_at: this.dateProvider.dateNow()
+                            updated_at: this.dateProvider.dateNow(),
+                            category_id,  
+                            shape,
+                            weight,
+                            lenght,
+                            height,
+                            width,
+                            diameter
                         })
                 }
 
@@ -85,13 +111,17 @@ class SaveProductUseCase {
                 quantity: quantity,
                 available: is_available,
                 created_at: this.dateProvider.dateNow(),
-                updated_at: this.dateProvider.dateNow()
+                updated_at: this.dateProvider.dateNow(),
+                category_id,   
+                shape,
+                weight,
+                lenght,
+                height,
+                width,
+                diameter
             })
 
 
-        } catch (error) {
-            throw error
-        }
     }
 }
 

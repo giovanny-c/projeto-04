@@ -38,7 +38,26 @@ class ProductsRepository implements IProductsRepository {
    
 
 
-    async save({ id, name, vendor_id, price, old_price, description, quantity, available, created_at, updated_at, category_id, sells, rating, votes }: ISaveProduct): Promise<Product> {
+    async save({ 
+        id,
+        name, 
+        vendor_id, 
+        price, 
+        old_price, 
+        description, 
+        quantity, 
+        available, 
+        created_at, 
+        updated_at, 
+        category_id, 
+        sells, rating, 
+        votes, 
+        shape,
+        weight,
+        lenght,
+        height,
+        width,
+        diameter }: ISaveProduct): Promise<Product> {
         //FALTA O NOME DO PRODUTO
         const product = this.repository.create({
             id,
@@ -54,7 +73,13 @@ class ProductsRepository implements IProductsRepository {
             category_id,
             sells,
             rating,
-            votes
+            votes,
+            shape,
+            weight,
+            lenght,
+            height,
+            width,
+            diameter
         })
 
         return await this.repository.save(product)

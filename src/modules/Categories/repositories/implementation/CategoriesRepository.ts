@@ -16,6 +16,7 @@ class CategoriesRepository implements ICategoriesRepository {
 
         this.repository = dataSource.getRepository(Category)
     }
+    
 
 
     async save({ id, name, description }: ISaveCategory): Promise<Category> {
@@ -28,6 +29,13 @@ class CategoriesRepository implements ICategoriesRepository {
 
         return await this.repository.save(category)
 
+    }
+    
+    async findByName(name: string): Promise<Category> {
+        return await this.repository.findOne({
+            where: {name},
+                        
+        }) as Category
     }
     async findById(id: string): Promise<Category> {
 

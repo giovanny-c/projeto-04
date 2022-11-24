@@ -22,6 +22,12 @@ class SaveProductController {
                 available,
                 quantity,
                 description,
+                category, 
+                shape,
+                weight,
+                lenght,
+                height,
+                width,
 
             } = req.body
 
@@ -45,7 +51,13 @@ class SaveProductController {
                 price,
                 description,
                 available,
-                quantity
+                quantity,
+                category, 
+                shape,
+                weight,
+                lenght,
+                height,
+                width,
             })
 
 

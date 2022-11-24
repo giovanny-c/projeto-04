@@ -23,6 +23,12 @@ interface IProductResponse {
         id: string
         url: () => string
     }[]
+    shape?: string
+    weight: number
+    lenght?: number
+    height?: number
+    width?: number
+    diameter?: number
 
 
 
