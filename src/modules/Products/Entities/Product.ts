@@ -62,24 +62,24 @@ class Product {
 
     @OneToMany(() => OrdersProducts, order_products => order_products.product)
     order_products: OrdersProducts[]
-    
+
 
     @Column()
     shape: string
 
-    @Column()
+    @Column("decimal")
     weight: number
 
-    @Column()
+    @Column("decimal")
     lenght: number
 
-    @Column()
+    @Column("decimal")
     height: number
 
-    @Column()
+    @Column("decimal")
     width: number
 
-    @Column()
+    @Column("decimal")
     diameter: number
 
     
