@@ -1,7 +1,9 @@
 import {calcularPrecoPrazo, consultarCep, rastrearEncomendas, CepResponse, PrecoPrazoRequest} from "correios-brasil"
+import { ICalculatePriceAndDeliveryTimeRequest } from "../dtos/ShippingDTOs"
+import { IShippingProvider } from "../IShippingProvider"
 
 
-class CorreiosShippingProvider {
+class CorreiosShippingProvider implements IShippingProvider {
 
 
     //consultar cep
@@ -15,7 +17,7 @@ class CorreiosShippingProvider {
     
 
     //calcular preços e prazos
-    async valculatePriceAndDeliveryTime({
+    async calculatePriceAndDeliveryTime({
         vendorFacilityZipcode,
         customerZipcode,
         productWeight,
@@ -26,18 +28,18 @@ class CorreiosShippingProvider {
         typeOfService,
         productDiameter,
 
-    }){
+    }: ICalculatePriceAndDeliveryTimeRequest){
        
         let args = {
         sCepOrigem: vendorFacilityZipcode,
         sCepDestino: customerZipcode,
-        nVlPeso: productWeight,
-        nCdFormato: productShape,
-        nVlComprimento: productLenght,
-        nVlAltura: productHeight,
-        nVlLargura: productWidth,
-        nCdServico: typeOfService ,
-        nVlDiametro: productDiameter,
+        nVlPeso: String(productWeight),
+        nCdFormato: String(productShape),
+        nVlComprimento: String(productLenght),
+        nVlAltura: String(productHeight),
+        nVlLargura: String(productWidth),
+        nCdServico: typeOfService,
+        nVlDiametro: String(productDiameter),
         } 
 
         return await calcularPrecoPrazo(args)
