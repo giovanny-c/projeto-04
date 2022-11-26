@@ -27,6 +27,9 @@ class CorreiosShippingProvider implements IShippingProvider {
         productWidth,
         typeOfService,
         productDiameter,
+        deliveryOnlytoCustomer,
+        declaredValue,
+        receptionNotice
 
     }: ICalculatePriceAndDeliveryTimeRequest){
        
@@ -40,7 +43,10 @@ class CorreiosShippingProvider implements IShippingProvider {
         nVlLargura: String(productWidth),
         nCdServico: typeOfService,
         nVlDiametro: String(productDiameter),
-        } 
+        sCdMaoPropria: deliveryOnlytoCustomer, // n padrao
+        nVlValorDeclarado: declaredValue,
+        sCdAvisoRecebimento: receptionNotice // n padrao
+        } as PrecoPrazoRequest 
 
         return await calcularPrecoPrazo(args)
 
