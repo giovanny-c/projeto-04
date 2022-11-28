@@ -1,3 +1,4 @@
+import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
 import { Service, Shape } from "@shared/container/providers/shippingProvider/dtos/ShippingDTOs";
 import { IShippingProvider } from "@shared/container/providers/shippingProvider/IShippingProvider";
@@ -6,25 +7,29 @@ import { inject, injectable } from "tsyringe";
 
 
 @injectable()
-class ConsultingPriceAndDeliveryTime {
+class ConsultingPriceAndDeliveryTimeUseCase {
 
     constructor(
         @inject("ProductsRepository")
         private productsRepository: IProductsRepository,
         @inject("ShippingProvider")
         private shippingProvider: IShippingProvider,
+        @inject("UsersRepository")
+        private usersRepository: IUsersRepository,
 
     ){
 
     }
 
-    async execute(zipcode: string, product_id: string, typeOfService: string){
+    async execute(zipcode: string, product_id: string, typeOfService: string[]){
 
         const product = await this.productsRepository.findById(product_id)
-
+        
         if(!product){
             throw new AppError("Product not found", 400)
         }
+
+        const {address: vendor_address} = await this.usersRepository.findAddressById(product.vendor_id)
 
         const isValidZipcode = await this.shippingProvider.validZipcode(zipcode)
 
@@ -40,14 +45,19 @@ class ConsultingPriceAndDeliveryTime {
             productShape: product.shape as Shape,
             productWeight: product.weight,
             productWidth: product.width,
-            typeOfService: typeOfService as Service
+            typeOfService: typeOfService as Service[],
+            vendorFacilityZipcode: vendor_address.zipcode
+
+            
 
         })
+
+        return response
 
     }
 
 }
 
 export {
-    ConsultingPriceAndDeliveryTime
+    ConsultingPriceAndDeliveryTimeUseCase
 }

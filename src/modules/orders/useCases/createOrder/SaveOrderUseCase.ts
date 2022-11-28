@@ -132,7 +132,9 @@ class SaveOrderUseCase {
             totalValue += product.price * product.quantity
         })
 
-        console.log(totalValue)
+        //===========================================================================
+        //FAZER O FRETE AQUI =======================================================
+        //===========================================================================
 
         const order = await this.ordersRepository.save({
             customer: customerExists,

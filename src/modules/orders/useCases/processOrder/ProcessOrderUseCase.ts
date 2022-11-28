@@ -47,15 +47,27 @@ class ProcessOrderUseCase { //MUDAR NOME PARA PROCESS ORDER ou algo parecido
 
         
             if(order.status === "PROCESSING PAYMENT"){
-                throw new AppError("The payment of this order is still processing!", 401)
+                return {
+                    message: "Processing payment. If you use Billet as the payment type, you will have to await up to 2 days after the billet payment, to confirm",
+                    status: "processing",
+                    
+                }
             }
 
             if(order.status === "PENDING"){
-                throw new AppError("Awaiting payment confirmation", 401)
+                return {
+                    message: "Payment pending. If you use Billet as the payment type, you will have to await up to 2 days after the billet payment, to confirm",
+                    status: "payment",
+                    
+                }
             }
 
             if(order.status === "PAYMENT REFUSED"){
-                throw new AppError("The payment for this order was refused", 401)
+                return {
+                    message: "Payment refused",
+                    status: "refused",
+                    
+                }   
             }
             
            

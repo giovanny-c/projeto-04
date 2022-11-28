@@ -13,6 +13,7 @@ class UsersRepository implements IUsersRepository {
     constructor() {
         this.repository = dataSource.getRepository(User)
     }
+    
 
 
 
@@ -42,6 +43,15 @@ class UsersRepository implements IUsersRepository {
         const user = await this.repository.findOneBy({ email })
 
         return user as User
+    }
+    
+    async findAddressById(id: string): Promise<User> {
+       return await this.repository.findOne({
+        relations: {address: true},
+        select: ["id", "email", "name", "address"],
+        where: {id}
+
+       }) as User
     }
 
     async markUserAsLogged(id: string): Promise<void> {

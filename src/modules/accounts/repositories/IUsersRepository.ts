@@ -8,7 +8,7 @@ interface IUsersRepository {
     findByEmail(email: string): Promise<User>
     markUserAsLogged(id: string): Promise<void>
     unmarkUserAsLogged(id: string): Promise<void>
-
+    findAddressById(id: string): Promise<User>
 }
 
 export { IUsersRepository }
