@@ -4,20 +4,20 @@
 interface ICalculatePriceAndDeliveryTimeRequest {
         vendorFacilityZipcode: string
         customerZipcode: string
-        productShape: shape
+        productShape: Shape
         productWeight: number
         productLenght: number
         productHeight: number
         productWidth: number
-        typeOfService: services[]
+        typeOfService: Service[]
         productDiameter: number
-        DeliveryOnlytoCustomer?: YesOrNo
-        DeclaredValue?: number //of the order
-        receptionNotice?: YesOrNo
+        deliveryOnlytoCustomer?: YesOrNo
+        declaredValue?: number //do pedido
+        receptionNotice?: YesOrNo // se vai receber aviso quando for intregue ao cliente
 
 }
 
-type services = 
+type Service = 
     "04014" |// = SEDEX à vista
     "04065" |// = SEDEX à vista pagamento na entrega
     "04510" |// = PAC à vista
@@ -27,11 +27,11 @@ type services =
     "40290"  // = SEDEX Hoje Varejo
 
 
-type shape = 
+type Shape = 
 "1"| //= Formato caixa/pacote
 "2"| //= Formato rolo/prisma
 "3"  // = Envelope
 
 type YesOrNo = "S" | "N"
 
-export {ICalculatePriceAndDeliveryTimeRequest}
+export {ICalculatePriceAndDeliveryTimeRequest, Shape, Service}

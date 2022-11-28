@@ -18,6 +18,8 @@ interface ISaveUserDTO {
     is_logged?: boolean
 
     admin?: boolean
+
+    address_id?: string
 }
 
 export { ISaveUserDTO }

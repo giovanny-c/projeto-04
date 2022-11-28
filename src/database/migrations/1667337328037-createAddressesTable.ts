@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm"
+import { MigrationInterface, QueryRunner, Table, TableColumn, TableForeignKey } from "typeorm"
 
 export class createAddressesTable1667337328037 implements MigrationInterface {
 
@@ -45,22 +45,30 @@ export class createAddressesTable1667337328037 implements MigrationInterface {
                     name: "user_id",
                     type: "uuid",
                 }
-            ],
-
-            foreignKeys: [
-                {
-                    name:"FKUsersAddress",
-                    referencedTableName: "users",
-                    referencedColumnNames: ["id"],
-                    columnNames: ["user_id"],
-                    onDelete: "SET NULL"
-                }
             ]
 
+        })),
+        
+        await queryRunner.addColumn("users", new TableColumn({
+            name: "address_id",
+            type:  "varchar",
+            isNullable: true
         }))
+
+        await queryRunner.createForeignKey("users", new TableForeignKey({
+                    name:"FKUsersAddress",
+                    referencedTableName: "address",
+                    referencedColumnNames: ["id"],
+                    columnNames: ["address_id"],
+                    onDelete: "SET NULL"
+        }))
+
+        
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.dropForeignKey("users", "FKUsersAddress")
+        await queryRunner.dropColumn("users", "address_id")
         await queryRunner.dropTable("addresses")
     }
 

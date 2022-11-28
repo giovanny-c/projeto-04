@@ -2,39 +2,42 @@ import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid"
 import { Exclude} from "class-transformer"
 
-@Entity("users")
-class User {
+@Entity("addresses")
+class Address {
 
     @Exclude()
     @PrimaryColumn()
     id?: string
 
     @Column()
-    name: string
+    address: string
 
     @Column()
-    email: string
+    address_number: string
 
-    @Exclude()//nao vai trazer a senha
+    
     @Column()
-    password_hash: string
+    neighborhood: string
 
-    @Exclude()
+
     @Column()
-    salt: string
+    city: string
 
-    @Exclude()
+    
     @Column()
-    is_confirmed: boolean
+    state: string
 
-    @Exclude()
+    
     @Column()
-    is_logged: boolean
+    country: string
 
-    @Exclude()
+    
     @Column()
-    admin: boolean
+    zipcode: string
 
+    
+    @Column()
+    user_id: string
 
     constructor() {
         if (!this.id) {
@@ -45,4 +48,7 @@ class User {
 
 }
 
-export { User }
+export { Address }
+
+
+
