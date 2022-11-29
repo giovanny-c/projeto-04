@@ -4,8 +4,10 @@ import { inspect } from "../../../../utils/decorators/inspect";
 import { AppError } from "../../../../shared/errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { IGetProfileRequest, IGetProfileResponse } from "./GetProfileDTO";
-import { instanceToInstance, instanceToPlain,  } from "class-transformer";
+import {  instanceToPlain  } from "class-transformer";
 import ICacheProvider from "@shared/container/providers/cacheProvider/ICacheProvider";
+import { IAddressesRepository } from "@modules/Accounts/repositories/IAddressesRepository";
+import { User } from "@modules/Accounts/entities/User";
 
 
 
@@ -19,6 +21,8 @@ class GetProfileUseCase {
         private usersRepository: IUsersRepository,
         @inject("CacheProvider")
         private cacheProvider: ICacheProvider,
+        @inject("AddressRepository")
+        private addressRepository: IAddressesRepository,
 
     ) { }
 
@@ -35,10 +39,11 @@ class GetProfileUseCase {
         let user
 
         const userRedis = await this.cacheProvider.getRedis(`user-${id}`) as string
-        console.log(userRedis)
+        
+      
+        user = JSON.parse(userRedis)
 
-
-
+            
         if (!userRedis) {
             user = await this.usersRepository.findById(id)
 
@@ -51,15 +56,19 @@ class GetProfileUseCase {
             
             await this.cacheProvider.setRedis(`user-${user.id}`, JSON.stringify(instanceToPlain(user)))
 
-            return  JSON.parse(await this.cacheProvider.getRedis(`user-${id}`) as string)
+            user = JSON.parse(await this.cacheProvider.getRedis(`user-${id}`) as string)
         }
 
+        //adress
+        const addresses = await this.addressRepository.findAllUsersAddresses(user.id) 
 
+
+        return {
+            email: user.email,
+            name: user.name,
+            addresses
+        }
         
-        user = JSON.parse(userRedis)
-
-
-        return user 
     }
 }
 export { GetProfileUseCase }

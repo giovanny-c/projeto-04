@@ -22,6 +22,8 @@ import multer from "multer"
 
 import uploadConfig from "@config/upload"
 import { DeleteProductController } from "@modules/Products/useCases/deleteProduct/DeleteProductController";
+import { AddAddressController } from "@modules/Accounts/useCases/addAddress/AddAddressController";
+import { GetAddressController } from "@modules/Accounts/useCases/getAddress/GetAddressController";
 
 const upload = multer(uploadConfig)
 
@@ -41,6 +43,8 @@ const getFileController = new GetFileController()
 const getFileFromUserController = new GetFileFromUserController()
 const saveProductController = new SaveProductController()
 const deleteProductController = new DeleteProductController()
+const addAddressController = new AddAddressController()
+const getAddressController = new GetAddressController()
 
 accountsRoutes.post("/sign-in", upload.none(), createUserController.handle)
 accountsRoutes.get("/sign-in", signInController.handle)
@@ -66,6 +70,10 @@ accountsRoutes.get("/user/file/:id", ensureAuthenticated, getFileController.hand
 accountsRoutes.post(["/user/products/create", "user/announce/new-product"], ensureAuthenticated, upload.array("images"), saveProductController.handle)
 accountsRoutes.put("/user/product/:id/edit", ensureAuthenticated, upload.array("images"), saveProductController.handle)
 accountsRoutes.delete("/user/products/:id/delete", ensureAuthenticated, deleteProductController.handle)
+
+//address
+accountsRoutes.post("/address/add", ensureAuthenticated, addAddressController.handle)
+accountsRoutes.post("/address/get", ensureAuthenticated, getAddressController.handle)
 
 
 export default accountsRoutes

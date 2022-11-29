@@ -1,3 +1,4 @@
+import { Address } from "@modules/Accounts/entities/Address"
 
 
 interface IGetProfileRequest {
@@ -8,6 +9,7 @@ interface IGetProfileResponse {
 
     email: string
     name: string
+    addresses: Address[]
 }
 
 export { IGetProfileRequest, IGetProfileResponse }
