@@ -1,7 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn} from "typeorm";
 import { v4 as uuidV4 } from "uuid"
 import { Exclude} from "class-transformer"
-import { Address } from "./Address";
 
 @Entity("users")
 class User {
@@ -35,13 +34,6 @@ class User {
     @Exclude()
     @Column()
     admin: boolean
-
-    @Column()
-    address_id: string
-
-    @ManyToOne(() => Address)
-    @JoinColumn({name: "address_id"})
-    address: Address
 
 
     constructor() {

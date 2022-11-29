@@ -19,7 +19,6 @@ interface ISaveUserDTO {
 
     admin?: boolean
 
-    address_id?: string
 }
 
 export { ISaveUserDTO }

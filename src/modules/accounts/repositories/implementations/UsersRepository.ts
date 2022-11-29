@@ -45,14 +45,6 @@ class UsersRepository implements IUsersRepository {
         return user as User
     }
     
-    async findAddressById(id: string): Promise<User> {
-       return await this.repository.findOne({
-        relations: {address: true},
-        select: ["id", "email", "name", "address"],
-        where: {id}
-
-       }) as User
-    }
 
     async markUserAsLogged(id: string): Promise<void> {
         const user = this.repository.create({

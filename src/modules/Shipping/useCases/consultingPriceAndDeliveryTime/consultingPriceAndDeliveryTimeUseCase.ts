@@ -1,3 +1,4 @@
+import { IAddressesRepository } from "@modules/Accounts/repositories/IAddressesRepository";
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
 import { Service, Shape } from "@shared/container/providers/shippingProvider/dtos/ShippingDTOs";
@@ -16,6 +17,8 @@ class ConsultingPriceAndDeliveryTimeUseCase {
         private shippingProvider: IShippingProvider,
         @inject("UsersRepository")
         private usersRepository: IUsersRepository,
+        @inject("AddressesRepository")
+        private addressesRepository: IAddressesRepository,
 
     ){
 
@@ -29,7 +32,7 @@ class ConsultingPriceAndDeliveryTimeUseCase {
             throw new AppError("Product not found", 400)
         }
 
-        const {address: vendor_address} = await this.usersRepository.findAddressById(product.vendor_id)
+        const address = await this.addressesRepository.findUserDefaultAddress(product.vendor_id)
 
         const isValidZipcode = await this.shippingProvider.validZipcode(zipcode)
 
@@ -46,7 +49,7 @@ class ConsultingPriceAndDeliveryTimeUseCase {
             productWeight: product.weight,
             productWidth: product.width,
             typeOfService: typeOfService as Service[],
-            vendorFacilityZipcode: vendor_address.zipcode
+            vendorFacilityZipcode: address.zipcode
 
             
 
