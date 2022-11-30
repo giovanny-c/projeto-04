@@ -22,7 +22,6 @@ class Order {
     @UpdateDateColumn()
     updated_at: Date
 
-
     @Column()
     customer_id: string
 
@@ -35,6 +34,9 @@ class Order {
     
     @Column("decimal")
     total: number
+
+    @Column()
+    tracking_code?: string
 
     
 
