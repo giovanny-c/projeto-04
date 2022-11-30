@@ -5,6 +5,7 @@ import { dataSource } from "database";
 import { Repository } from "typeorm";
 import { IOrdersRepository } from "../IOrdersRepository";
 import IUpdateStatusOrder from "@modules/Orders/dtos/IUpdateOrderStatusDTO";
+import IUpdateOrderValueDTO from "@modules/Orders/dtos/IUpdateOrderValueDTO";
 
 
 class OrdersRepository implements IOrdersRepository{
@@ -14,7 +15,7 @@ class OrdersRepository implements IOrdersRepository{
     constructor(){
         this.repository = dataSource.getRepository(Order)
     }
-
+    
     
     async save({id, customer, products, status, updated_at, created_at, total}: ISaveOrder): Promise<Order> {
         const order = this.repository.create({
@@ -99,7 +100,16 @@ class OrdersRepository implements IOrdersRepository{
     }
 
     
-    
+    async updateOrderValue({id, total, updated_at}: IUpdateOrderValueDTO) {
+        const order = this.repository.create({
+            id,
+            total,
+            updated_at
+        })
+
+        return await this.repository.save(order)
+    }
+
 
 }
 

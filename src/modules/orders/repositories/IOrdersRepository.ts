@@ -1,6 +1,7 @@
 import { ISaveOrder } from "../dtos/ISaveOrderDTO"
 import Order from "../entities/Order"
 import IUpdateStatusOrder from "../dtos/IUpdateOrderStatusDTO"
+import IUpdateOrderValue from "../dtos/IUpdateOrderValueDTO"
 
 
 interface IOrdersRepository {
@@ -11,6 +12,7 @@ interface IOrdersRepository {
     findByVendorId(vendor_id: string): Promise<Order[]>
     findByIdAndVendorId(id: string, vendor_id: string): Promise<Order>
     updateOrderStatus(data: IUpdateStatusOrder): Promise<Order>
+    updateOrderValue(data: IUpdateOrderValue)
     
 
 
