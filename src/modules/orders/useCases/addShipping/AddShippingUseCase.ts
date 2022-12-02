@@ -12,6 +12,7 @@ import { Service, Shape } from "@shared/container/providers/shippingProvider/dto
 import { IShippingProvider } from "@shared/container/providers/shippingProvider/IShippingProvider";
 import { AppError } from "@shared/errors/AppError";
 import { instanceToInstance, instanceToPlain } from "class-transformer";
+import { PrecoPrazoResponse } from "correios-brasil/dist";
 import { inject, injectable } from "tsyringe";
 
 interface IRequest {
@@ -98,34 +99,82 @@ class ShowOrderUseCase {
 
         
         
-
+// adiciona no valor total da order
         const addShippingToOrder = await this.ordersRepository.updateOrderValue({
             id: order.id,
             total: shipping_total_value,
             updated_at: this.dateProvider.dateNow()
         })
 
-// SEPARAR OS PRODUTOS PARA CADA VENDEDOR X PARECIDO COM O SAVEORDER
-//PARA FAZER OS PRAZOS DE ENTREGA
-        let shipping_filtered_by_vendor
-        
-        shipping_for_products.forEach((shipping_for_product, index)=> {
 
-            
-            if(shipping_filtered_by_vendor.includes(shipping_for_product.product.vendor_id)){
-                shipping_filtered_by_vendor.push(shipping_for_product.product.vendor_id)
+///////////////// filtra os vendor ids, para so ter 1 de cada /////////
+        let filtered_vendors: string[] = []
+
+        shipping_for_products.forEach(sfp => {
+
+            if(!filtered_vendors.find(vendor_id => vendor_id === sfp.product.vendor_id)){
+
+              filtered_vendors.push(sfp.product.vendor_id)  
             }
 
             
+        })
 
 
-        }) 
-/////////////////
+        
+///////////////////// poe cada sfp dentro com seu vendor correspondente //////////////       
+        let shipping_filtered_by_vendor: any[] = [] 
+        
+        filtered_vendors.forEach(vendor_id => {
+
+
+            let sFPs = shipping_for_products.map(sfp => {
+
+
+                if(vendor_id === sfp.product.vendor_id){
+                    
+                    return sfp
+                }
+
+            })
+
+            shipping_filtered_by_vendor.push({
+                vendor_id,
+                vendor: sFPs[0]?.product.vendor || "some name",
+                shipping_products: sFPs,
+                deadline: sFPs[0]?.shipping_for_product.PrazoEntrega
+            })
+
+
+        })
+
+        /* oq tem que vir
+            [
+                {
+                    vendor_id,
+                    shipping_products [
+                        {
+                            prod 1 
+                        },
+                        {
+                            prod 2
+                        }
+                    ]
+                },
+                {
+                    vendor_id, shipping_products[{p1}, {p2}]
+                }
+            ]
+        
+        */
+
+
+/////////////////////////////////////////////////////
 
         return {
             total: addShippingToOrder.total,
             order,
-            shipping_for_products
+            shipping_filtered_by_vendor
         }
         
         
