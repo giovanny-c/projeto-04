@@ -24,7 +24,7 @@ interface IRequest {
 
 
 @injectable()
-class ShowOrderUseCase {
+class AddShippingUseCase {
     
     constructor(
         @inject("OrdersRepository")
@@ -181,4 +181,4 @@ class ShowOrderUseCase {
     }
 }
 
-export {ShowOrderUseCase}
+export {AddShippingUseCase}

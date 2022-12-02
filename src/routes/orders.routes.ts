@@ -5,6 +5,7 @@ import { SaveOrderController } from "@modules/Orders/useCases/createOrder/SaveOr
 import { ShowOrderController } from "@modules/Orders/useCases/showOrder/ShowOrderController"
 import { ShowCustomersOrdersController } from "@modules/Orders/useCases/showCustomersOrders/ShowCustomerOrdersController"
 import { CancelOrderController } from "@modules/Orders/useCases/cancelOrder/CancelOrderController"
+import { AddShippingController } from "@modules/Orders/useCases/addShipping/AddShippingController"
 
 
 
@@ -19,6 +20,7 @@ const saveOrderController = new SaveOrderController()
 const showOrderController = new ShowOrderController()
 const showCustomersOrdersController = new ShowCustomersOrdersController()
 const cancelOrderController = new CancelOrderController()
+const addShippingController = new AddShippingController()
 
 
 ordersRoutes.post(
@@ -62,6 +64,8 @@ ordersRoutes.put(
     }),
     cancelOrderController.handle,
 )
+
+ordersRoutes.put("/shipping/add", ensureAuthenticated, addShippingController.handle)
 
 
 
