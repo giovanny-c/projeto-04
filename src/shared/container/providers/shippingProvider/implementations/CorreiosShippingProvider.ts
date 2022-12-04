@@ -7,7 +7,7 @@ class CorreiosShippingProvider implements IShippingProvider {
 
 
     //consultar cep
-    async validZipcode(zipcode: string): Promise<CepResponse>{
+    async validZipcode(zipcode: string): Promise<any>{
 
         return await consultarCep(zipcode)
     
@@ -33,22 +33,22 @@ class CorreiosShippingProvider implements IShippingProvider {
 
     }: ICalculatePriceAndDeliveryTimeRequest){
        
-        let args = {
-        sCepOrigem: vendorFacilityZipcode,
-        sCepDestino: customerZipcode,
-        nVlPeso: String(productWeight),
-        nCdFormato: String(productShape),
-        nVlComprimento: String(productLenght),
-        nVlAltura: String(productHeight),
-        nVlLargura: String(productWidth),
-        nCdServico: typeOfService,
-        nVlDiametro: String(productDiameter),
-        sCdMaoPropria: deliveryOnlytoCustomer, // n padrao
-        nVlValorDeclarado: declaredValue,
-        sCdAvisoRecebimento: receptionNotice // n padrao
-        } as PrecoPrazoRequest 
+        
 
-        return await calcularPrecoPrazo(args)
+        return await calcularPrecoPrazo({
+            sCepOrigem: vendorFacilityZipcode,
+            sCepDestino: customerZipcode,
+            nVlPeso: String(productWeight),
+            nCdFormato: String(productShape),
+            nVlComprimento: String(productLenght),
+            nVlAltura: String(productHeight),
+            nVlLargura: String(productWidth),
+            nCdServico: typeOfService,
+            nVlDiametro: String(productDiameter),
+            sCdMaoPropria: deliveryOnlytoCustomer, // n padrao
+            nVlValorDeclarado: declaredValue,
+            sCdAvisoRecebimento: receptionNotice // n padrao
+        })
 
     }
 

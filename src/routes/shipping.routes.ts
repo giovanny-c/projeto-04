@@ -18,7 +18,7 @@ const shippingRoutes = Router()
 
 const consultingPriceAndDeliveryTimeController = new ConsultingPriceAndDeliveryTimeController()
 
-shippingRoutes.get("/consult", ensureAuthenticated, consultingPriceAndDeliveryTimeController.handle)
+shippingRoutes.get("/:product_id/consult", ensureAuthenticated, consultingPriceAndDeliveryTimeController.handle)
 
 
 export default shippingRoutes

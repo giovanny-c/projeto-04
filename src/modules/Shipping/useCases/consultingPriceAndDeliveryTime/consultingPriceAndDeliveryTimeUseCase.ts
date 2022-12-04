@@ -1,7 +1,6 @@
 import { IAddressesRepository } from "@modules/Accounts/repositories/IAddressesRepository";
 import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
-import { Service, Shape } from "@shared/container/providers/shippingProvider/dtos/ShippingDTOs";
 import { IShippingProvider } from "@shared/container/providers/shippingProvider/IShippingProvider";
 import { AppError } from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
@@ -35,20 +34,23 @@ class ConsultingPriceAndDeliveryTimeUseCase {
         const address = await this.addressesRepository.findUserDefaultAddress(product.vendor_id)
 
         const isValidZipcode = await this.shippingProvider.validZipcode(zipcode)
+        console.log(isValidZipcode)
 
-        if(!isValidZipcode.cep.match(/(\d{5})-? ?(\d{3})/)){
+        if(!isValidZipcode.data.cep.match(/(\d{5})-? ?(\d{3})/)){
             throw new AppError("cep not valid", 400)
         }
+
+        console.log(typeOfService)
 
         const response = await this.shippingProvider.calculatePriceAndDeliveryTime({
             customerZipcode: zipcode,
             productDiameter: product.diameter,
             productHeight: product.height,
             productLenght: product.lenght,
-            productShape: product.shape as Shape,
+            productShape: product.shape,
             productWeight: product.weight,
             productWidth: product.width,
-            typeOfService: typeOfService as Service[],
+            typeOfService: typeOfService,
             vendorFacilityZipcode: address.zipcode
 
             
