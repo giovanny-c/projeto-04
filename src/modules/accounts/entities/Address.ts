@@ -39,6 +39,9 @@ class Address {
     //? vai funcionar assim ?
     @ManyToOne(()=> User) 
     @JoinColumn({name: "user_id"})
+    user: User
+
+    @Column()
     user_id: string
 
     @Column()

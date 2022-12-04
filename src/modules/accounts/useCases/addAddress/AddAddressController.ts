@@ -8,6 +8,7 @@ class AddAddressController {
         try {
 
             const {
+                address_id,
                 address,
                 address_number,
                 neighborhood,
@@ -22,6 +23,7 @@ class AddAddressController {
             const addAddress = container.resolve(AddAddressUseCase)
 
             const response = await addAddress.execute({
+                id: address_id,
                 address,
                 address_number,
                 neighborhood,
