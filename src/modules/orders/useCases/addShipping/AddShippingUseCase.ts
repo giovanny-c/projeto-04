@@ -37,8 +37,8 @@ class AddShippingUseCase {
         private usersRepository: IUsersRepository, 
         @inject("DayjsDateProvider")
         private dateProvider: DayjsDateProvider,
-        @inject("ShippingRepository")
-        private shippingRepository: IShippingProvider
+        @inject("ShippingProvider")
+        private shippingProvider: IShippingProvider
     ){
     }
     
@@ -73,7 +73,7 @@ class AddShippingUseCase {
 
             const vendor_address = await this.addressesRepository.findUserDefaultAddress(product.vendor_id)
 
-            const shipping_for_product = await this.shippingRepository.calculatePriceAndDeliveryTime({
+            const shipping_for_product = await this.shippingProvider.calculatePriceAndDeliveryTime({
                 customerZipcode: address.zipcode,
                 productDiameter: product.diameter,
                 productHeight: product.height,

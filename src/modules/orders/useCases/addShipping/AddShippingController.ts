@@ -9,7 +9,8 @@ class AddShippingController {
 
     async handle(req: Request, res: Response): Promise<Response>{
 
-        const {order_id, type_of_service} = req.body
+        const { type_of_service} = req.body
+        const {order_id} = req.params
         //const {products} = req.body
         const {id: user_id} = req.user
 

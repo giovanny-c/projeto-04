@@ -8,6 +8,7 @@ import { inject, injectable } from "tsyringe";
 import { IFile } from "@modules/File/dtos/IFileDTO"
 import { IRequestSaveProduct } from "./IRequestSaveProductDTO";
 import { ICategoriesRepository } from "@modules/Categories/repositories/ICategoriesRepository";
+import { Category } from "@modules/Categories/entities/Category";
 
 @injectable()
 class SaveProductUseCase {
@@ -55,7 +56,7 @@ class SaveProductUseCase {
             available === "true" ? is_available = true : is_available = false
 
 
-            const {id: category_id} = await this.categoriesRepository.findByName(category as string)
+            const _category = await this.categoriesRepository.findByName(category as string)
 
 
 
@@ -91,7 +92,7 @@ class SaveProductUseCase {
                             available: is_available,
                             created_at: product.created_at,
                             updated_at: this.dateProvider.dateNow(),
-                            category_id,  
+                            category_id: _category?.id,  
                             shape,
                             weight,
                             lenght,
@@ -112,7 +113,7 @@ class SaveProductUseCase {
                 available: is_available,
                 created_at: this.dateProvider.dateNow(),
                 updated_at: this.dateProvider.dateNow(),
-                category_id,   
+                category_id : _category?.id,   
                 shape,
                 weight,
                 lenght,

@@ -7,7 +7,7 @@ import { inject, injectable } from "tsyringe";
 @injectable()
 class GetAddressUseCase {
     constructor(
-      @inject("AddressRepository")
+      @inject("AddressesRepository")
       private addressRepository: IAddressesRepository,
       @inject("Userspository")
       private usersRepository: IUsersRepository

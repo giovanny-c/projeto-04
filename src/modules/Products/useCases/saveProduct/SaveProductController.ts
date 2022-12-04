@@ -36,7 +36,7 @@ class SaveProductController {
 
             const images = req.files as IFile[]
 
-            const { id } = req.params
+            const { id: product_id } = req.params
 
             const { id: vendor_id } = req.user
 
@@ -45,7 +45,7 @@ class SaveProductController {
             const saveProductUseCase = container.resolve(SaveProductUseCase)
 
             const response = await saveProductUseCase.execute({
-                id,
+                id: product_id,
                 name,
                 vendor_id,
                 price,

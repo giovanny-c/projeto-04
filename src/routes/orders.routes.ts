@@ -65,7 +65,7 @@ ordersRoutes.put(
     cancelOrderController.handle,
 )
 
-ordersRoutes.put("/shipping/add", ensureAuthenticated, addShippingController.handle)
+ordersRoutes.put("/:order_id/shipping/add", ensureAuthenticated, addShippingController.handle)
 
 
 

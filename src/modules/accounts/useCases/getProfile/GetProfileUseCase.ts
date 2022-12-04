@@ -21,7 +21,7 @@ class GetProfileUseCase {
         private usersRepository: IUsersRepository,
         @inject("CacheProvider")
         private cacheProvider: ICacheProvider,
-        @inject("AddressRepository")
+        @inject("AddressesRepository")
         private addressRepository: IAddressesRepository,
 
     ) { }
@@ -59,14 +59,12 @@ class GetProfileUseCase {
             user = JSON.parse(await this.cacheProvider.getRedis(`user-${id}`) as string)
         }
 
-        //adress
-        const addresses = await this.addressRepository.findAllUsersAddresses(user.id) 
-
+        
 
         return {
             email: user.email,
             name: user.name,
-            addresses
+            
         }
         
     }

@@ -43,7 +43,7 @@ class AddressesRepository implements IAddressesRepository {
         }) as Address
     }
     async findAllUsersAddresses(user_id: string): Promise<Address[]> {
-        return await this.repository.findBy({user_id})
+        return await this.repository.find({where: {user_id: user_id}})
     }
     async delete(id: string): Promise<void> {
         

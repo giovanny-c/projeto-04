@@ -36,13 +36,14 @@ class Address {
     @Column()
     zipcode: string
 
+    @Column()
+    user_id: string
+    
     //? vai funcionar assim ?
     @ManyToOne(()=> User) 
     @JoinColumn({name: "user_id"})
     user: User
 
-    @Column()
-    user_id: string
 
     @Column()
     default_address: boolean
