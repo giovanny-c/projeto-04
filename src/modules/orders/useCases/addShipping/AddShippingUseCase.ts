@@ -8,18 +8,25 @@ import { OrdersRepository } from "@modules/Orders/repositories/implementations/O
 import { IOrdersRepository } from "@modules/Orders/repositories/IOrdersRepository";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
 import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider";
-import { Service, Shape } from "@shared/container/providers/shippingProvider/dtos/ShippingDTOs";
 import { IShippingProvider } from "@shared/container/providers/shippingProvider/IShippingProvider";
 import { AppError } from "@shared/errors/AppError";
 import { instanceToInstance, instanceToPlain } from "class-transformer";
 import { PrecoPrazoResponse } from "correios-brasil/dist";
+import { response } from "express";
+import { string } from "joi";
 import { inject, injectable } from "tsyringe";
 
 interface IRequest {
     order_id: string
     user_id: string
-    type_of_service: string
+    type_of_service: string[]
 
+}
+
+interface IResponse {
+
+    order: Order,
+    shipping_filtered_by_vendor: any[]
 }
 
 
@@ -42,7 +49,7 @@ class AddShippingUseCase {
     ){
     }
     
-    async execute({order_id, user_id, type_of_service }: IRequest): Promise<any>{
+    async execute({order_id, user_id, type_of_service }: IRequest): Promise<IResponse>{
 
         const order = await this.ordersRepository.findById(order_id)
 
@@ -54,17 +61,12 @@ class AddShippingUseCase {
         const address = await this.addressesRepository.findUserDefaultAddress(user_id)
 
         if(!address){
-
-            return {
-
-                message: "You need to add an address first",
-                redirect: `${process.env.APP_API_URL}${process.env.URL_CUSTOMER_ADD_ADDRESS}`
-            }
+                throw new AppError(`You need to add an address first:  ${process.env.APP_API_URL}${process.env.URL_CUSTOMER_ADD_ADDRESS}`, 401)
 
         }
 
-
-        let shipping_total_value = 0
+    
+        let shipping_total_value: number = 0
 
         //calcula o preço do frete de cada produto
         let shipping_for_products = await Promise.all(order.order_products.map(async (order_product)=> {
@@ -78,16 +80,22 @@ class AddShippingUseCase {
                 productDiameter: product.diameter,
                 productHeight: product.height,
                 productLenght: product.lenght,
-                productShape: product.shape as Shape,
+                productShape: product.shape,
                 productWeight: product.weight,
-                productWidth: product.weight,
-                typeOfService: [type_of_service as Service],
+                productWidth: product.width,
+                typeOfService: type_of_service,
                 vendorFacilityZipcode: vendor_address.zipcode
             })
 
-            let shipping_total_for_product = Number(shipping_for_product.Valor) * order_product.quantity as number
+            
+            let sfpValor = Number(shipping_for_product[0].Valor.replace(".", "").replace(",","."))
+
+            console.log(sfpValor)
+
+            let shipping_total_for_product: number = sfpValor * order_product.quantity as number
 
             shipping_total_value += shipping_total_for_product 
+            
 
             return {
                 product,
@@ -142,7 +150,7 @@ class AddShippingUseCase {
                 vendor_id,
                 vendor: sFPs[0]?.product.vendor || "some name",
                 shipping_products: sFPs,
-                deadline: sFPs[0]?.shipping_for_product.PrazoEntrega
+                //deadline: sFPs[0]?.shipping_for_product.PrazoEntrega
             })
 
 
@@ -171,9 +179,20 @@ class AddShippingUseCase {
 
 /////////////////////////////////////////////////////
 
+        const responseOrder: Order = {
+
+            ...order,
+            
+
+        }
+
         return {
-            total: addShippingToOrder.total,
-            order,
+           // total: addShippingToOrder.total,
+            order: {
+                ...order,
+                total: addShippingToOrder.total,
+                updated_at: addShippingToOrder.updated_at
+            },
             shipping_filtered_by_vendor
         }
         

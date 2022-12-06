@@ -100,7 +100,7 @@ class OrdersRepository implements IOrdersRepository{
     }
 
     
-    async updateOrderValue({id, total, updated_at}: IUpdateOrderValueDTO) {
+    async updateOrderValue({id, total, updated_at}: IUpdateOrderValueDTO): Promise<Order> {
         const order = this.repository.create({
             id,
             total,

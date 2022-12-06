@@ -34,13 +34,14 @@ class ConsultingPriceAndDeliveryTimeUseCase {
         const address = await this.addressesRepository.findUserDefaultAddress(product.vendor_id)
 
         const isValidZipcode = await this.shippingProvider.validZipcode(zipcode)
-        console.log(isValidZipcode)
+        
 
         if(!isValidZipcode.data.cep.match(/(\d{5})-? ?(\d{3})/)){
             throw new AppError("cep not valid", 400)
         }
 
-        console.log(typeOfService)
+        
+        
 
         const response = await this.shippingProvider.calculatePriceAndDeliveryTime({
             customerZipcode: zipcode,
@@ -52,8 +53,6 @@ class ConsultingPriceAndDeliveryTimeUseCase {
             productWidth: product.width,
             typeOfService: typeOfService,
             vendorFacilityZipcode: address.zipcode
-
-            
 
         })
 

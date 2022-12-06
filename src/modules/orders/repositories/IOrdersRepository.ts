@@ -12,7 +12,7 @@ interface IOrdersRepository {
     findByVendorId(vendor_id: string): Promise<Order[]>
     findByIdAndVendorId(id: string, vendor_id: string): Promise<Order>
     updateOrderStatus(data: IUpdateStatusOrder): Promise<Order>
-    updateOrderValue(data: IUpdateOrderValue)
+    updateOrderValue(data: IUpdateOrderValue): Promise<Order>
     
 
 
