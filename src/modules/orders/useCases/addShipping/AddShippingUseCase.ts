@@ -111,7 +111,8 @@ class AddShippingUseCase {
         const addShippingToOrder = await this.ordersRepository.updateOrderValue({
             id: order.id,
             total: shipping_total_value,
-            updated_at: this.dateProvider.dateNow()
+            updated_at: this.dateProvider.dateNow(),
+            shipping_confirmation: true
         })
 
 

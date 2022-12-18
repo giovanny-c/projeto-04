@@ -38,6 +38,9 @@ class Order {
     @Column()
     tracking_code?: string
 
+    @Column()
+    shipping_confirmation?: boolean
+
     
 
     constructor() {
