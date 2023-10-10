@@ -1,10 +1,11 @@
 import { inject, injectable } from "tsyringe";
 import { ISaveUserDTO } from "../../dtos/ISaveUserDTO";
-import { IUsersRepository } from "../../repositories/IUsersRepository";
+
 import { AppError } from "../../../../shared/errors/AppError";
 import { genPassword } from "../../../../utils/passwordUtils/passwordUtils"
 import { User } from "@modules/Accounts/entities/User";
 import { instanceToPlain } from "class-transformer";
+import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
 
 
 @injectable()

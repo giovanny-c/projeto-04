@@ -34,7 +34,7 @@ class PagarMePostBackUseCase {
         @inject("TransactionsRepository")
         private transactionsRepository: ITransactionsRepository,
         @inject("DayjsDateProvider")
-        private dateProvider: IDateProvider ,
+        private dateProvider: IDateProvider,
         @inject("TransactionProvider")
         private transactionProvider: ITransactionProvider,
         @inject("MailProvider")

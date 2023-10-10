@@ -2,10 +2,7 @@ import { container } from "tsyringe";
 
 import "./providers/index"
 
-import { UsersRepository } from "../../modules/Accounts/repositories/implementations/UsersRepository";
-import { IUsersRepository } from "../../modules/Accounts/repositories/IUsersRepository";
-import { IUsersTokensRepository } from "../../modules/Accounts/repositories/IUsersTokensRepository";
-import { UsersTokensRepository } from "../../modules/Accounts/repositories/implementations/UsersTokensRepository";
+
 import { IFileRepository } from "@modules/File/repositories/IFileRepository";
 import { FileRepository } from "@modules/File/repositories/implementations/FileRepository";
 import { IProductsRepository } from "@modules/Products/repositories/IProductsRepository";
@@ -18,6 +15,10 @@ import { ITransactionsRepository } from "@modules/Transactions/repositories/ITra
 import { TransactionsRepository } from "@modules/Transactions/repositories/implementations/TransactionsRepository";
 import { IAddressesRepository } from "@modules/Accounts/repositories/IAddressesRepository";
 import { AddressesRepository } from "@modules/Accounts/repositories/implementations/AddressesRepository";
+import { IUsersRepository } from "@modules/Accounts/repositories/IUsersRepository";
+import { IUsersTokensRepository } from "@modules/Accounts/repositories/IUsersTokensRepository";
+import { UsersRepository } from "@modules/Accounts/repositories/implementations/UsersRepository";
+import { UsersTokensRepository } from "@modules/Accounts/repositories/implementations/UsersTokensRepository";
 
 container.registerSingleton<IUsersRepository>(
     "UsersRepository",
