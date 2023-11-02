@@ -14,7 +14,9 @@ import "shared/redis/redisConnect"
 import session from "express-session"
 import { redisSession } from "@shared/session/redisSession"
 
-
+// rabbitMQ
+import rabbitmq_router from "routes/rabbitMQ-router"
+import RabbitMQServer from "@shared/rabbitMQ/rabbitMQ-server"
 
 //multer upload 
 import upload from "@config/upload"
@@ -63,8 +65,19 @@ app.use(function(req, res, next) {
 })
 
 
+
 // app.use(auth(config)) 
 app.use(router)
+
+app.use(rabbitmq_router)
+
+const consumer = async() => {    
+    const rabbitMQServer = new RabbitMQServer('amqp://admin:admin@rabbitmq:5672')
+    await rabbitMQServer.start()
+    
+    await rabbitMQServer.consume("queue1", (message) => console.log(message.content.toString()))
+}
+
 
 
 
